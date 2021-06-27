@@ -1,44 +1,59 @@
+{% extends "base.html" %}
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
+
+{% block title %}
+{{ title }}
+{% endblock %}
 
 
+{% block content %}
 <div class="jumbotron text-center">
   <h1>Temperatura y Humedad</h1>
   <p>medida de temperatura y humedad en diferentes sitios</p>
 </div>
 
-    <div class="container">
-      <div class="row">
-          {% for weather_today in weathers_today %}
-            <div class="col-sm-4">
-                <h3>{{ weather_today.location }}</h3>
+<div class="container">
+  <div class="row">
+      {% for weather_today in weathers_today %}
+        <div class="col-sm-4 col-xs-12 weather-container ">
+            <h3><img src="{% static weather_today.image_location %}"> {{ weather_today.location }}</h3>
 
-                        <div class="col-sm-6">
+                    <div class="col-sm-12 col-xs-6 measure-temperature">
+                        <h4>
                             <img src="{% static 'img/temperatura.png' %}"> Temperatura: <br>
+                        </h4>
+                        <p>
+                            {% if  weather_today.temperature  %}
+                                {{ weather_today.temperature }} °C
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </p>
 
-                            {{ weather_today.temperature }}
-                        </div>
+                    </div>
 
-                        <div class="col-sm-6">
+                    <div class="col-sm-12 col-xs-6 measure-humidity">
+                        <h4>
                             <img src="{% static 'img/humedad.png' %}"> Humedad: <br>
-                            {{ weather_today.humidity }}
-                        </div>
+                        </h4>
+                        <p>
+                            {% if  weather_today.humidity  %}
+                                {{ weather_today.humidity }} %
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if not weather_today.humidity or not weather_today.temperature   %}
+                        <a href="{% url 'app:weather-add' %}" class="btn btn-primary measure-button-add"> Agregar Temperatura y Humedad</a>
+                    {% else %}
+                         {{ weather_today.create_at }}
+                    {% endif %}
+        </div>
+      {% endfor %}
+  </div>
+</div>
 
-                <p> {{ weather_today.create_at }}</p>
-            </div>
-          {% endfor %}
-      </div>
-    </div>
+{% endblock %}
 
-</body>
-</html>

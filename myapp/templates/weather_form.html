@@ -1,6 +1,54 @@
+{% extends "base.html" %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save">
-</form>
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block content %}
+    <div class="jumbotron text-center">
+      <h1>Agregar Temperatura y Humedad</h1>
+    </div>
+<div class="container">
+  <div class="row">
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="col-sm-12 col-xs-12 weather-container ">
+
+            <label for="id_location">Lugar:</label>
+            <select name="location" required id="id_location">
+              <option value="N"  selected=""> <img src="{% static 'img/nevera.png' %}"> Nevera</option>
+              <option value="L"><img src="{% static 'img/laboratorio.png' %}"> Laboratorio</option>
+              <option value="A"><img src="{% static 'img/aprisco.png' %}"> Aprisco</option>
+            </select>
+
+        </div>
+
+        <div class="col-sm-12 col-xs-12 weather-container ">
+
+            <div class="col-sm-6 col-xs-12 measure-temperature">
+                <img src="{% static 'img/temperatura.png' %}"> <br>
+                <label for="id_temperature">Temperatura °C:</label> <br>
+                <input type="number" name="temperature" step="0.01" min="-100" max="100" value="-5" required id="id_temperature">
+            </div>
+
+            <div class="col-sm-6 col-xs-12 measure-humidity">
+                <img src="{% static 'img/humedad.png' %}"> <br>
+                <label for="id_humidity">% Humedad:</label> <br>
+                <input type="number" name="humidity" step="0.01"  min="0" max="100" value="55" required id="id_humidity">
+            </div>
+
+        </div>
+
+
+        <input type="submit" value="Guardar" class="btn btn-primary measure-button-add">
+        <a href="{% url 'app:weather-today' %}" class="btn btn-secondary measure-button-cancel"> Cancelar</a>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

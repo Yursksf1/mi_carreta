@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block script %}
+	<script src='https://cdn.plot.ly/plotly-2.1.0.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'> </script>
+
+    <script>
+
+        var trace1 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Aprisco',
+          x: [
+              {% for date in aprisco_date %}
+              '{{ date }}',
+              {% endfor %}
+          ],
+          y: {{ aprisco_data }},
+          line: {color: '#17BECF'}
+        }
+
+        var trace2 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Laboratorio',
+          x: [
+              {% for date in laboratorio_date %}
+              '{{ date }}',
+              {% endfor %}
+          ],
+          y: {{ laboratorio_data }},
+          line: {color: '#7F7F7F'}
+        }
+
+        var trace3 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Nevera',
+          x: [
+              {% for date in nevera_date %}
+              '{{ date }}',
+              {% endfor %}
+          ],
+          y: {{ nevera_data }},
+          line: {color: '#804000'}
+        }
+
+        var data = [trace1,trace2, trace3];
+
+        var layout = {
+          title: 'Temperaturas',
+        };
+
+        Plotly.newPlot('Temperaturas', data, layout);
+
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <div id='Temperaturas'> </div>
+{% endblock %}
+
