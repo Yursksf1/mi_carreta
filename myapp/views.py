@@ -9,6 +9,11 @@ from datetime import date
 
 def weather_today(request):
     weathers_today = []
+    image_locations = {
+        'N': 'nevera.png',
+        'L': 'laboratorio.png',
+        'A': 'aprisco.png',
+    }
     for locations in HistoryWeather.LOCATION:
         current_weather = HistoryWeather.objects.filter(
             location=locations[0],
@@ -20,6 +25,7 @@ def weather_today(request):
         serializer = HistoryWeatherSerialize(current_weather)
         current_weather = serializer.data
         current_weather['location'] = locations[1]
+        current_weather['image_location'] = image_locations.get(locations[0])
         weathers_today.append(current_weather)
 
 

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,10 +24,13 @@
                 <h3>{{ weather_today.location }}</h3>
 
                         <div class="col-sm-6">
+                            <img src="{% static 'img/temperatura.png' %}"> Temperatura: <br>
+
                             {{ weather_today.temperature }}
                         </div>
 
                         <div class="col-sm-6">
+                            <img src="{% static 'img/humedad.png' %}"> Humedad: <br>
                             {{ weather_today.humidity }}
                         </div>
 
