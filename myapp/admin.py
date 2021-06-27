@@ -8,20 +8,16 @@ from tzlocal import get_localzone
 from dateutil import relativedelta as rdelta
 
 class SheepAdmin(admin.ModelAdmin):
-    list_display = ('id', 'identification_number', 'name', 'gender', 'age', 'birthday', 'parentDadId', 'parentMomId', 'active')
+    list_display = ('id', 'identification_number', 'name', 'gender', 'age', 'birthday', 'breeds', 'parentDadId', 'parentMomId', 'active')
     # fields = ('name', 'amount', 'category',  'active', 'description')
     list_filter = ('active', 'gender', 'birthday')
     search_fields = ('name', 'identification_number')
 
     def age(self, obj):
-        local_tz = get_localzone()
-        now = datetime.now(local_tz)
-        birthday = obj.birthday
-        rd = rdelta.relativedelta(now, birthday)
-        if rd.years:
-            return "{0.years} Años {0.months} meses".format(rd)
-        else:
-            return "{0.months} meses, {0.days} dias".format(rd)
+        return obj.age()
+
+    def breeds(self, obj):
+        return obj.breeds()
 
 admin.site.register(Sheep, SheepAdmin)
 
