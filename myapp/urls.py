@@ -8,4 +8,5 @@ urlpatterns = [
     path('weather/today', views.weather_today, name='weather-today'),
     path('weather/history', views.weather_history, name='weather-history'),
     path('weather/add', views.WeatherCreateView.as_view(), name='weather-add'),
+    path('', views.dashboard, name='dashboard'),
 ]

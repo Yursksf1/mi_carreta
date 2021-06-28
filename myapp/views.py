@@ -45,55 +45,93 @@ def weather_today(request):
 
 def weather_history(request):
     nevera_date = []
-    nevera_data = []
+    nevera_data_t = []
+    nevera_data_h = []
+
     laboratorio_date = []
-    laboratorio_data = []
+    laboratorio_data_t = []
+    laboratorio_data_h = []
+
     aprisco_date = []
-    aprisco_data = []
+    aprisco_data_t = []
+    aprisco_data_h = []
 
     query = HistoryWeather.objects.filter(
         location='N'
     )
     if query.exists():
-        results = query.order_by('create_at').all()[:100]
+        results = query.order_by('-create_at').all()[:100]
         for result in results:
             nevera_date.append(str(result.create_at.date()))
-            nevera_data.append(float(result.temperature))
+            nevera_data_t.append(float(result.temperature))
+            nevera_data_h.append(float(result.humidity))
 
     query = HistoryWeather.objects.filter(
         location='L'
     )
     if query.exists():
-        results = query.order_by('create_at').all()[:100]
+        results = query.order_by('-create_at').all()[:100]
         for result in results:
             laboratorio_date.append(str(result.create_at.date()))
-            laboratorio_data.append(float(result.temperature))
+            laboratorio_data_t.append(float(result.temperature))
+            laboratorio_data_h.append(float(result.humidity))
 
     query = HistoryWeather.objects.filter(
         location='A'
     )
     if query.exists():
-        results = query.order_by('create_at').all()[:100]
+        results = query.order_by('-create_at').all()[:100]
         for result in results:
             aprisco_date.append(str(result.create_at.date()))
-            aprisco_data.append(float(result.temperature))
-    print(nevera_date)
-    print(aprisco_data)
+            aprisco_data_t.append(float(result.temperature))
+            aprisco_data_h.append(float(result.humidity))
+
+
     return render(
         request,
         'weather_history.html',
         {
             'nevera_date': nevera_date,
-            'nevera_data': nevera_data,
+            'nevera_data_t': nevera_data_t,
+            'nevera_data_h': nevera_data_h,
 
             'laboratorio_date': laboratorio_date,
-            'laboratorio_data': laboratorio_data,
+            'laboratorio_data_t': laboratorio_data_t,
+            'laboratorio_data_h': laboratorio_data_h,
 
             'aprisco_date': aprisco_date,
-            'aprisco_data': aprisco_data,
+            'aprisco_data_t': aprisco_data_t,
+            'aprisco_data_h': aprisco_data_h,
         }
     )
 
+def dashboard(request):
+    total = 96
+    num_machos = 7
+    num_hembras = 89
+
+    num_gestantes = 11
+    num_natal = 8
+    num_destetes = 20
+
+    num_vendidas = 25
+    num_muertes = 6
+
+    return render(
+        request,
+        'dashboard.html',
+        {
+            'total': total,
+            'num_machos': num_machos,
+            'num_hembras': num_hembras,
+
+            'num_gestantes': num_gestantes,
+            'num_natal': num_natal,
+            'num_destetes': num_destetes,
+            'num_vendidas': num_vendidas,
+            'num_muertes': num_muertes
+        }
+    )
 
 class WeatherCreateView(CreateView):
     template_name = 'weather_form.html'

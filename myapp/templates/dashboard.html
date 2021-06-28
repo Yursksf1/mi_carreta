@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 dashboard-container ">
+
+    <div class="col-sm-12 col-xs-12 dashboard-container total">
+        <h4>
+             Total Animales: <br>
+        </h4>
+        <p>
+            {% if  total  %}
+                {{ total }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+    </div>
+
+    <div class="col-sm-4 col-xs-4 dashboard-container machos">
+        <h4>
+             Machos: <br>
+        </h4>
+        <p>
+            {% if  num_machos  %}
+                {{ num_machos }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+    </div>
+
+    <div class="col-sm-4 col-xs-4 dashboard-container  hembras">
+        <h4>
+             Hembrass: <br>
+        </h4>
+        <p>
+            {% if  num_hembras  %}
+                {{ num_hembras }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+    </div>
+
+    <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+        <h4>
+             Corderos: <br>
+        </h4>
+        <p>
+            {% if  False  %}
+                {{ num_hembras }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+    </div>
+  <div class="col-sm-4 col-xs-4 dashboard-container machos">
+        <h4>
+             Machos: <br>
+        </h4>
+        <p>
+            {% if  num_machos  %}
+                {{ num_machos }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+    </div>
+
+    <div class="col-sm-4 col-xs-4 dashboard-container  hembras">
+        <h4>
+             Hembrass: <br>
+        </h4>
+        <p>
+            {% if  num_hembras  %}
+                {{ num_hembras }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+    </div>
+
+    <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+        <h4>
+             Corderos: <br>
+        </h4>
+        <p>
+            {% if  False  %}
+                {{ num_hembras }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+    </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

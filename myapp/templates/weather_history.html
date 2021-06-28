@@ -12,52 +12,95 @@
 
     <script>
 
-        var trace1 = {
-          type: "scatter",
-          mode: "lines",
-          name: 'Aprisco',
-          x: [
+        var aprisco_dates = [
               {% for date in aprisco_date %}
               '{{ date }}',
               {% endfor %}
-          ],
-          y: {{ aprisco_data }},
-          line: {color: '#17BECF'}
-        }
+          ]
 
-        var trace2 = {
-          type: "scatter",
-          mode: "lines",
-          name: 'Laboratorio',
-          x: [
+        var laboratorio_dates = [
               {% for date in laboratorio_date %}
               '{{ date }}',
               {% endfor %}
-          ],
-          y: {{ laboratorio_data }},
-          line: {color: '#7F7F7F'}
-        }
+          ]
 
-        var trace3 = {
-          type: "scatter",
-          mode: "lines",
-          name: 'Nevera',
-          x: [
+        var nevera_dates = [
               {% for date in nevera_date %}
               '{{ date }}',
               {% endfor %}
-          ],
-          y: {{ nevera_data }},
+          ]
+
+        var ttrace1 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Aprisco',
+          x: aprisco_dates,
+          y: {{ aprisco_data_t }},
+          line: {color: '#17BECF'}
+        }
+
+        var ttrace2 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Laboratorio',
+          x: laboratorio_dates,
+          y: {{ laboratorio_data_t }},
+          line: {color: '#7F7F7F'}
+        }
+
+        var ttrace3 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Nevera',
+          x: nevera_dates,
+          y: {{ nevera_data_t }},
           line: {color: '#804000'}
         }
 
-        var data = [trace1,trace2, trace3];
+        var tdata = [ttrace1,ttrace2, ttrace3];
 
-        var layout = {
+        var tlayout = {
           title: 'Temperaturas',
         };
 
-        Plotly.newPlot('Temperaturas', data, layout);
+        Plotly.newPlot('Temperaturas', data=tdata, layout=tlayout);
+
+
+        var htrace1 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Aprisco',
+          x: aprisco_dates,
+          y: {{ aprisco_data_h }},
+          line: {color: '#17BECF'}
+        }
+
+        var htrace2 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Laboratorio',
+          x: laboratorio_dates,
+          y: {{ laboratorio_data_h }},
+          line: {color: '#7F7F7F'}
+        }
+
+        var htrace3 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Nevera',
+          x: nevera_dates,
+          y: {{ nevera_data_h }},
+          line: {color: '#804000'}
+        }
+
+        var hdata = [htrace1,htrace2, htrace3];
+
+        var hlayout = {
+          title: 'Humedad',
+        };
+
+        Plotly.newPlot('Humedad', data=hdata, layout=hlayout);
+
 
     </script>
 {% endblock %}
@@ -65,5 +108,6 @@
 
 {% block content %}
     <div id='Temperaturas'> </div>
+    <div id='Humedad'> </div>
 {% endblock %}
 
