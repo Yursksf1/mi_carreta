@@ -93,8 +93,7 @@ class SheepBreed(models.Model):
         on_delete=models.CASCADE,
     )
     percent = models.DecimalField(max_digits=5, decimal_places=2)
-
-
+    
 class SheepPhoto(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sheep = models.ForeignKey(
@@ -104,6 +103,17 @@ class SheepPhoto(models.Model):
     upload = models.FileField(upload_to='media/')
     create_at = models.DateTimeField(auto_now_add=True)
     is_principal = models.fields.BooleanField(default=True)
+
+    def take_ago(self):
+        local_tz = get_localzone()
+        now = datetime.now(local_tz)
+        create_at = self.create_at
+        rd = rdelta.relativedelta(now, create_at)
+        if rd.years:
+            return "{0.years} Años {0.months} meses".format(rd)
+        else:
+            return "{0.months} meses, {0.days} dias".format(rd)
+
 
 class HistoryWeight(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

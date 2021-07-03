@@ -1,21 +1,19 @@
-<div class="col-sm-12 col-md-3 offset-md-2 mt-5 p-0 post-container">
 
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
+    <div class="card-body">
+      <h5 class="card-title">{{ sheep.full_name }}</h5>
+      <p class="card-text">{{ sheep.age }}</p>
 
-    <p class="mt-1 ml-2" >
-        <a href="" style="color: #000; font-size: 20px;">
-            <i class="far fa-heart"></i>
-        </a> 30% Super Oveja
-    </p>
-    <p class="ml-2 mt-0 mb-2">
-        <b> {{ sheep.full_name }}</b> - <small>{{ sheep.birthday }}</small>
-    </p>
-    <p class="ml-2 mt-0 mb-2">
-        <b> {{ sheep.age }}</b> - <small>{{ sheep.breeds }}</small>
-    </p>
-    <p class="ml-2 mt-0 mb-2">
-        <b> {{ sheep.prncipal_photo }}</b> - <small>{{ sheep.prncipal_photo }}</small>
-    </p>
+      <p class="card-text">
+        {% if sheep.gender == 'M'%}
+            <i class="fa fa-mars"></i>
+        {% else %}
+            <i class="fa fa-venus"></i>
+        {% endif %}
 
-    <img style="width: 100%;" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.prncipal_photo.create_at }}">
-
-</div>
+        {{ sheep.breeds  }}
+      </p>
+      <a href="{% url 'app:detail' sheep.id %}" class="btn btn-primary">Ver</a>
+    </div>
+  </div>
