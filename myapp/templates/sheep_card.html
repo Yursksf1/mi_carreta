@@ -1,57 +1,73 @@
 
-  <div class="card col-sm-12 col-md-5 col-lg-4 offset-0 offset-md-1 offset-lg-0 ">
-    <div class="row no-gutters">
-      <div class=" col-4 col-sm-4 col-md-7 col-lg-6">
-        <img class="card-img-top" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
-      </div>
-      <div class="col-8 col-sm-8 col-md-5 col-lg-6">
-        <div class="card-body">
-          <h5 class="card-title">{{ sheep.full_name }}</h5>
-          <p class="card-text">
-            {% if sheep.gender == 'M'%}
-                <i class="fa fa-mars"></i>
-            {% else %}
-                <i class="fa fa-venus"></i>
-            {% endif %}
+  <div class="card col-sm-12 col-md-6 col-lg-4 offset-0 offset-md-0 offset-lg-0 mb-3 ">
+    <div class="row ">
 
-            {{ sheep.breed  }}
-
-          </p>
-          <p class="card-text"><small class="text-muted">{{ sheep.age }}</small></p>
-
-            {% if sheep.breed %}
-
-              <p class="card-text"><small class="text-muted">{{ sheep.breed }}</small></p>
-                <div class="progress">
-
-                {% for breed in sheep.breeds  %}
-                    <div class="progress-bar  {{ breed.breed.color }}" style="width:{{breed.percent}}%">
-                        {{breed.breed.acronym}}
-                    </div>
-                {% endfor %}
-              </div>
-            {% else %}
-                <p class="card-text"><small class="text-muted"> Mestizo </small></p>
-                <div class="progress">
-                    <div class="progress-bar brown" style="width:100%">
-                        MZ
-                    </div>
-              </div>
-            {% endif %}
-
-          <div class="card-buttons">
-            <a href="{% url 'app:detail' sheep.id %}" class="btn btn-primary">
+      <div class="col-12 text-center card-header">
+        <h5 class="card-title">
+          <a href="{% url 'app:detail' sheep.id %}" >
+            {{ sheep.full_name }}
+          </a> 
+          
+          <span class="card-buttons float-right">
+            <a href="{% url 'app:detail' sheep.id %}" >
                 <i class="fa fa-eye"></i>
-            </a>
-            <a href="{% url 'app:detail' sheep.id %}" class="btn btn-primary">
+            </a> 
+               
+            <a href="{% url 'app:detail' sheep.id %}" >
                 <i class="fa fa-pencil-square-o"></i>
             </a>
-          </div>
+        </span>
 
+        </h5>
+      </div>
+      
+      <div class="col-10 offset-1">
+        <br>
+        {% if sheep.breed %}
+          <div class="progress">
+
+          {% for breed in sheep.breeds  %}
+              <div class="progress-bar  {{ breed.breed.color }}" style="width:{{breed.percent}}%">
+                  {{breed.breed.acronym}}
+              </div>
+          {% endfor %}
         </div>
+        {% else %}
+            <div class="progress">
+                <div class="progress-bar brown" style="width:100%">
+                    MZ
+                </div>
+          </div>
+        {% endif %}
+      </div>
 
+      <div class=" col-6 col-sm-4 col-md-7 col-lg-6">
+        <a href="{% url 'app:detail' sheep.id %}" title="">
+          <img class="card-img-top" class="img-thumbnail" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
+        </a>
 
-
+      </div>
+      <div class="col-6 col-sm-8 col-md-5 col-lg-6">
+        <div class="card-body">
+          <p class="card-text">
+            
+            <div class='sheep-weight'>
+              {{ sheep.weight  }}
+            </div>
+            {% if sheep.breed %}
+              {{ sheep.breed  }}
+            {% else %}
+              MEZTIZO
+            {% endif %}
+          </p>
+          <p class="card-text"><small class="text-muted">
+            {% if sheep.gender == 'M'%}
+              <i class="fa fa-mars"></i>
+            {% else %}
+              <i class="fa fa-venus"></i>
+            {% endif %}
+            {{ sheep.age }}</small></p>
+        </div>
       </div>
     </div>
   </div>

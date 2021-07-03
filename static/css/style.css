@@ -75,13 +75,33 @@ form .weather-container input  {
     border-radius: 50%;
 }
 
+a {
+    color: black;
+}
+
+.sheep-weight {
+    font-weight: bold;
+    font-size: 25px;  
+}
+
+.fa-mars{
+    font-weight: bold;
+    font-size: 25px;
+    color:  #3399FF;
+}
+
+.fa-venus{
+    font-weight: bold;
+    font-size: 25px;
+    color:  #fc75f0;
+}
+
 .card-img-top {
-    width: 150px;
-    height: 150px;
+    border-radius: 12px;
+
 }
 
 .card-buttons {
-    text-align:left;
 }
 
 .blue-dark{

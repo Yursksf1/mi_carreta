@@ -64,6 +64,17 @@ class Sheep(models.Model):
 
         return breeds
 
+    def weight(self):
+        weight = HistoryWeight.objects.filter(
+            sheep=self
+        )
+
+        if not weight.exists():
+            return 'N/A'
+
+        weight = weight.order_by('-create_at').first()
+
+        return '{} Kg'.format( str(weight.weight)[:-1])
 
     def age(self):
         local_tz = get_localzone()
@@ -71,9 +82,33 @@ class Sheep(models.Model):
         birthday = self.birthday
         rd = rdelta.relativedelta(now, birthday)
         if rd.years:
-            return "{0.years} Años {0.months} meses".format(rd)
+            name_year = 'años'
+            name_months = 'meses'
+            if rd.years == 1:
+                name_year = 'año'
+
+            if rd.months == 1:
+                name_months = 'mes'
+
+            return "{0.years} {name_year} {0.months} {name_months}".format(
+                rd,
+                name_year=name_year,
+                name_months=name_months
+            )
+
         else:
-            return "{0.months} meses, {0.days} dias".format(rd)
+            name_months = 'meses'
+            name_days = 'días'
+            if rd.months == 1:
+                name_months = 'mes'
+
+            if rd.days == 1:
+                name_days = 'día'
+            return "{0.months}  {name_months}, {0.days} {name_days}".format(
+                rd,
+                name_months=name_months,
+                name_days=name_days
+            )
 
     def prncipal_photo(self):
         sheep_photo = SheepPhoto.objects.filter(
@@ -108,7 +143,7 @@ class SheepBreed(models.Model):
         on_delete=models.CASCADE,
     )
     percent = models.DecimalField(max_digits=5, decimal_places=2)
-    
+
 class SheepPhoto(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sheep = models.ForeignKey(
