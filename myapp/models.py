@@ -8,6 +8,7 @@ from tzlocal import get_localzone
 from dateutil import relativedelta as rdelta
 # Create your models here.
 from django.urls import reverse
+from django.utils.timezone import now
 
 
 class Sheep(models.Model):
@@ -26,7 +27,7 @@ class Sheep(models.Model):
         max_length=1,
         choices=GENDER,
     )
-    birthday = models.DateTimeField(auto_now_add=True)
+    birthday = models.DateTimeField(default=now, editable=True)
 
     parentDadId = models.ForeignKey('Sheep', null=True, related_name='dad', on_delete=models.SET_NULL)
     parentMomId = models.ForeignKey('Sheep', null=True, related_name='mom', on_delete=models.SET_NULL)
@@ -35,6 +36,9 @@ class Sheep(models.Model):
 
     def __str__(self):
         return self.name
+
+    def full_name(self):
+        return '{} - {}'.format(self.identification_number, self.name)
 
     def breeds(self):
         breeds = SheepBreed.objects.filter(
@@ -87,7 +91,8 @@ class SheepPhoto(models.Model):
         on_delete=models.CASCADE,
     )
     upload = models.FileField(upload_to='media/')
-
+    create_at = models.DateTimeField(auto_now_add=True)
+    is_principal = models.fields.BooleanField(default=True)
 
 class HistoryWeight(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

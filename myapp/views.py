@@ -140,3 +140,46 @@ class WeatherCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('app:weather-today')
+
+
+# SHEEPS
+# Django
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, DetailView, ListView
+
+# Forms
+from .forms import SheepForm
+
+# Models
+from .models import Sheep
+
+class SheepsFeedView(LoginRequiredMixin, ListView):
+    """Return all published sheeps."""
+
+    template_name = 'sheep_list.html'
+    model = Sheep
+    paginate_by = 30
+    context_object_name = 'sheep'
+
+
+class SheepDetailView(LoginRequiredMixin, DetailView):
+    """Return sheep detail."""
+
+    template_name = 'sheep_detail.html'
+    queryset = Sheep.objects.all()
+    context_object_name = 'sheep'
+
+
+class CreateSheepView(LoginRequiredMixin, CreateView):
+    """Create a new sheep."""
+
+    template_name = 'sheep_form.html'
+    form_class = SheepForm
+    success_url = reverse_lazy('app:feed')
+
+    def get_context_data(self, **kwargs):
+        """Add user and profile to context."""
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context

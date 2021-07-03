@@ -1,2 +1,17 @@
+"""Sheep forms."""
+
+# Django
 from django import forms
-from myapp.models import HistoryWeather
+
+# Models
+from .models import Sheep
+
+
+class SheepForm(forms.ModelForm):
+    """Sheep model form."""
+
+    class Meta:
+        """Form settings."""
+
+        model = Sheep
+        fields = ('identification_number', 'name', 'gender', 'birthday')
