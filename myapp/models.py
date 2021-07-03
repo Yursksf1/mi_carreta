@@ -40,6 +40,18 @@ class Sheep(models.Model):
     def full_name(self):
         return '{} - {}'.format(self.identification_number, self.name)
 
+    def breed(self):
+        breeds = SheepBreed.objects.filter(
+            sheep=self
+        )
+
+        if not breeds.exists():
+            return None
+
+        breeds = breeds.order_by('percent').all()
+
+        return breeds[0].breed.name
+
     def breeds(self):
         breeds = SheepBreed.objects.filter(
             sheep=self
@@ -50,7 +62,8 @@ class Sheep(models.Model):
 
         breeds = breeds.order_by('percent').all()
 
-        return breeds[0].breed.name
+        return breeds
+
 
     def age(self):
         local_tz = get_localzone()
@@ -77,6 +90,8 @@ class Sheep(models.Model):
 class Breed(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.fields.CharField(max_length=100)
+    acronym = models.fields.CharField(max_length=100)
+    color = models.fields.CharField(max_length=100)
     description = models.fields.CharField(max_length=300)
 
     def __str__(self):

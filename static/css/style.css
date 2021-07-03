@@ -74,3 +74,57 @@ form .weather-container input  {
     height: 50px;
     border-radius: 50%;
 }
+
+.card-img-top {
+    width: 150px;
+    height: 150px;
+}
+
+.card-buttons {
+    text-align:left;
+}
+
+.blue-dark{
+    background-color: #002060;
+}
+
+.brown {
+    background-color: #833C0C;
+}
+
+.fucsia {
+    background-color: #FF0066;
+}
+
+.green {
+    background-color: #00B050;
+}
+
+.light-green {
+    background-color: #92D050;
+}
+
+.light-yellow {
+    background-color: #F8CBAD;
+}
+
+.lila {
+    background-color: #9933FF;
+}
+
+.orange {
+    background-color: #FF3300;
+}
+
+.sky-blue {
+    background-color: #3399FF;
+}
+
+.violet {
+    background-color: #4C004C;
+}
+
+.yellow{
+    background-color: #FFC000;
+}
+

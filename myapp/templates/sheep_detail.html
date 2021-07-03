@@ -6,28 +6,154 @@
 {{ title }}
 {% endblock %}
 
+{% block script %}
+	<script src='https://cdn.plot.ly/plotly-2.1.0.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'> </script>
+
+    <script>
+
+        var aprisco_dates = [
+            {% for weight in sheep.historyweight_set.all %}
+              "{{ weight.create_at|date:'Y-m-d' }}",
+            {% endfor %}
+          ]
+        
+        var aprisco_data = [
+            {% for weight in sheep.historyweight_set.all %}
+              '{{ weight.weight }}',
+            {% endfor %}
+        ]
+
+        var trace1 = {
+          type: "scatter",
+          mode: "lines",
+          name: 'Peso',
+          x: aprisco_dates,
+          y: aprisco_data,
+          line: {color: '#17BECF'}
+        }
+
+
+        var hdata = [trace1];
+
+        var hlayout = {
+          title: 'Historico Pesos',
+        };
+
+        Plotly.newPlot('HistoricoPesos', data=hdata, layout=hlayout);
+
+
+    </script>
+{% endblock %}
+
 
 {% block content %}
-<div class="col-sm-12 col-md-3 offset-md-2 mt-5 p-0 post-container">
-
-
-    <p class="mt-1 ml-2" >
-        <a href="" style="color: #000; font-size: 20px;">
-            <i class="far fa-heart"></i>
-        </a> 30% Super Oveja
-    </p>
+<div class="col-sm-12 col-md-12r">
     <p class="ml-2 mt-0 mb-2">
         <b> {{ sheep.full_name }}</b> - <small>{{ sheep.birthday }}</small>
     </p>
     <p class="ml-2 mt-0 mb-2">
-        <b> {{ sheep.age }}</b> - <small>{{ sheep.breeds }}</small>
+        <b> {{ sheep.age }}</b> - <small>{{ sheep.breed }}</small>
     </p>
 
-    <img style="width: 100%;" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
+    <img src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
     <p>Tomado hace: {{ sheep.prncipal_photo.take_ago }}</p>
+</div>
+
+<div class="col-sm-12">
+
+    <div id='HistoricoPesos'> </div>
 
 </div>
 
+<div class="col-sm-12">
 
-{% endblock %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Peso [Kg]</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for weight in sheep.historyweight_set.all %}
+        <tr>
+          <th scope="row">    {{ forloop.counter }} </th>
+          <td>{{ weight.create_at }}</td>
+          <td>{{ weight.weight }}</td>
+        </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+    <p>Tomado hace: {{ sheep }}</p>
+
+</div>
+
+<div class="col-sm-12 col-md-12">
+    <h1> FAMILY:</h1>
+    <div class="row">
+
+        <div class="col-sm-12 col-md-12">
+            <b> Padre: </b> <br>
+            {% if sheep.parentDadId %}
+                {% with sheep=sheep.parentDadId %}
+                    {% include "sheep_card.html" %}
+                {% endwith %}
+            {% else %}
+                N/A
+            {% endif%}
+        </div>
+        {% if sheep.parentDadId and  sheep.parentDadId.parentDadId %}
+        <div class="col-sm-12 col-md-12">
+            <b> Abuelo Paterno: </b> <br>
+                {% with sheep=sheep.parentDadId.parentDadId %}
+                    {% include "sheep_card.html" %}
+                {% endwith %}
+        </div>
+        {% endif%}
+
+        {% if sheep.parentDadId and  sheep.parentDadId.parentMomId %}
+        <div class="col-sm-12 col-md-12">
+            <b> Abuea Paterna: </b> <br>
+                {% with sheep=sheep.parentDadId.parentMomId %}
+                    {% include "sheep_card.html" %}
+                {% endwith %}
+        </div>
+        {% endif%}
+
+        <div class="col-sm-12 col-md-12">
+
+            <b> Madre: </b> <br>
+
+            {% if sheep.parentMomId %}
+                {% with sheep=sheep.parentMomId %}
+                    {% include "sheep_card.html" %}
+                {% endwith %}
+            {% else %}
+                N/A
+            {% endif%}
+        </div>
+        {% if sheep.parentDadId and  sheep.parentDadId.parentDadId %}
+        <div class="col-sm-12 col-md-12">
+            <b> Abuelo Materno: </b> <br>
+                {% with sheep=sheep.parentDadId.parentDadId %}
+                    {% include "sheep_card.html" %}
+                {% endwith %}
+        </div>
+        {% endif%}
+
+        {% if sheep.parentDadId and  sheep.parentDadId.parentMomId %}
+        <div class="col-sm-12 col-md-12">
+            <b> Abuea Materna: </b> <br>
+                {% with sheep=sheep.parentDadId.parentMomId %}
+                    {% include "sheep_card.html" %}
+                {% endwith %}
+        </div>
+        {% endif%}
+
+    </div>
+</div>
+    {% endblock %}
 
