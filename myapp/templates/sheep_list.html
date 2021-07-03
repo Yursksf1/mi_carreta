@@ -10,7 +10,11 @@
 
 {% block content %}
 <div class="container">
-  List
-</div>
+    <div class="row">
 
+        {% for sheep in sheeps %}
+            {% include "sheep_card.html" %}
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

@@ -24,12 +24,14 @@ form .weather-container input  {
  .measure-temperature {
     color: #eeeeee;
     background-color: #e35f5f;
+    padding-bottom: 15px;
  }
 
 
  .measure-humidity {
     color: #eeeeee;
     background-color: #264b5d;
+    padding-bottom: 15px;
  }
 
  .measure-button-add {

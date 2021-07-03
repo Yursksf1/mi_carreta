@@ -24,7 +24,7 @@ urlpatterns = [
     ),
 
     path(
-        route='sheep/<int:pk>/',
+        route='sheep/<uuid:pk>/',
         view=views.SheepDetailView.as_view(),
         name='detail'
     )

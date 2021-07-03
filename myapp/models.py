@@ -62,6 +62,17 @@ class Sheep(models.Model):
         else:
             return "{0.months} meses, {0.days} dias".format(rd)
 
+    def prncipal_photo(self):
+        sheep_photo = SheepPhoto.objects.filter(
+            sheep=self, is_principal=True
+        )
+
+        if not sheep_photo.exists():
+            return None
+
+        sheep_photo = sheep_photo.first()
+
+        return sheep_photo
 
 class Breed(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

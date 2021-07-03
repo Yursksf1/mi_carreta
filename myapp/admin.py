@@ -1,5 +1,5 @@
 from django.contrib import admin
-from myapp.models import Sheep, Breed, HistoryWeight
+from myapp.models import Sheep, Breed, HistoryWeight, SheepPhoto
 # Register your models here.
 from django.utils import timezone
 from datetime import datetime
@@ -28,3 +28,5 @@ class BreedAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
 
 admin.site.register(Breed, BreedAdmin)
+
+admin.site.register(SheepPhoto)

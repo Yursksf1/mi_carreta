@@ -154,16 +154,16 @@ from .forms import SheepForm
 # Models
 from .models import Sheep
 
-class SheepsFeedView(LoginRequiredMixin, ListView):
+class SheepsFeedView(ListView):
     """Return all published sheeps."""
 
     template_name = 'sheep_list.html'
     model = Sheep
     paginate_by = 30
-    context_object_name = 'sheep'
+    context_object_name = 'sheeps'
 
 
-class SheepDetailView(LoginRequiredMixin, DetailView):
+class SheepDetailView(DetailView):
     """Return sheep detail."""
 
     template_name = 'sheep_detail.html'
@@ -171,7 +171,7 @@ class SheepDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'sheep'
 
 
-class CreateSheepView(LoginRequiredMixin, CreateView):
+class CreateSheepView(CreateView):
     """Create a new sheep."""
 
     template_name = 'sheep_form.html'

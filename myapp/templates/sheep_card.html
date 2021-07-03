@@ -1,14 +1,5 @@
 <div class="col-sm-12 col-md-3 offset-md-2 mt-5 p-0 post-container">
-    <div class="media pt-3 pl-3 pb-1">
-        <a href="{% url "sheep:detail" sheep.id %}">
-            <img class="mr-3 rounded-circle" height="35" src="{{ post.profile.picture.url }}" alt="{{ post.user.get_full_name }}">
-        </a>
-        <div class="media-body">
-            <p style="margin-top: 5px;">{{ post.user.get_full_name  }}</p>
-        </div>
-    </div>
 
-    <img style="width: 100%;" src="{{ post.photo.url }}" alt="{{ post.title }}">
 
     <p class="mt-1 ml-2" >
         <a href="" style="color: #000; font-size: 20px;">
@@ -16,6 +7,15 @@
         </a> 30% Super Oveja
     </p>
     <p class="ml-2 mt-0 mb-2">
-        <b>{{ post.title }}</b> - <small>{{ post.created }}</small>
+        <b> {{ sheep.full_name }}</b> - <small>{{ sheep.birthday }}</small>
     </p>
+    <p class="ml-2 mt-0 mb-2">
+        <b> {{ sheep.age }}</b> - <small>{{ sheep.breeds }}</small>
+    </p>
+    <p class="ml-2 mt-0 mb-2">
+        <b> {{ sheep.prncipal_photo }}</b> - <small>{{ sheep.prncipal_photo }}</small>
+    </p>
+
+    <img style="width: 100%;" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.prncipal_photo.create_at }}">
+
 </div>
