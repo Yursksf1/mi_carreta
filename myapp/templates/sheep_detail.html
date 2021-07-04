@@ -17,7 +17,7 @@
               "{{ weight.create_at|date:'Y-m-d' }}",
             {% endfor %}
           ]
-        
+
         var aprisco_data = [
             {% for weight in sheep.historyweight_set.all %}
               '{{ weight.weight }}',
@@ -56,8 +56,24 @@
         <b> {{ sheep.age }}</b> - <small>{{ sheep.breed }}</small>
     </p>
 
-    <img src="{{ sheep.prncipal_photo.upload.url }}" class="img-fluid" alt="{{ sheep.full_name }}">
-    <p>Tomado hace: {{ sheep.prncipal_photo.take_ago }}</p>
+    <div class="col-md-6">
+        {% if sheep.prncipal_photo %}
+            <img class="detail-img-principal" class="img-fluid" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
+        {% else %}
+            <img class="detail-img-principal" class="img-fluid" src="{% static 'img/sheep_default.jpeg' %}"  alt="{{ sheep.full_name }}">
+        {% endif %}
+        <!-- <img src="{{ sheep.prncipal_photo.upload.url }}" class="img-fluid" alt="{{ sheep.full_name }}"> -->
+        <p>Tomado hace: {{ sheep.prncipal_photo.take_ago }}</p>
+    </div>
+    <div class="col-md-6">
+        {% for sheep_photo in sheep.sheepphoto_set.all %}
+            {{ sheep_photo }}
+        <img src="{{ sheep_photo.upload.url }}" class="img-fluid" alt="{{ sheep.full_name }}">
+
+        {% endfor %}
+        other
+    </div>
+
 </div>
 
 <div class="col-sm-12">
