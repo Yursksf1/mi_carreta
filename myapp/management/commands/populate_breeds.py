@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 # Models
 from myapp.models import Breed
 
-ROLE_CHOICES = [
+BREEDS = [
     ['Hampshire',
      'No Tengo idea de que sea'],
 
@@ -48,9 +48,11 @@ ROLE_CHOICES = [
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        for role in ROLE_CHOICES:
-            if not Breed.objects.filter(name=role[0]).exists():
+        for breed in BREEDS:
+            if not Breed.objects.filter(name=breed[0]).exists():
                 Breed.objects.create(
-                    name=role[0].upper(),
-                    description=role[1],
+                    name=breed[0].upper(),
+                    acronym=breed[1],
+                    color=breed[2],
+                    description=breed[3],
                 )
