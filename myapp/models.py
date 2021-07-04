@@ -20,6 +20,7 @@ class Sheep(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     identification_number = models.fields.CharField(max_length=100)
+    identification_number_2 = models.fields.CharField(max_length=100)
     name = models.fields.CharField(max_length=100)
     description = models.fields.CharField(max_length=300)
 
@@ -35,7 +36,7 @@ class Sheep(models.Model):
     active = models.fields.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return self.full_name()
 
     def full_name(self):
         return '{} - {}'.format(self.identification_number, self.name)
@@ -144,6 +145,9 @@ class SheepBreed(models.Model):
     )
     percent = models.DecimalField(max_digits=5, decimal_places=2)
 
+    def __str__(self):
+        return '{} - {} - {}'.format(self.sheep, self.percent, self.breed.name)
+
 class SheepPhoto(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sheep = models.ForeignKey(
@@ -153,6 +157,9 @@ class SheepPhoto(models.Model):
     upload = models.FileField(upload_to='media/')
     create_at = models.DateTimeField(auto_now_add=True)
     is_principal = models.fields.BooleanField(default=True)
+    
+    def __str__(self):
+        return '{} - {}'.format(self.sheep, self.is_principal)
 
     def take_ago(self):
         local_tz = get_localzone()
