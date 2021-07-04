@@ -173,7 +173,9 @@ class SheepPhoto(models.Model):
             return "{0.years} Años {0.months} meses".format(rd)
         else:
             return "{0.months} meses, {0.days} dias".format(rd)
-
+    
+    class Meta:
+        ordering = ['-is_principal']
 
 class HistoryWeight(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
