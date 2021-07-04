@@ -51,7 +51,7 @@ SHEEP_PICTURE = [
     ['275219', 'media/Sinba.jpg', 'TRUE'],
     ['2825', 'media/Dorper_c.jpg', 'FALSE'],
     ['2825', 'media/Dorper.jpg', 'TRUE'],
-    ['2326', 'media/Francois c.jpg', 'FALSE'],
+    ['2326', 'media/Francois_c.jpg', 'FALSE'],
     ['2326', 'media/Francois.jpg', 'TRUE'],
     ['275473', 'media/Mangani_c.jpg', 'FALSE'],
     ['275473', 'media/Mangani.jpg', 'TRUE'],

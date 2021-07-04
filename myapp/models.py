@@ -39,6 +39,9 @@ class Sheep(models.Model):
         return self.full_name()
 
     def full_name(self):
+        if self.identification_number_2:
+            return '{} - {} ({})'.format(self.identification_number, self.name, self.identification_number_2)
+
         return '{} - {}'.format(self.identification_number, self.name)
 
     def breed(self):
