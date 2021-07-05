@@ -47,21 +47,49 @@ form .weather-container input  {
 .dashboard-container {
     border-width: 1px;
     border-color: black;
-    padding: 1px;
-    border-radius: 25px;
+    padding-right: 1%;
+    padding-left: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-radius: .25rem;
+    text-align: center;
+}
+.bg-gradient-total {
+    background: #62d469!important;
+    background: linear-gradient(45deg,#7cce9f 0%,#62d469 100%)!important;
+    border-color: #92D050!important;
 }
 
+
+.bg-gradient-machos {
+    background: #1f1498!important;
+    background: linear-gradient(45deg,#321fdb 0%,#1f1498 100%)!important;
+    border-color: #1f1498!important;
+}
+
+.bg-gradient-corderos {
+    background: #2982cc!important;
+    background: linear-gradient(45deg,#39f 0%,#2982cc 100%)!important;
+    border-color: #2982cc!important;
+}
+.bg-gradient-hembras {
+    background: #d93737!important;
+    background: linear-gradient(45deg,#e55353 0%,#d93737 100%)!important;
+    border-color: #d93737!important;
+}
+
+
 .dashboard-container .total {
-    background-color: darkslateblue;
+    /* background-color: darkslateblue; */
 }
 .dashboard-container .machos {
-    background-color: #6f94c6;
+    /* background-color: #6f94c6; */
 }
 .dashboard-container .hembras {
-    background-color: lightpink;
+    /* background-color: lightpink; */
 }
 .dashboard-container .cordero {
-    background-color: #ddffdd;
+    /* background-color: #ddffdd; */
 }
 
 .dashboard-container p {

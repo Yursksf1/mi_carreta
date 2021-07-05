@@ -8,13 +8,13 @@
         <h5 class="card-title">
           <a href="{% url 'app:detail' sheep.id %}" >
             {{ sheep.full_name }}
-          </a> 
-          
+          </a>
+
           <span class="card-buttons float-right">
             <a href="{% url 'app:detail' sheep.id %}" >
                 <i class="fa fa-eye"></i>
-            </a> 
-               
+            </a>
+
             <a href="{% url 'app:detail' sheep.id %}" >
                 <i class="fa fa-pencil-square-o"></i>
             </a>
@@ -22,7 +22,7 @@
 
         </h5>
       </div>
-      
+
       <div class="col-10 offset-1">
         <br>
         {% if sheep.breed %}
@@ -49,18 +49,18 @@
             <img class="card-img-top" class="img-thumbnail" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
           {% else %}
           <img class="card-img-top" class="img-thumbnail" src="{% static 'img/sheep_default.jpeg' %}"  alt="{{ sheep.full_name }}">
-          {% endif %}  
+          {% endif %}
         </a>
       </div>
       <div class="col-6 col-sm-8 col-md-5 col-lg-6">
         <div class="card-body">
           <p class="card-text">
-            
+
             <div class='sheep-weight'>
               {{ sheep.weight  }}
             </div>
-            {% if sheep.breed %}
-              {{ sheep.breed  }}
+            {% if sheep.breed_name %}
+              {{ sheep.breed_name  }}
             {% else %}
               MEZTIZO
             {% endif %}

@@ -14,6 +14,8 @@
     <div class="col-xs-12 dashboard-container ">
 
     <div class="col-sm-12 col-xs-12 dashboard-container total">
+        <div class="card text-white bg-gradient-total">
+
         <h4>
              Total Animales: <br>
         </h4>
@@ -25,89 +27,107 @@
             {% endif %}
         </p>
 
+        </div>
     </div>
 
     <div class="col-sm-4 col-xs-4 dashboard-container machos">
-        <h4>
-             Machos: <br>
-        </h4>
-        <p>
-            {% if  num_machos  %}
-                {{ num_machos }}
-            {% else %}
-                N/A
-            {% endif %}
-        </p>
+        <div class="card text-white bg-gradient-machos">
+
+            <h4>
+                Machos (P): <br>
+            </h4>
+            <p>
+                {% if  num_machos_p  %}
+                    {{ num_machos_p }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
+        </div>
 
     </div>
 
-    <div class="col-sm-4 col-xs-4 dashboard-container  hembras">
-        <h4>
-             Hembrass: <br>
-        </h4>
-        <p>
-            {% if  num_hembras  %}
-                {{ num_hembras }}
-            {% else %}
-                N/A
-            {% endif %}
-        </p>
+    <div class="col-sm-4 col-xs-4 dashboard-container hembras">
+        <div class="card text-white bg-gradient-hembras">
 
-    </div>
+            <h4>
+                Hembras (P): <br>
+            </h4>
+            <p>
+                {% if  num_hembras_p  %}
+                    {{ num_hembras_p }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
 
-    <div class="col-sm-4 col-xs-4 dashboard-container cordero">
-        <h4>
-             Corderos: <br>
-        </h4>
-        <p>
-            {% if  False  %}
-                {{ num_hembras }}
-            {% else %}
-                N/A
-            {% endif %}
-        </p>
-
-    </div>
-  <div class="col-sm-4 col-xs-4 dashboard-container machos">
-        <h4>
-             Machos: <br>
-        </h4>
-        <p>
-            {% if  num_machos  %}
-                {{ num_machos }}
-            {% else %}
-                N/A
-            {% endif %}
-        </p>
-
-    </div>
-
-    <div class="col-sm-4 col-xs-4 dashboard-container  hembras">
-        <h4>
-             Hembrass: <br>
-        </h4>
-        <p>
-            {% if  num_hembras  %}
-                {{ num_hembras }}
-            {% else %}
-                N/A
-            {% endif %}
-        </p>
-
+        </div>
     </div>
 
     <div class="col-sm-4 col-xs-4 dashboard-container cordero">
-        <h4>
-             Corderos: <br>
-        </h4>
-        <p>
-            {% if  False  %}
-                {{ num_hembras }}
-            {% else %}
-                N/A
-            {% endif %}
-        </p>
+        <div class="card text-white bg-gradient-corderos">
 
+            <h4>
+                Corderos (P): <br>
+            </h4>
+            <p>
+                {% if  num_corderos_p  %}
+                    {{ num_corderos_p }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    <div class="col-sm-4 col-xs-4 dashboard-container machos">
+        <div class="card text-white bg-gradient-machos">
+
+            <h4>
+                Machos (C): <br>
+            </h4>
+            <p>
+                {% if  num_machos  %}
+                    {{ num_machos }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
+
+        </div>
+    </div>
+
+    <div class="col-sm-4 col-xs-4 dashboard-container  hembras">
+        <div class="card text-white bg-gradient-hembras">
+
+            <h4>
+                Hembras (C): <br>
+            </h4>
+            <p>
+                {% if  num_hembras  %}
+                    {{ num_hembras }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
+
+        </div>
+    </div>
+
+    <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+        <div class="card text-white bg-gradient-corderos">
+
+            <h4>
+                Corderos (C): <br>
+            </h4>
+            <p>
+                {% if  num_corderos  %}
+                    {{ num_corderos }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
+
+        </div>
     </div>
 
     </div>

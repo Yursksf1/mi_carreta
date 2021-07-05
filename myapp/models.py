@@ -45,7 +45,7 @@ class Sheep(models.Model):
 
         return '{} - {}'.format(self.identification_number, self.name)
 
-    def breed(self):
+    def breed_name(self):
         breeds = SheepBreed.objects.filter(
             sheep=self
         )
@@ -166,10 +166,13 @@ class SheepBreed(models.Model):
     breed = models.ForeignKey(
         Breed,
         on_delete=models.CASCADE,
+        related_name='sheep'
     )
     sheep = models.ForeignKey(
         Sheep,
         on_delete=models.CASCADE,
+        related_name='breed'
+
     )
     percent = models.DecimalField(max_digits=5, decimal_places=2)
 

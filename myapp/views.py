@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.generic.edit import FormView
 from myapp.models import HistoryWeather
 from myapp.serializers import HistoryWeatherSerialize
-from datetime import date
+from datetime import date, timedelta
 from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
@@ -106,9 +106,19 @@ def weather_history(request):
     )
 
 def dashboard(request):
-    total = 96
-    num_machos = 7
-    num_hembras = 89
+    sheeps = Sheep.objects
+
+    total = len(sheeps.all())
+
+    num_machos = len(sheeps.filter(gender='M', breed__percent__lt=80))
+    num_hembras = len(sheeps.filter(gender='H', breed__percent__lt=80))
+    today = date.today()
+    month_3 = today - timedelta(days=90)
+    num_cordero = len(sheeps.filter(birthday__gt=month_3, breed__percent__lt=80))
+
+    num_machos_p = len(sheeps.filter(gender='M', breed__percent__gt=80))
+    num_hembras_p = len(sheeps.filter(gender='H', breed__percent__gt=80))
+    num_cordero_p = len(sheeps.filter(birthday__gt=month_3, breed__percent__gt=80))
 
     num_gestantes = 11
     num_natal = 8
@@ -122,8 +132,13 @@ def dashboard(request):
         'dashboard.html',
         {
             'total': total,
+            'num_machos_p': num_machos_p,
+            'num_hembras_p': num_hembras_p,
+            'num_corderos_p': num_cordero_p,
+
             'num_machos': num_machos,
             'num_hembras': num_hembras,
+            'num_corderos': num_cordero,
 
             'num_gestantes': num_gestantes,
             'num_natal': num_natal,
