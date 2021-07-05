@@ -123,7 +123,7 @@
                     <img class="demo cursor" src="{{ sheep_photo.upload.url }}" style="width:100%" onclick="currentSlide({{ forloop.counter }})" alt="{{sheep_photo.take_ago}}">
                 </div>
             {% endfor %}
-        
+
         {% else %}
             <div class="row">
                 <div class="column offset-md-0">
@@ -170,7 +170,6 @@
 <div class="col-sm-12 col-md-12">
     <h1> FAMILY:</h1>
     <div class="row">
-
         <div class="col-sm-12 col-md-12">
             <b> Padre: </b> <br>
             {% if sheep.parentDadId %}
@@ -181,7 +180,7 @@
                 N/A
             {% endif%}
         </div>
-        {% if sheep.parentDadId and  sheep.parentDadId.parentDadId %}
+        {% if sheep.parentDadId and sheep.parentDadId.parentDadId %}
         <div class="col-sm-12 col-md-12">
             <b> Abuelo Paterno: </b> <br>
                 {% with sheep=sheep.parentDadId.parentDadId %}
@@ -190,7 +189,7 @@
         </div>
         {% endif%}
 
-        {% if sheep.parentDadId and  sheep.parentDadId.parentMomId %}
+        {% if sheep.parentDadId and sheep.parentDadId.parentMomId %}
         <div class="col-sm-12 col-md-12">
             <b> Abuea Paterna: </b> <br>
                 {% with sheep=sheep.parentDadId.parentMomId %}
@@ -211,7 +210,7 @@
                 N/A
             {% endif%}
         </div>
-        {% if sheep.parentDadId and  sheep.parentDadId.parentDadId %}
+        {% if sheep.parentDadId and sheep.parentDadId.parentDadId %}
         <div class="col-sm-12 col-md-12">
             <b> Abuelo Materno: </b> <br>
                 {% with sheep=sheep.parentDadId.parentDadId %}
@@ -220,7 +219,7 @@
         </div>
         {% endif%}
 
-        {% if sheep.parentDadId and  sheep.parentDadId.parentMomId %}
+        {% if sheep.parentDadId and sheep.parentDadId.parentMomId %}
         <div class="col-sm-12 col-md-12">
             <b> Abuea Materna: </b> <br>
                 {% with sheep=sheep.parentDadId.parentMomId %}
@@ -228,6 +227,16 @@
                 {% endwith %}
         </div>
         {% endif%}
+
+        <div class="col-sm-12 col-md-12">
+
+        <h5> HIJOS: </h5>
+        <br>
+         {% for sheep in sheep.children %}
+             {% include "sheep_card.html" %}
+         {% endfor %}
+
+        </div>
 
     </div>
 </div>

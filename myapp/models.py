@@ -9,6 +9,7 @@ from dateutil import relativedelta as rdelta
 # Create your models here.
 from django.urls import reverse
 from django.utils.timezone import now
+from django.db.models import Q
 
 
 class Sheep(models.Model):
@@ -126,6 +127,30 @@ class Sheep(models.Model):
 
         return sheep_photo
 
+    def children(self):
+        sheep = None
+        if self.gender == 'H':
+            sheep = Sheep.objects.filter(
+                parentMomId=self
+            )
+        elif self.gender == 'M':
+            sheep = Sheep.objects.filter(
+                parentDadId=self
+            )
+        else:
+            sheep = Sheep.objects.filter(
+                Q(parentMomId=self) |
+                Q(parentDadId=self)
+            )
+
+        if not sheep.exists():
+            return []
+
+        sheeps = sheep.order_by('birthday').all()
+
+        return sheeps
+
+
 class Breed(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.fields.CharField(max_length=100)
@@ -160,7 +185,7 @@ class SheepPhoto(models.Model):
     upload = models.FileField(upload_to='media/')
     create_at = models.DateTimeField(auto_now_add=True)
     is_principal = models.fields.BooleanField(default=True)
-    
+
     def __str__(self):
         return '{} - {}'.format(self.sheep, self.is_principal)
 
@@ -173,7 +198,7 @@ class SheepPhoto(models.Model):
             return "{0.years} Años {0.months} meses".format(rd)
         else:
             return "{0.months} meses, {0.days} dias".format(rd)
-    
+
     class Meta:
         ordering = ['-is_principal']
 

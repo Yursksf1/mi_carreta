@@ -23,7 +23,7 @@ SHEEP_CHOICES = [
     ['275210', '666', 'Diabla', '', 'H', '11/12/2016', '', '', 'TRUE'],
     ['126', '334048', 'Bella', '', 'H', '12/04/2020', '', '', 'TRUE'],
     ['264', '', '3 rojo', '', 'H', '21/03/2020', '', '', 'TRUE'],
-    ['081', '', 'hija de diabla', '', 'H', '2/01/2021', '275210', '', 'TRUE'],
+    ['081', '', 'hija de diabla', '', 'H', '2/01/2021', '', '275210', 'TRUE'],
     ['619', '', 'hijo de 3', '', 'M', '30/03/2021', '264', '567', 'TRUE'],
     ['275473', '', 'mangani', '', 'M', '17/08/2018', '', '', 'TRUE'],
     ['1224', '', 'Navidad', '', 'M', '17/08/2020', '', '', 'TRUE'],
@@ -70,8 +70,8 @@ class Command(BaseCommand):
 
                 print('birthday', birthday)
 
-                parentDadId = Sheep.objects.filter(identification_number=sheep[7]).first()
-                parentMomId = Sheep.objects.filter(identification_number=sheep[8]).first()
+                parentDadId = Sheep.objects.filter(identification_number=sheep[6]).first()
+                parentMomId = Sheep.objects.filter(identification_number=sheep[7]).first()
 
                 s = Sheep.objects.create(
                     identification_number=sheep[0],
@@ -81,7 +81,7 @@ class Command(BaseCommand):
                     gender=sheep[4],
                     parentDadId=parentDadId,
                     parentMomId=parentMomId,
-                    active=sheep[7] == 'TRUE'
+                    active=sheep[8] == 'TRUE'
                 )
                 s.birthday = birthday
                 s.save()
