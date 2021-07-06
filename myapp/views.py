@@ -177,6 +177,19 @@ class SheepsFeedView(ListView):
     paginate_by = 30
     context_object_name = 'sheeps'
 
+    def get_queryset(self):
+        """Filter by price if it is provided in GET parameters"""
+        queryset = super().get_queryset()
+
+        if 'price' in self.request.GET:
+            queryset = queryset.filter(price=self.request.GET['price'])
+        if 'name' in self.request.GET:
+            queryset = queryset.filter(name__icontains=self.request.GET['name'])
+        if 'gender' in self.request.GET:
+            queryset = queryset.filter(gender=self.request.GET['gender'])
+        return queryset
+
+
 
 class SheepDetailView(DetailView):
     """Return sheep detail."""

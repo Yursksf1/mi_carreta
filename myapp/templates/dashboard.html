@@ -13,56 +13,61 @@
   <div class="row">
     <div class="col-xs-12 dashboard-container ">
 
-    <div class="col-sm-12 col-xs-12 dashboard-container total">
-        <div class="card text-white bg-gradient-total">
-
-        <h4>
-             Total Animales: <br>
-        </h4>
-        <p>
-            {% if  total  %}
-                {{ total }}
-            {% else %}
-                N/A
-            {% endif %}
-        </p>
-
-        </div>
-    </div>
-
-    <div class="col-sm-4 col-xs-4 dashboard-container machos">
-        <div class="card text-white bg-gradient-machos">
-
+    <a href="{% url 'app:feed' %}">
+        <div class="col-sm-12 col-xs-12 dashboard-container total">
+            <div class="card text-white bg-gradient-total">
             <h4>
-                Machos (P): <br>
+                    Total Animales: 
+                <br>
             </h4>
             <p>
-                {% if  num_machos_p  %}
-                    {{ num_machos_p }}
+                {% if  total  %}
+                    {{ total }}
                 {% else %}
                     N/A
                 {% endif %}
             </p>
+            </div>
         </div>
+    </a>
 
-    </div>
+    <a href="{% url 'app:feed' %}?gender=M">
 
-    <div class="col-sm-4 col-xs-4 dashboard-container hembras">
-        <div class="card text-white bg-gradient-hembras">
+        <div class="col-sm-4 col-xs-4 dashboard-container machos">
+            <div class="card text-white bg-gradient-machos">
 
-            <h4>
-                Hembras (P): <br>
-            </h4>
-            <p>
-                {% if  num_hembras_p  %}
-                    {{ num_hembras_p }}
-                {% else %}
-                    N/A
-                {% endif %}
-            </p>
-
+                <h4>
+                    Machos (P): <br>
+                </h4>
+                <p>
+                    {% if  num_machos_p  %}
+                        {{ num_machos_p }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </p>
+            </div>
         </div>
-    </div>
+    </a>
+
+    <a href="{% url 'app:feed' %}?gender=H">
+        <div class="col-sm-4 col-xs-4 dashboard-container hembras">
+            <div class="card text-white bg-gradient-hembras">
+
+                <h4>
+                    Hembras (P): <br>
+                </h4>
+                <p>
+                    {% if  num_hembras_p  %}
+                        {{ num_hembras_p }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </p>
+
+            </div>
+        </div>
+    </a>
 
     <div class="col-sm-4 col-xs-4 dashboard-container cordero">
         <div class="card text-white bg-gradient-corderos">
