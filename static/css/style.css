@@ -54,9 +54,13 @@ form .weather-container input  {
     border-radius: .25rem;
     text-align: center;
 }
+.dashboard-container a {
+    color: #ffffff;
+}
+
 .bg-gradient-total {
     background: #62d469!important;
-    background: linear-gradient(45deg,#7cce9f 0%,#62d469 100%)!important;
+    background: linear-gradient(45deg,#49ec8f 0%,#62d469 100%)!important;
     border-color: #92D050!important;
 }
 
