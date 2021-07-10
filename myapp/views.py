@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.generic.edit import FormView
-from myapp.models import HistoryWeather
+from myapp.models import HistoryWeather, SheepBreed
 from myapp.serializers import HistoryWeatherSerialize
 from datetime import date, timedelta
 from django.shortcuts import redirect, render
@@ -181,12 +181,24 @@ class SheepsFeedView(ListView):
         """Filter by price if it is provided in GET parameters"""
         queryset = super().get_queryset()
 
-        if 'price' in self.request.GET:
-            queryset = queryset.filter(price=self.request.GET['price'])
         if 'name' in self.request.GET:
             queryset = queryset.filter(name__icontains=self.request.GET['name'])
         if 'gender' in self.request.GET:
             queryset = queryset.filter(gender=self.request.GET['gender'])
+
+        if 'breeds' in self.request.GET:
+            sheep_breeds = SheepBreed.objects.filter(percent__gte=self.request.GET['breeds']).all()
+            ids = [sheep_breed.sheep.id for sheep_breed in sheep_breeds]
+            queryset = queryset.filter(
+                id__in=ids
+            )
+        if 'type' in self.request.GET:
+            if self.request.GET['type'] == 'cordero':
+                today = date.today()
+                month_3 = today - timedelta(days=90)
+                queryset = queryset.filter(birthday__gt=month_3)
+
+
         return queryset
 
 

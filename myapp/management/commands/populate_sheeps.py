@@ -7,6 +7,7 @@ from datetime import datetime
 
 # creating an instance of
 # datetime.date
+import csv
 
 
 # Multi Tenants
@@ -46,19 +47,19 @@ SHEEP_BREEDS = [
     ['601', 'RM', 100.00],
 ]
 
-SHEEP_PICTURE = [
-    ['275219', 'media/Simba_c.jpg', 'FALSE'],
-    ['275219', 'media/Sinba.jpg', 'TRUE'],
-    ['2825', 'media/Dorper_c.jpg', 'FALSE'],
-    ['2825', 'media/Dorper.jpg', 'TRUE'],
-    ['2326', 'media/Francois_c.jpg', 'FALSE'],
-    ['2326', 'media/Francois.jpg', 'TRUE'],
-    ['275473', 'media/Mangani_c.jpg', 'FALSE'],
-    ['275473', 'media/Mangani.jpg', 'TRUE'],
-    ['1224', 'media/Navidad.jpg', 'TRUE'],
-    ['601', 'media/Reyes.jpg', 'TRUE'],
-    ['774943', 'media/Diamante.jpg', 'TRUE'],
-]
+path = './data/sheep_picture.csv'
+SHEEP_PICTURE = []
+cont = 0
+with open(path, newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=';')
+    for row in spamreader:
+        if cont:
+            SHEEP_PICTURE.append(row)
+        cont = cont+1
+
+    print('Ingresar {} registros de photos'.format(cont))
+
+
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -87,30 +88,37 @@ class Command(BaseCommand):
                 s.save()
 
         for sheep_breed in SHEEP_BREEDS:
-            sheep = Sheep.objects.filter(identification_number=sheep_breed[0]).first()
-            breed = Breed.objects.filter(acronym=sheep_breed[1]).first()
-            validate = SheepBreed.objects.filter(
-                sheep=sheep, 
-                breed=breed
-            ).exists()
+            if Sheep.objects.filter(identification_number=sheep_breed[0]).exists():
+                sheep = Sheep.objects.filter(identification_number=sheep_breed[0]).first()
+                breed = Breed.objects.filter(acronym=sheep_breed[1]).first()
+                validate = SheepBreed.objects.filter(
+                    sheep=sheep, 
+                    breed=breed
+                ).exists()
 
-            if not validate:
-                SheepBreed.objects.create(
-                    breed=breed,
-                    sheep=sheep,
-                    percent=sheep_breed[2]
-                )
+                if not validate:
+                    SheepBreed.objects.create(
+                        breed=breed,
+                        sheep=sheep,
+                        percent=sheep_breed[2]
+                    )
         
         for sheep_picture in SHEEP_PICTURE:
-            sheep = Sheep.objects.filter(identification_number=sheep_picture[0]).first()
-            validate = SheepPhoto.objects.filter(
-                sheep=sheep, 
-                upload=sheep_picture[1]
-            ).exists()
-            
-            if not validate:
-                SheepPhoto.objects.create(
-                    sheep=sheep,
-                    upload=sheep_picture[1],
-                    is_principal=sheep_picture[2] == 'TRUE'
-                )
+            if Sheep.objects.filter(identification_number=sheep_picture[0]).exists():
+                sheep = Sheep.objects.filter(identification_number=sheep_picture[0]).first()
+                validate = SheepPhoto.objects.filter(
+                    sheep=sheep, 
+                    upload=sheep_picture[1]
+                ).exists()
+                
+                if not validate:
+                    create_at_date = datetime.strptime(sheep_picture[3], '%d/%m/%Y')
+                    create_at = timezone.make_aware(create_at_date, timezone.get_default_timezone())
+                    
+                    sp = SheepPhoto.objects.create(
+                        sheep=sheep,
+                        upload=sheep_picture[1],
+                        is_principal=sheep_picture[2] == 'TRUE'
+                    )
+                    sp.create_at = create_at
+                    sp.save()
