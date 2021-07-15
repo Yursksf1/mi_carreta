@@ -2,12 +2,14 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.generic.edit import FormView
-from myapp.models import HistoryWeather, SheepBreed
-from myapp.serializers import HistoryWeatherSerialize
 from datetime import date, timedelta
 from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
+
+from myapp.models import HistoryWeather, SheepBreed
+from myapp.serializers import HistoryWeatherSerialize
+from myapp.controllers import SheepController
 
 IMAGEN_LOCATION = {
     'N': 'img/nevera.png',
@@ -107,18 +109,19 @@ def weather_history(request):
 
 def dashboard(request):
     sheeps = Sheep.objects
+    total = len(sheeps.filter(active=True).all())
+    ids_pure = SheepController.get_id_pure()
 
-    total = len(sheeps.all())
-
-    num_machos = len(sheeps.filter(gender='M', breed__percent__lt=80))
-    num_hembras = len(sheeps.filter(gender='H', breed__percent__lt=80))
+    num_machos = len(sheeps.filter(gender='M', active=True).exclude(id__in=ids_pure))
+    num_hembras = len(sheeps.filter(gender='H', active=True).exclude(id__in=ids_pure))
     today = date.today()
     month_3 = today - timedelta(days=90)
-    num_cordero = len(sheeps.filter(birthday__gt=month_3, breed__percent__lt=80))
 
-    num_machos_p = len(sheeps.filter(gender='M', breed__percent__gt=80))
-    num_hembras_p = len(sheeps.filter(gender='H', breed__percent__gt=80))
-    num_cordero_p = len(sheeps.filter(birthday__gt=month_3, breed__percent__gt=80))
+    num_cordero = len(sheeps.filter(birthday__gt=month_3, active=True).exclude(id__in=ids_pure))
+
+    num_machos_p = len(sheeps.filter(gender='M', id__in=ids_pure, active=True))
+    num_hembras_p = len(sheeps.filter(gender='H', id__in=ids_pure, active=True))
+    num_cordero_p = len(sheeps.filter(birthday__gt=month_3, id__in=ids_pure, active=True))
 
     num_gestantes = 11
     num_natal = 8
@@ -174,24 +177,32 @@ class SheepsFeedView(ListView):
 
     template_name = 'sheep_list.html'
     model = Sheep
-    paginate_by = 30
+    paginate_by = 200
     context_object_name = 'sheeps'
 
     def get_queryset(self):
         """Filter by price if it is provided in GET parameters"""
         queryset = super().get_queryset()
 
+        if 'active' in self.request.GET:
+            if self.request.GET['active'] == 'true':
+                queryset = queryset.filter(active=True)
         if 'name' in self.request.GET:
             queryset = queryset.filter(name__icontains=self.request.GET['name'])
         if 'gender' in self.request.GET:
             queryset = queryset.filter(gender=self.request.GET['gender'])
 
         if 'breeds' in self.request.GET:
-            sheep_breeds = SheepBreed.objects.filter(percent__gte=self.request.GET['breeds']).all()
-            ids = [sheep_breed.sheep.id for sheep_breed in sheep_breeds]
-            queryset = queryset.filter(
-                id__in=ids
-            )
+            ids_pure = SheepController.get_id_pure()
+
+            if self.request.GET['breeds'] == 'puro':
+                queryset = queryset.filter(
+                    id__in=ids_pure
+                )
+
+            if self.request.GET['breeds'] == 'comercial':
+                queryset = queryset.exclude(id__in=ids_pure)
+
         if 'type' in self.request.GET:
             if self.request.GET['type'] == 'cordero':
                 today = date.today()

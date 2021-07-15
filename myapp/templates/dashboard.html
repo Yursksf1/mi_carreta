@@ -13,7 +13,7 @@
   <div class="row">
     <div class="col-xs-12 dashboard-container ">
 
-    <a href="{% url 'app:feed' %}">
+    <a href="{% url 'app:feed' %}?active=true">
         <div class="col-sm-12 col-xs-12 dashboard-container total">
             <div class="card text-white bg-gradient-total">
             <h4>
@@ -31,7 +31,7 @@
         </div>
     </a>
 
-    <a href="{% url 'app:feed' %}?gender=M&breeds=100">
+    <a href="{% url 'app:feed' %}?gender=M&breeds=puro&active=true">
 
         <div class="col-sm-4 col-xs-4 dashboard-container machos">
             <div class="card text-white bg-gradient-machos">
@@ -50,7 +50,7 @@
         </div>
     </a>
 
-    <a href="{% url 'app:feed' %}?gender=H&breeds=80">
+    <a href="{% url 'app:feed' %}?gender=H&breeds=puro&active=true">
         <div class="col-sm-4 col-xs-4 dashboard-container hembras">
             <div class="card text-white bg-gradient-hembras">
 
@@ -68,7 +68,7 @@
             </div>
         </div>
     </a>
-    <a href="{% url 'app:feed' %}?type=cordero&breeds=75">
+    <a href="{% url 'app:feed' %}?type=cordero&breeds=puro&active=true">
         <div class="col-sm-4 col-xs-4 dashboard-container cordero">
             <div class="card text-white bg-gradient-corderos">
 
@@ -85,6 +85,7 @@
             </div>
         </div>
     </a>
+    <a href="{% url 'app:feed' %}?gender=M&breeds=comercial&active=true">
 
     <div class="col-sm-4 col-xs-4 dashboard-container machos">
         <div class="card text-white bg-gradient-machos">
@@ -102,6 +103,9 @@
 
         </div>
     </div>
+        </a>
+
+    <a href="{% url 'app:feed' %}?gender=H&breeds=comercial&active=true">
 
     <div class="col-sm-4 col-xs-4 dashboard-container  hembras">
         <div class="card text-white bg-gradient-hembras">
@@ -119,6 +123,9 @@
 
         </div>
     </div>
+    </a>
+
+    <a href="{% url 'app:feed' %}?type=cordero&breeds=comercial&active=true">
 
     <div class="col-sm-4 col-xs-4 dashboard-container cordero">
         <div class="card text-white bg-gradient-corderos">
@@ -136,6 +143,7 @@
 
         </div>
     </div>
+    </a>
 
     </div>
   </div>

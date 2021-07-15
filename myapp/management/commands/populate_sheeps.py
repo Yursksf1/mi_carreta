@@ -15,37 +15,31 @@ import csv
 # Models
 from myapp.models import Sheep, Breed, SheepBreed, SheepPhoto, HistoryWeight
 
-SHEEP_CHOICES = [
-    ['567', '13', 'jeronimo', '', 'M', '21/03/2019', '', '', 'FALSE'],
-    ['2326', '127', 'Francois', '', 'M', '11/09/2014', '', '', 'TRUE'],
-    ['2825', '', 'dorper', '', 'M', '5/05/2017', '', '', 'TRUE'],
-    ['774943', '', 'Diamante', '', 'M', '17/08/2015', '', '', 'TRUE'],
-    ['275219', '', 'Simba', '', 'M', '2/09/2016', '', '', 'TRUE'],
-    ['275210', '666', 'Diabla', '', 'H', '11/12/2016', '', '', 'TRUE'],
-    ['126', '334048', 'Bella', '', 'H', '12/04/2020', '', '', 'TRUE'],
-    ['264', '', '3 rojo', '', 'H', '21/03/2020', '', '', 'TRUE'],
-    ['081', '', 'hija de diabla', '', 'H', '2/01/2021', '', '275210', 'TRUE'],
-    ['619', '', 'hijo de 3', '', 'M', '30/03/2021', '264', '567', 'TRUE'],
-    ['275473', '', 'mangani', '', 'M', '17/08/2018', '', '', 'TRUE'],
-    ['1224', '', 'Navidad', '', 'M', '17/08/2020', '', '', 'TRUE'],
-    ['601', '', 'Dia de Reyes', '', 'M', '17/08/2020', '', '', 'TRUE'],
-]
 
-SHEEP_BREEDS = [
-    ['567', 'HS', 100.00],
-    ['2326', 'CL', 100.00],
-    ['2825', 'DP', 100.00],
-    ['774943', 'HS', 100.00],
-    ['275219', 'HS', 100.00],
-    ['275210', 'HS', 100.00],
-    ['126', 'HS', 100.00],
-    ['264', 'HS', 100.00],
-    ['081', 'HS', 100.00],
-    ['619', 'HS', 100.00],
-    ['275473', 'HS', 100.00],
-    ['1224', 'RM', 100.00],
-    ['601', 'RM', 100.00],
-]
+path = './data/sheeps.csv'
+SHEEP_CHOICES = []
+cont = 0
+with open(path, newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=';')
+    for row in spamreader:
+        if cont:
+            SHEEP_CHOICES.append(row)
+        cont = cont+1
+    print('Ingresar {} registros de sheeps'.format(cont))
+
+
+path = './data/sheep_breeds.csv'
+SHEEP_BREEDS = []
+cont = 0
+with open(path, newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=';')
+    for row in spamreader:
+        if cont:
+            SHEEP_BREEDS.append(row)
+        cont = cont+1
+    print('Ingresar {} registros de sheeps'.format(cont))
+
+
 
 path = './data/sheep_picture.csv'
 SHEEP_PICTURE = []
@@ -68,9 +62,6 @@ class Command(BaseCommand):
 
                 birthday_date = datetime.strptime(sheep[5], '%d/%m/%Y')
                 birthday = timezone.make_aware(birthday_date, timezone.get_default_timezone())
-
-                print('birthday', birthday)
-
                 parentDadId = Sheep.objects.filter(identification_number=sheep[6]).first()
                 parentMomId = Sheep.objects.filter(identification_number=sheep[7]).first()
 
@@ -89,6 +80,7 @@ class Command(BaseCommand):
 
         for sheep_breed in SHEEP_BREEDS:
             if Sheep.objects.filter(identification_number=sheep_breed[0]).exists():
+                print('sheep_breed', sheep_breed)
                 sheep = Sheep.objects.filter(identification_number=sheep_breed[0]).first()
                 breed = Breed.objects.filter(acronym=sheep_breed[1]).first()
                 validate = SheepBreed.objects.filter(
