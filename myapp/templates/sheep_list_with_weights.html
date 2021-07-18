@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+        {% for sheep in sheeps %}
+            {% include "sheep_card_v2.html" %}
+            {% include "sheep_card_table_weights.html" %}
+
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block script %}
+	<script src='https://cdn.plot.ly/plotly-2.1.0.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'> </script>
+	<script src='https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css'> </script>
+	<script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'> </script>
+
+    <script>
+        // Basic example
+        $(document).ready(function () {
+        $('.dtBasicExample').DataTable({
+            order: [[0, "desc"]],
+            lengthMenu: [[5, 10, 100, -1], [5, 10, 100, "todos"]],
+            bFilter: false,
+            language: {
+                "lengthMenu": "Ver _MENU_ por pag",
+                "zeroRecords": "No hay información para mostrar",
+                "info": " _PAGE_ / _PAGES_",
+                "infoEmpty": "No hay elementos disponibles",
+                "infoFiltered": "(Filtrado de _MAX_ elementos totales)",
+            },
+
+        });
+        });
+
+        {% for sheep in sheeps %}
+
+            var aprisco_dates = [
+                {% for weight in sheep.historyweight_set.all %}
+                "{{ weight.create_at|date:'Y-m-d' }}",
+                {% endfor %}
+            ]
+
+            var aprisco_data = [
+                {% for weight in sheep.historyweight_set.all %}
+                '{{ weight.weight }}',
+                {% endfor %}
+            ]
+
+            var trace1 = {
+            type: "scatter",
+            mode: "lines",
+            name: 'Peso',
+            x: aprisco_dates,
+            y: aprisco_data,
+            line: {color: '#17BECF'}
+            }
+
+
+            var hdata = [trace1];
+
+            var hlayout = {
+            title: 'Historico Pesos',
+            };
+
+            var name = "HistoricoPesos-" +  "{{ sheep.id }}"
+            console.log(name)
+            Plotly.newPlot(name, data=hdata, layout=hlayout);
+        {% endfor %}
+
+        
+    </script>
+{% endblock %}

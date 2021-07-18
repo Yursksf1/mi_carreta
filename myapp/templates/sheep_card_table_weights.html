@@ -1,0 +1,42 @@
+
+  {% load static %}
+
+  <div class="card col-sm-12 col-md-6 col-lg-8 offset-0 offset-md-0 offset-lg-0 mb-3 ">
+    <div class="row ">
+
+      <div class="col-12 text-center card-header">
+        <h5 class="card-title">
+          PESO
+        </h5>
+      </div>
+
+
+      <div class=" col-6 col-sm-3 col-lg-3">
+        <table class="table dtBasicExample">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Peso [Kg]</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for weight in sheep.historyweight_set.all %}
+                  <tr>
+                    <th scope="row">    {{ forloop.counter }} </th>
+                    <td>{{ weight.create_at |date:'d/m/Y'}}</td>
+                    <td>{{ weight.weight }}</td>
+                  </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+          
+      </div>
+      <div class="col-6 col-sm-9 col-lg-9">
+        <div class="col-sm-12">
+            <div id="HistoricoPesos-{{ sheep.id }}"> </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>

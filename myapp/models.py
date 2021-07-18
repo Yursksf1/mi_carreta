@@ -22,7 +22,7 @@ class Sheep(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     identification_number = models.fields.CharField(max_length=100)
     identification_number_2 = models.fields.CharField(max_length=100)
-    name = models.fields.CharField(max_length=100)
+    name = models.fields.CharField(max_length=100, null=True)
     description = models.fields.CharField(max_length=300)
 
     gender = models.CharField(

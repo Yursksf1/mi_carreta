@@ -6,6 +6,7 @@ from datetime import date, timedelta
 from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
+from django.db.models import Q
 
 from myapp.models import HistoryWeather, SheepBreed
 from myapp.serializers import HistoryWeatherSerialize
@@ -189,6 +190,12 @@ class SheepsFeedView(ListView):
                 queryset = queryset.filter(active=True)
         if 'name' in self.request.GET:
             queryset = queryset.filter(name__icontains=self.request.GET['name'])
+        if 'search' in self.request.GET:
+            queryset = queryset.filter(
+                    Q(identification_number=self.request.GET['search']) | 
+                    Q(identification_number_2=self.request.GET['search']) | 
+                    Q(name__icontains=self.request.GET['search'])
+                ) 
         if 'gender' in self.request.GET:
             queryset = queryset.filter(gender=self.request.GET['gender'])
 

@@ -15,36 +15,31 @@ from datetime import datetime
 from myapp.models import Sheep, HistoryWeight
 
 
-SHEEP_HISTORY_WEIGHT_CHOICES = [
-    ['275219', 138.0, '06/03/2021'],
-    ['275219', 141.0, '14/03/2021'],
-    ['275219', 141.5, '19/03/2021'],
-    ['275219', 138.5, '26/03/2021'],
-    ['275219', 139.0, '02/04/2021'],
-    ['275219', 134.5, '16/04/2021'],
-    ['275219', 142.5, '27/04/2021'],
-    ['275219', 134.0, '12/05/2021'],
-    ['275219', 132.0, '30/05/2021'],
-    ['275219', 130.0, '15/06/2021'],
-    ['275219', 129.5, '30/06/2021'],
-    ['2326', 91.0, '30/06/2021'],
-    ['2825', 63.0, '30/06/2021'],
-    ['774943', 95.5, '30/06/2021'],
-    ['275210', 80.5, '30/06/2021'],
-    ['126', 53.5, '30/06/2021'],
-    ['264', 41.5, '30/06/2021'],
-    ['081', 30.0, '30/06/2021'],
-    ['619', 14.0, '30/06/2021'], 
-    ['2326', 91.0, '29/06/2021'],
-    ['2825', 63.0, '29/06/2021'],
-    ['774943', 95.5, '29/06/2021'],
-    ['275210', 80.5, '29/06/2021'],
-    ['126', 53.5, '29/06/2021'],
-    ['264', 41.5, '29/06/2021'],
-    ['081', 30.0, '29/06/2021'],
-    ['619', 14.0, '29/06/2021'], 
-]
+import csv
 
+path = './data/sheep_history_weight.csv'
+# path = '/Users/yurley.sanchez/Desktop/yurley/mi_carreta/data/sheep_history_weight.csv'
+SHEEP_HISTORY_WEIGHT_CHOICES = []
+cont = 0
+headers = []
+with open(path, newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=';')
+    for row in spamreader:
+        if cont:
+            for index, date in enumerate(headers[2:]):
+                if row[index+2] and row[index+2].strip():
+                    new_row = []
+                    new_row.append(row[1])
+                    new_row.append(row[index+2].replace(',','.'))
+                    new_row.append(date)
+                    SHEEP_HISTORY_WEIGHT_CHOICES.append(new_row)
+        else:
+            for r in row:
+                headers.append(r)
+        cont = cont+1
+
+    print('Ingresar {} registros'.format(cont))
+    print(SHEEP_HISTORY_WEIGHT_CHOICES)
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -53,10 +48,10 @@ class Command(BaseCommand):
             birthday_date = datetime.strptime(sheep[2], '%d/%m/%Y')
             create_at = timezone.make_aware(birthday_date, timezone.get_default_timezone())
             sheepId = Sheep.objects.filter(identification_number=sheep[0]).first()
-
-            s = HistoryWeight.objects.create(
-                sheep=sheepId,
-                weight=sheep[1],
-            )
-            s.create_at = create_at
-            s.save()
+            if sheepId:
+                s = HistoryWeight.objects.create(
+                    sheep=sheepId,
+                    weight=sheep[1],
+                )
+                s.create_at = create_at
+                s.save()

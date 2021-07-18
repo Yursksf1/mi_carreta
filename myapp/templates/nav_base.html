@@ -1,38 +1,79 @@
 {% load static %}
 
-    <nav class="navbar navbar-expand-lg navbar-expand-md navbar-dark bg-dark static-top">
+    <nav class="navbar navbar-expand-lg navbar-expand-md navbar-dark bg-dark static-top justify-content-between">
     <div class="container">
 
 
       <a class="" href="{% url 'app:dashboard' %}">
           <img class='nav-logo' src="{% static 'img/logo.png' %}" alt="Granja Ovina MI CARRETA">
-      </a>
+      </a> 
+      &nbsp;
+
+      </button>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarResponsive">
+        
+
         <ul class="navbar-nav ml-auto">
+  
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:weather-today' %}">Today</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:weather-history' %}">History</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:weather-add' %}">Add</a>
+            <a class="nav-link" href="{% url 'app:weather-today' %}">TyH</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:feed' %}?active=true">list sheep</a>
+            <a class="nav-link" href="{% url 'app:feed_with_weight' %}?active=true"> SW</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'app:feed' %}?active=true">sheeps</a>
           </li>
 
+
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:create' %}">add sheep</a>
+            <a class="nav-link" href="{% url 'app:create' %}">+</a>
           </li>
-          <button id="js-daterangepicker-predefined" class="btn btn-soft-primary">
-            <i class="nova-calendar mr-2"></i>
-            <span></span>
-          </button>
+
+        <form class="form-inline pull-right">    
+
+
+          <input id="search" class="form-control" type="text" placeholder="Search">
+          &nbsp;
+
+          <li class="nav-item dropdown">
+
+            <a id='btnFilter' class=" nav-link dropdown-toggle btn btn-success" href="#" id="navbardrop" data-toggle="dropdown">
+              <i class="fa fa-filter"></i>
+            </a>
+            <div class="dropdown-menu">
+              <p class="dropdown-item" href="#">Genero</p>
+              <input type='checkbox' class="dropdown-item" href="#">Machos</input>
+              <input type='checkbox' class="dropdown-item" href="#">Hembras</input>
+              <hr>              
+              <p class="dropdown-item" href="#">Raza</p>
+              <input type='checkbox' class="dropdown-item" href="#">Puro</input>
+              <input type='checkbox' class="dropdown-item" href="#">Comercial</input>
+              <hr>              
+              <p class="dropdown-item" href="#">Status</p>
+              <input type='checkbox' class="dropdown-item" href="#">Active</input>
+              <input type='checkbox' class="dropdown-item" href="#">Incative</input>
+              <hr>              
+            
+            
+            </div>
+          </li>
+          &nbsp;
+
+          <div id='btnSearch' class="btn btn-success" type="submit">
+            <i class="fa fa-search"></i>
+          </div>
+           
+        </form>
+
+
+
         </ul>
       </div>
     </div>

@@ -21,6 +21,12 @@ urlpatterns = [
     ),
 
     path(
+        route='sheeps_with_weigh',
+        view=views.SheepsFeedView.as_view(template_name='sheep_list_with_weights.html'),
+        name='feed_with_weight'
+    ),
+
+    path(
         route='sheep/new/',
         view=views.CreateSheepView.as_view(),
         name='create'
