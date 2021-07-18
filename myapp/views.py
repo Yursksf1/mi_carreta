@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
 from django.db.models import Q
 
-from myapp.models import HistoryWeather, SheepBreed
+from myapp.models import HistoryWeather, SheepBreed, Sheep
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
 
@@ -192,10 +192,10 @@ class SheepsFeedView(ListView):
             queryset = queryset.filter(name__icontains=self.request.GET['name'])
         if 'search' in self.request.GET:
             queryset = queryset.filter(
-                    Q(identification_number=self.request.GET['search']) | 
-                    Q(identification_number_2=self.request.GET['search']) | 
+                    Q(identification_number=self.request.GET['search']) |
+                    Q(identification_number_2=self.request.GET['search']) |
                     Q(name__icontains=self.request.GET['search'])
-                ) 
+                )
         if 'gender' in self.request.GET:
             queryset = queryset.filter(gender=self.request.GET['gender'])
 
@@ -241,3 +241,20 @@ class CreateSheepView(CreateView):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
         return context
+
+from django.views import View
+
+class SheepWeighView(View):
+
+    def get(self, request, pk, *args, **kwargs):
+        print(pk, request)
+
+        return render(
+
+            request,
+            'sheep_weigh_view.html',
+            {}
+        )
+
+    def post(self, request, pk, *args, **kwargs):
+        print(pk, request)

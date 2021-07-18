@@ -36,5 +36,10 @@ urlpatterns = [
         route='sheep/<uuid:pk>/',
         view=views.SheepDetailView.as_view(),
         name='detail'
+    ),
+    path(
+        route='sheep/<uuid:pk>/weigh',
+        view=views.SheepDetailView.as_view(),
+        name='detail'
     )
 ]

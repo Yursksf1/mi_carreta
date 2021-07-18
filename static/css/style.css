@@ -2,6 +2,27 @@
      background-color: gray;
  }
  
+ .paginate_button {
+    color: white;
+    background-color: #343a40;
+    border-radius: 2px;
+    margin-left: 1px;
+    border-color: black;
+    padding: 8px;
+    right: auto;
+
+}
+
+.paginate_button:hover {
+  background-color: white;
+  color: #343a40  
+  }
+
+.dataTables_info {
+    padding: 8px;
+    right: auto;
+}
+
  .weather-container {
     border-width: 1px;
     border-color: black;
@@ -214,8 +235,8 @@ a {
   }
   
   /* Next & previous buttons */
-  .prev,
-  .next {
+  .slide-prev,
+  .slide-next {
     cursor: pointer;
     position: absolute;
     top: 40%;
@@ -231,14 +252,14 @@ a {
   }
   
   /* Position the "next button" to the right */
-  .next {
+  .slide-next {
     right: 0;
     border-radius: 3px 0 0 3px;
   }
   
   /* On hover, add a black background color with a little bit see-through */
-  .prev:hover,
-  .next:hover {
+  .slide-prev:hover,
+  .slide-next:hover {
     background-color: rgba(0, 0, 0, 0.8);
   }
   
