@@ -21,16 +21,24 @@ class SheepController(object):
     @staticmethod
     def get_id_range_weight(weight_range_min, weight_range_max):
         # todo check
-        weight = HistoryWeight.objects.order_by('-create_at')
-
+        sheep_current_height = {}
+        weights = HistoryWeight.objects.order_by('create_at').all()
         ids_weight = []
-        for w in weight:
-            if weight_range_min and w.weight < weight_range_min:
+        for i in weights:
+            if i.sheep not in sheep_current_height:
+                sheep_current_height[i.sheep] = i
+            else:
+                if sheep_current_height[i.sheep].create_at < i.create_at:
+                    sheep_current_height[i.sheep] = i
+
+        for key, value in sheep_current_height.items():
+            if weight_range_min and value.weight < weight_range_min:
                 continue
 
-            if weight_range_max and w.weight > weight_range_max:
+            if weight_range_max and value.weight > weight_range_max:
                 continue
 
-            ids_weight.append(w.sheep.id)
+            ids_weight.append(str(value.sheep.id))
+
 
         return ids_weight
