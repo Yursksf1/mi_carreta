@@ -52,7 +52,7 @@
           var status_active = $('#status_active').is(":checked")
           var status_incative = $('#status_incative').is(":checked")
 
-          if ((genero_machos || genero_hembras) && !(genero_machos && genero_machos) ) {
+          if ((genero_machos || genero_hembras) && !(genero_machos && genero_hembras) ) {
               var gender = genero_machos? 'M' : 'H';
               url = url + '&gender=' + gender ;
           }
