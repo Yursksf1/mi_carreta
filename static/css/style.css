@@ -5,6 +5,50 @@
     margin-top: -15px;
  }
 
+ .dropdown-menu {
+     min-width: 320px;
+     color: #6c757d;
+ }
+
+ .dropdown-menu .row{
+     margin-left: 0;
+     margin-right: 0;
+ }
+
+ .container-date-filter .col-sm-2 {
+     padding-right: 10px;
+     padding-left: 10px;
+ }
+ .container-date-filter .col-sm-6  {
+     padding-right: 5px;
+     padding-left: 5px;
+ }
+ .container-date-filter .col-sm-4  {
+     padding-right: 5px;
+     padding-left: 5px;
+ }
+ .container-date-filter .col-sm-8  {
+     padding-right: 5px;
+     padding-left: 5px;
+ }
+
+ .container-date-filter .col .col {
+     margin-left: 0;
+     margin-right: 0;
+ }
+
+ .container-item-filter p{
+     margin-top: 10px;
+     margin-bottom: 0px;
+ }
+ .container-item-filter {
+     border: 1px solid rgba(0,0,0,.125);
+     font-size: 12px;
+ }
+ .container-item-filter {
+     border: 1px solid rgba(0,0,0,.125);
+ }
+
  .paginate_button {
     color: white;
     background-color: #343a40;

@@ -42,34 +42,56 @@
           <input id="search" class="form-control" type="text" placeholder="Search">
           &nbsp;
 
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" id="dropdownMenuClickableInside">
 
             <a id='btnFilter' class=" nav-link dropdown-toggle btn btn-success" href="#" id="navbardrop" data-toggle="dropdown">
               <i class="fa fa-filter"></i>
             </a>
             <div class="dropdown-menu">
-              <p class="dropdown-item" href="#">Genero</p>
-              <input id="genero_machos" type='checkbox' class="dropdown-item" href="#">Machos</input>
-              <input id="genero_hembras" type='checkbox' class="dropdown-item" href="#">Hembras</input>
-              <hr>
-              <p class="dropdown-item" href="#">Raza</p>
-              <input id="raza_puro" type='checkbox' class="dropdown-item" href="#">Puro</input>
-              <input id="raza_comercial" type='checkbox' class="dropdown-item" href="#">Comercial</input>
-              <hr>
-              <p class="dropdown-item" href="#">Rango Peso</p>
-              <input id="range_w_min" type='text' class="dropdown-item" href="#">Min</input>
-              <input id="range_w_max" type='text' class="dropdown-item" href="#">Max</input>
-              <hr>
-              <p class="dropdown-item" href="#">Rango Dias</p>
-              <input id="range_a_min" type='text' class="dropdown-item" href="#">Min</input>
-              <input id="range_a_max" type='text' class="dropdown-item" href="#">Max</input>
-              <hr>
-              <p class="dropdown-item" href="#">Status</p>
-              <input id="status_active" type='checkbox' class="dropdown-item" href="#">Active</input>
-              <input id="status_incative" type='checkbox' class="dropdown-item" href="#">Incative</input>
-              <hr>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12 container-item-filter">
+                        <p class="item-filter">Genero</p>
+                          <input id="genero_machos" type='checkbox' class="item-filter">&nbsp;Machos</input>
+                          <input id="genero_hembras" type='checkbox' class="item-filter">&nbsp;Hembras</input>
+                    </div>
 
+                    <div class="col-md-4 col-sm-12 container-item-filter">
+                      <p class="item-filter">Raza</p>
+                        <input id="raza_comercial" type='checkbox' class="item-filter">&nbsp;Comercial</input>
+                        <input id="raza_puro" type='checkbox' class="item-filter">&nbsp;Puro</input>
+                    </div>
 
+                    <div class="col-md-4 col-sm-12 container-item-filter">
+                      <p class="item-filter">Status</p>
+                        <input id="status_incative" type='checkbox' class="item-filter">&nbsp;Incative</input>
+                        <input id="status_active" type='checkbox' class="item-filter">&nbsp;Active</input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 container-item-filter">
+                      <p class="item-filter">Rango Peso</p>
+                      <input id="range_w_min" type='number' min='0' style="width: 50%" class="item-filter">&nbsp;Min</input>
+                      <input id="range_w_max" type='number' min='0' style="width: 50%" class="item-filter">&nbsp;Max</input>
+                    </div>
+
+                    <div class="col-md-8 col-sm-6 container-item-filter container-date-filter">
+                      <p class="item-filter">Rango Dias</p>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="col-sm-2" onclick="setDateInterval(0, 90)">(c1)</div>
+                                <div class="col-sm-2" onclick="setDateInterval(90, 180)">(c2)</div>
+                                <div class="col-sm-2" onclick="setDateInterval(180, 270)">(b1)</div>
+                                <div class="col-sm-2" onclick="setDateInterval(270, 360)">(b2)</div>
+                                <div class="col-sm-2"onclick="setDateInterval(360, 0)">(oveja)</div>
+                            </div>
+                            <div class="col-sm-8">
+                                <input id="range_a_min" type='number' min='0' style="width: 70%" class="item-filter">&nbsp;Min</input>
+                                <input id="range_a_max" type='number' min='0' style="width: 70%" class="item-filter">&nbsp;Max</input>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
           </li>
           &nbsp;

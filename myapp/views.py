@@ -256,6 +256,9 @@ class SheepsFeedView(ListView):
                 id__in=ids_range_weight
             )
 
+        if True:
+            queryset = queryset.order_by('birthday')
+
         return queryset
 
 

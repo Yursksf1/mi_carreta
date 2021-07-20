@@ -35,6 +35,66 @@
 
         <script>
 
+        params = {
+             {% for key, val in request.GET.items %}
+                '{{key}}': '{{ val }}',
+            {% endfor %}
+        }
+
+        if (params['search'] ) {
+            $('#search').val(params['search'] )
+        }
+
+        if (params['weight_range_min'] ) {
+            $('#range_w_min').val(params['weight_range_min'] )
+        }
+
+        if (params['weight_range_max'] ) {
+            $('#range_w_max').val(params['weight_range_max'] )
+        }
+
+        if (params['age_range_min'] ) {
+            $('#range_a_min').val(params['age_range_min'] )
+        }
+
+        if (params['age_range_max'] ) {
+            $('#range_a_max').val(params['age_range_max'] )
+        }
+
+        if (params['gender'] ) {
+            console.log(1)
+            if (params['gender'] == 'M') {
+                $('#genero_machos').click();
+            } else {
+                $('#genero_hembras').click();
+            }
+        }
+
+        if (params['breeds'] ) {
+            if (params['breeds'] == 'puro') {
+                $('#raza_puro').click();
+            } else {
+                $('#raza_comercial').click();
+            }
+        }
+
+        if (params['active'] ) {
+            if (params['active'] == 'true') {
+                $('#status_active').click();
+            } else {
+                $('#status_incative').click();
+            }
+        }
+
+        function setDateInterval(min, max) {
+            if (min) {
+                $('#range_a_min').val(min)
+            }
+            if (max) {
+                $('#range_a_max').val(max)
+            }
+        }
+
       $('#btnSearch').on('click', function (evt) {
           evt.preventDefault();
           var searchInput = $('#search').val();
