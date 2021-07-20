@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
 from django.db.models import Q
 
-from myapp.models import HistoryWeather, SheepBreed, Sheep
+from myapp.models import HistoryWeather, SheepBreed, Sheep, HistoryWeight
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
 
@@ -216,6 +216,45 @@ class SheepsFeedView(ListView):
                 month_3 = today - timedelta(days=90)
                 queryset = queryset.filter(birthday__gt=month_3)
 
+        if 'age_range_max' in self.request.GET:
+            age_range_max = self.request.GET['age_range_max']
+            if age_range_max.isnumeric():
+                age_range_max = int(age_range_max)
+                today = date.today()
+                age_range_day_max = today - timedelta(days=age_range_max)
+                queryset = queryset.filter(birthday__gt=age_range_day_max)
+
+        if 'age_range_min' in self.request.GET:
+            age_range_min = self.request.GET['age_range_min']
+            if age_range_min.isnumeric():
+                age_range_min = int(age_range_min)
+                today = date.today()
+                age_range_day_min = today - timedelta(days=age_range_min)
+                queryset = queryset.filter(birthday__lt=age_range_day_min)
+
+        if 'weight_range_max' in self.request.GET or 'weight_range_min' in self.request.GET:
+
+            weight_range_max = None
+            if 'weight_range_max' in self.request.GET:
+                weight_range_max = self.request.GET['weight_range_max']
+                if weight_range_max.isnumeric():
+                    weight_range_max = int(weight_range_max)
+                else:
+                    weight_range_max = None
+
+            weight_range_min = None
+            if 'weight_range_min' in self.request.GET:
+                weight_range_min = self.request.GET['weight_range_min']
+                if weight_range_min.isnumeric():
+                    weight_range_min = int(weight_range_min)
+                else:
+                    weight_range_min = None
+
+            ids_range_weight = SheepController.get_id_range_weight(weight_range_min, weight_range_max)
+
+            queryset = queryset.filter(
+                id__in=ids_range_weight
+            )
 
         return queryset
 
@@ -243,18 +282,23 @@ class CreateSheepView(CreateView):
         return context
 
 from django.views import View
+from django.shortcuts import get_object_or_404
 
 class SheepWeighView(View):
 
     def get(self, request, pk, *args, **kwargs):
-        print(pk, request)
+        sheep = get_object_or_404(Sheep, pk=pk)
+        context = {
+            'sheep': sheep
+        }
 
         return render(
-
             request,
-            'sheep_weigh_view.html',
-            {}
+            'sheep_weigh_form.html',
+            context
         )
 
     def post(self, request, pk, *args, **kwargs):
-        print(pk, request)
+        print('post', pk, request)
+
+        return redirect('app:detail', pk)
