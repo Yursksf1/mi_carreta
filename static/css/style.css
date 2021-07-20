@@ -1,7 +1,10 @@
  .jumbotron-custom {
      background-color: gray;
  }
- 
+ .container-progress{
+    margin-top: -15px;
+ }
+
  .paginate_button {
     color: white;
     background-color: #343a40;
@@ -15,7 +18,7 @@
 
 .paginate_button:hover {
   background-color: white;
-  color: #343a40  
+  color: #343a40
   }
 
 .dataTables_info {
@@ -138,7 +141,7 @@ a {
 
 .sheep-weight {
     font-weight: bold;
-    font-size: 25px;  
+    font-size: 25px;
 }
 
 .fa-mars{
@@ -218,22 +221,22 @@ a {
 * {
     box-sizing: border-box;
   }
-  
+
   /* Position the image container (needed to position the left and right arrows) */
   .container {
     position: relative;
   }
-  
+
   /* Hide the images by default */
   .mySlides {
     display: none;
   }
-  
+
   /* Add a pointer when hovering over the thumbnail images */
   .cursor {
     cursor: pointer;
   }
-  
+
   /* Next & previous buttons */
   .slide-prev,
   .slide-next {
@@ -250,19 +253,19 @@ a {
     user-select: none;
     -webkit-user-select: none;
   }
-  
+
   /* Position the "next button" to the right */
   .slide-next {
     right: 0;
     border-radius: 3px 0 0 3px;
   }
-  
+
   /* On hover, add a black background color with a little bit see-through */
   .slide-prev:hover,
   .slide-next:hover {
     background-color: rgba(0, 0, 0, 0.8);
   }
-  
+
   /* Number text (1/3 etc) */
   .numbertext {
     color: #f2f2f2;
@@ -271,7 +274,7 @@ a {
     position: absolute;
     top: 0;
   }
-  
+
   /* Container for image text */
   .caption-container {
     text-align: center;
@@ -279,13 +282,13 @@ a {
     padding: 2px 16px;
     color: white;
   }
-  
+
   .row:after {
     content: "";
     display: table;
     clear: both;
   }
-  
+
   /* Six columns side by side */
   .column {
     float: left;
@@ -293,12 +296,12 @@ a {
     padding: 2px ;
 
   }
-  
+
   /* Add a transparency effect for thumnbail images */
   .demo {
     opacity: 0.6;
   }
-  
+
   .active,
   .demo:hover {
     opacity: 1;
