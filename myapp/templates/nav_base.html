@@ -6,7 +6,7 @@
 
       <a class="" href="{% url 'app:dashboard' %}">
           <img class='nav-logo' src="{% static 'img/logo.png' %}" alt="Granja Ovina MI CARRETA">
-      </a> 
+      </a>
       &nbsp;
 
       </button>
@@ -15,10 +15,10 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarResponsive">
-        
+
 
         <ul class="navbar-nav ml-auto">
-  
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'app:weather-today' %}">TyH</a>
           </li>
@@ -26,7 +26,7 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'app:feed_with_weight' %}?active=true"> SW</a>
           </li>
-          
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'app:feed' %}?active=true">sheeps</a>
           </li>
@@ -36,7 +36,7 @@
             <a class="nav-link" href="{% url 'app:create' %}">+</a>
           </li>
 
-        <form class="form-inline pull-right">    
+        <form class="form-inline pull-right">
 
 
           <input id="search" class="form-control" type="text" placeholder="Search">
@@ -49,19 +49,27 @@
             </a>
             <div class="dropdown-menu">
               <p class="dropdown-item" href="#">Genero</p>
-              <input type='checkbox' class="dropdown-item" href="#">Machos</input>
-              <input type='checkbox' class="dropdown-item" href="#">Hembras</input>
-              <hr>              
+              <input id="genero_machos" type='checkbox' class="dropdown-item" href="#">Machos</input>
+              <input id="genero_hembras" type='checkbox' class="dropdown-item" href="#">Hembras</input>
+              <hr>
               <p class="dropdown-item" href="#">Raza</p>
-              <input type='checkbox' class="dropdown-item" href="#">Puro</input>
-              <input type='checkbox' class="dropdown-item" href="#">Comercial</input>
-              <hr>              
+              <input id="raza_puro" type='checkbox' class="dropdown-item" href="#">Puro</input>
+              <input id="raza_comercial" type='checkbox' class="dropdown-item" href="#">Comercial</input>
+              <hr>
+              <p class="dropdown-item" href="#">Rango Peso</p>
+              <input id="range_w_min" type='text' class="dropdown-item" href="#">Min</input>
+              <input id="range_w_max" type='text' class="dropdown-item" href="#">Max</input>
+              <hr>
+              <p class="dropdown-item" href="#">Rango Dias</p>
+              <input id="range_a_min" type='text' class="dropdown-item" href="#">Min</input>
+              <input id="range_a_max" type='text' class="dropdown-item" href="#">Max</input>
+              <hr>
               <p class="dropdown-item" href="#">Status</p>
-              <input type='checkbox' class="dropdown-item" href="#">Active</input>
-              <input type='checkbox' class="dropdown-item" href="#">Incative</input>
-              <hr>              
-            
-            
+              <input id="status_active" type='checkbox' class="dropdown-item" href="#">Active</input>
+              <input id="status_incative" type='checkbox' class="dropdown-item" href="#">Incative</input>
+              <hr>
+
+
             </div>
           </li>
           &nbsp;
@@ -69,7 +77,7 @@
           <div id='btnSearch' class="btn btn-success" type="submit">
             <i class="fa fa-search"></i>
           </div>
-           
+
         </form>
 
 

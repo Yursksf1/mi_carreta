@@ -38,9 +38,51 @@
       $('#btnSearch').on('click', function (evt) {
           evt.preventDefault();
           var searchInput = $('#search').val();
-          console.log('searchInput', searchInput)
           var url_base = "{% url 'app:feed' %}"
-          var url = url_base + '?search=' + searchInput ; 
+          var url = url_base + '?search=' + searchInput ;
+
+          var genero_machos = $('#genero_machos').is(":checked")
+          var genero_hembras = $('#genero_hembras').is(":checked")
+          var raza_puro = $('#raza_puro').is(":checked")
+          var raza_comercial = $('#raza_comercial').is(":checked")
+          var range_w_min = $('#range_w_min').val()
+          var range_w_max = $('#range_w_max').val()
+          var range_a_min = $('#range_a_min').val()
+          var range_a_max = $('#range_a_max').val()
+          var status_active = $('#status_active').is(":checked")
+          var status_incative = $('#status_incative').is(":checked")
+
+          if ((genero_machos || genero_hembras) && !(genero_machos && genero_machos) ) {
+              var gender = genero_machos? 'M' : 'H';
+              url = url + '&gender=' + gender ;
+          }
+
+          if ((raza_puro || raza_comercial) && !(raza_puro && raza_comercial) ) {
+              var breeds = raza_puro? 'puro' : 'comercial';
+              url = url + '&breeds=' + breeds ;
+          }
+
+          if ((status_active || status_incative) && !(status_active && status_incative) ) {
+              var active = status_active? 'true' : 'false';
+              url = url + '&active=' + active ;
+          }
+
+          if (range_w_min) {
+              url = url + '&weight_range_min=' + range_w_min ;
+          }
+
+          if (range_w_max) {
+              url = url + '&weight_range_max=' + range_w_max ;
+          }
+
+          if (range_a_min) {
+              url = url + '&age_range_min=' + range_a_min ;
+          }
+
+          if (range_a_max) {
+              url = url + '&age_range_max=' + range_a_max ;
+          }
+
           window.location.replace(url);
 
       });
