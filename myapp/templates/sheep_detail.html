@@ -86,7 +86,7 @@
         <b> {{ sheep.full_name }}</b> - <small>{{ sheep.birthday }}</small>
     </p>
     <p class="ml-2 mt-0 mb-2">
-        <b> {{ sheep.age }}</b> - <small>{{ sheep.breed }}</small>
+        <b> {{ sheep.age }}</b> - {% if  sheep.breed %} <small>{{ sheep.breed }}</small> {% endif %}
     </p>
 
 <!-- Container for the image gallery -->
@@ -124,7 +124,7 @@
         {% if sheep.prncipal_photo %}
             {% for sheep_photo in sheep.sheepphoto_set.all %}
                 <div class="column offset-md-1">
-                    <img class="demo cursor" src="{{ sheep_photo.upload.url }}" style="width:100%" onclick="currentSlide({{ forloop.counter }})" alt="{{sheep_photo.take_ago}}">
+                    <img class="demo cursor" src="{{ sheep_photo.upload.url }}" style="width:100%" onclick="currentSlide({{ forloop.counter }})" alt="foto hace: {{sheep_photo.take_ago}}">
                 </div>
             {% endfor %}
 

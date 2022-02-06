@@ -139,10 +139,12 @@ def dashboard(request):
             'num_machos_p': num_machos_p,
             'num_hembras_p': num_hembras_p,
             'num_corderos_p': num_cordero_p,
+            'num_borrego_p': 0,
 
             'num_machos': num_machos,
             'num_hembras': num_hembras,
             'num_corderos': num_cordero,
+            'num_borrego_p': 0,
 
             'num_gestantes': num_gestantes,
             'num_natal': num_natal,
@@ -213,8 +215,17 @@ class SheepsFeedView(ListView):
         if 'type' in self.request.GET:
             if self.request.GET['type'] == 'cordero':
                 today = date.today()
-                month_3 = today - timedelta(days=90)
-                queryset = queryset.filter(birthday__gt=month_3)
+                one_year = today - timedelta(days=365)
+                queryset = queryset.filter(birthday__gt=one_year)
+
+            if self.request.GET['type'] == 'borrego':
+                today = date.today()
+                one_year = today - timedelta(days=365)
+                two_year = today - timedelta(days=750)
+                queryset = queryset.filter(
+                    birthday__lt=one_year,
+                    birthday__gt=two_year
+                )
 
         if 'age_range_max' in self.request.GET:
             age_range_max = self.request.GET['age_range_max']

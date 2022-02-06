@@ -81,6 +81,19 @@ class Sheep(models.Model):
 
         return '{} Kg'.format( str(weight.weight)[:-1])
 
+
+    def last_weight(self):
+        weight = HistoryWeight.objects.filter(
+            sheep=self
+        )
+
+        if not weight.exists():
+            return 'N/A'
+
+        weight = weight.order_by('-create_at').first()
+
+        return '{}'.format(str(weight.weight)[:-1])
+
     def age(self):
         local_tz = get_localzone()
         now = datetime.now(local_tz)

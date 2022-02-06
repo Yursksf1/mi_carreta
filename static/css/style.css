@@ -1,4 +1,8 @@
- .jumbotron-custom {
+body {
+    margin: 0;
+    padding: 0;
+}
+.jumbotron-custom {
      background-color: gray;
  }
  .container-progress{
@@ -99,6 +103,31 @@ form .weather-container input  {
     padding-bottom: 15px;
  }
 
+ .measure-date {
+    color: #000;
+    background-color: #D0ECE7;
+    padding-bottom: 15px;
+ }
+
+ .measure-weight {
+    color: #000;
+    background-color: #2E86C1;
+    padding-bottom: 15px;
+ }
+
+ .measure-famacha {
+    color: #000;
+    background-color: #e35f5f;
+    padding-bottom: 15px;
+ }
+
+ .measure-condicion-corporal {
+    color: #000;
+    background-color: #F7DC6F;
+    padding-bottom: 15px;
+ }
+
+
 
  .measure-humidity {
     color: #eeeeee;
@@ -171,6 +200,10 @@ form .weather-container input  {
 .dashboard-container p {
     font-size: 40px;
     text-align:center;
+}
+
+.edades {
+    background-color: red;
 }
 
 .nav-logo {

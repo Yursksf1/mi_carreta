@@ -77,24 +77,37 @@
 
 
 {% block content %}
+        <h1> Nuevo Peso:</h1>
+
     {% include "sheep_card.html" %}
 
-    <h1> Nuevo Peso:</h1>
     <form method="post">
         {% csrf_token %}
 
         <div class="col-sm-12 col-xs-12 weather-container ">
 
-            <div class="col-sm-6 col-xs-12 measure-temperature">
-                <img src="{% static 'img/temperatura.png' %}"> <br>
+            <div class="col-sm-6 col-xs-12 measure-date">
+                <img src="{% static 'img/calendar.png' %}"> <br>
                 <label for="id_temperature">Fecha:</label> <br>
                 <input type="date" name="date_weight" value='{% now "Y-m-d" %}' required id="id_date">
             </div>
 
-            <div class="col-sm-6 col-xs-12 measure-humidity">
-                <img src="{% static 'img/humedad.png' %}"> <br>
+            <div class="col-sm-6 col-xs-12 measure-weight">
+                <img src="{% static 'img/balanza.png' %}"> <br>
                 <label for="id_humidity">[Kg] Peso:</label> <br>
-                <input type="number" name="weight" step="0.01"  min="0" max="200" value="{{ sheep.weight  }}" required id="id_weight">
+                <input type="number" name="weight" step="0.1"  min="0" max="200" placeholder="{{ sheep.last_weight  }}" required id="id_weight">
+            </div>
+
+            <div class="col-sm-6 col-xs-12 measure-famacha">
+                <img src="{% static 'img/famacha.png' %}"> <br>
+                <label for="id_famacha">[1-5] Famacha:</label> <br>
+                <input type="number" name="date_famacha" step="1"  min="1" max="5" value=""  required id="id_famacha">
+            </div>
+
+            <div class="col-sm-6 col-xs-12 measure-condicion-corporal">
+                <img src="{% static 'img/metro.png' %}"> <br>
+                <label for="id_condicion_corportal">[1.0-5.0] Condición corporal:</label> <br>
+                <input type="number" name="date_corporal" step="0.1"  min="1" max="5" value="" required id="id_condicion_corportal">
             </div>
 
         </div>
