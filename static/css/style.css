@@ -117,13 +117,25 @@ form .weather-container input  {
 
  .measure-famacha {
     color: #000;
-    background-color: #e35f5f;
+    background-color: #F1948A;
     padding-bottom: 15px;
  }
 
  .measure-condicion-corporal {
     color: #000;
     background-color: #F7DC6F;
+    padding-bottom: 15px;
+ }
+
+ .measure-evaluation-reproductive {
+    color: #000;
+    background-color: #D2B4DE;
+    padding-bottom: 15px;
+ }
+
+ .measure-observaciones {
+    color: #000;
+    background-color: #85929E;
     padding-bottom: 15px;
  }
 

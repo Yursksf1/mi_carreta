@@ -83,10 +83,11 @@
 
 <div class="col-sm-12 col-md-12">
     <p class="ml-2 mt-0 mb-2">
-        <b> {{ sheep.full_name }}</b> - <small>{{ sheep.birthday }}</small>
+        <b>Nombre:  {{ sheep.full_name }}</b> - <small> Fecha de nacimiento: {{ sheep.birthday |date:"Y-m-d" }}</small>
     </p>
     <p class="ml-2 mt-0 mb-2">
-        <b> {{ sheep.age }}</b> - {% if  sheep.breed %} <small>{{ sheep.breed }}</small> {% endif %}
+        <b> Edad: {{ sheep.age }}</b> - {% if  sheep.breed %} <small> Raza: {{ sheep.breed_name }}</small> - {% endif %}
+        <b> Ultimo peso: {{ sheep.last_weight }} [kg]</b>
     </p>
 
 <!-- Container for the image gallery -->
@@ -153,7 +154,7 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">Fecha</th>
-      <th scope="col">Peso [Kg]</th>
+      <th scope="col">Peso [kg]</th>
     </tr>
   </thead>
   <tbody>

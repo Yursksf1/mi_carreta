@@ -94,7 +94,7 @@
 
             <div class="col-sm-6 col-xs-12 measure-weight">
                 <img src="{% static 'img/balanza.png' %}"> <br>
-                <label for="id_humidity">[Kg] Peso:</label> <br>
+                <label for="id_humidity">[kg] Peso:</label> <br>
                 <input type="number" name="weight" step="0.1"  min="0" max="200" placeholder="{{ sheep.last_weight  }}" required id="id_weight">
             </div>
 
@@ -109,9 +109,32 @@
                 <label for="id_condicion_corportal">[1.0-5.0] Condición corporal:</label> <br>
                 <input type="number" name="date_corporal" step="0.1"  min="1" max="5" value="" required id="id_condicion_corportal">
             </div>
+            {% if sheep.gender == 'M' %}
+                <div class="col-sm-6 col-xs-12 measure-evaluation-reproductive">
+                    <img src="{% static 'img/testiculo.png' %}"> <br>
+                    <label for="id_famacha">testiculos:</label> <br>
+                    <input type="text" name="evaluation-reproductive" required id="id_evaluation-reproductive">
 
+                </div>
+            {% else %}
+                <div class="col-sm-6 col-xs-12 measure-evaluation-reproductive">
+                    <img src="{% static 'img/ubre.png' %}"> <br>
+                    <label for="id_famacha">ubre:</label> <br>
+                    <input type="text" name="evaluation-reproductive" required id="id_evaluation-reproductive">
+                </div>
+            {% endif %}
+
+            <div class="col-sm-6 col-xs-12 measure-observaciones">
+                <img src="{% static 'img/observacion.png' %}"> <br>
+                <label for="id_observacion">Observaciones:</label> <br>
+                <input type="text" name="observacion"  required id="id_observacion">
+            </div>
         </div>
 
+            <a href="{% url 'app:weather-today' %}" class="btn btn-success ">
+                <img src="{% static 'img/jeringuilla.png' %}">
+                Medicina
+            </a>
 
         <input type="submit" value="Guardar" class="btn btn-primary measure-button-add">
         <a href="{% url 'app:weather-today' %}" class="btn btn-secondary measure-button-cancel"> Cancelar</a>

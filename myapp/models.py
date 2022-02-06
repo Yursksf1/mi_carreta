@@ -79,7 +79,7 @@ class Sheep(models.Model):
 
         weight = weight.order_by('-create_at').first()
 
-        return '{} Kg'.format( str(weight.weight)[:-1])
+        return '{} kg'.format( str(weight.weight)[:-1])
 
 
     def last_weight(self):
