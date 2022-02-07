@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
 from django.db.models import Q
 
-from myapp.models import HistoryWeather, SheepBreed, Sheep, HistoryWeight
+from myapp.models import HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
 
@@ -313,6 +313,41 @@ class SheepWeighView(View):
         )
 
     def post(self, request, pk, *args, **kwargs):
-        print('post', pk, request)
-
+        data_request = request.POST
+        if data_request:
+            data = {
+                'date': data_request.get('date'),
+                'weight': data_request.get('weight'),
+                'famacha': data_request.get('famacha'),
+                'corporal': data_request.get('corporal'),
+                'evaluation-reproductive': data_request.get('evaluation-reproductive'),
+                'observacion': data_request.get('observacion'),
+            }
+            SheepController().update_weight(pk, data)
         return redirect('app:detail', pk)
+
+
+class ObservationsView(ListView):
+    """Return all published sheeps."""
+
+    template_name = 'observations.html'
+    model = Observations
+    paginate_by = 20
+    context_object_name = 'observation'
+
+    def get_queryset(self):
+        """Filter by price if it is provided in GET parameters"""
+        queryset = super().get_queryset()
+
+        queryset = queryset.filter(active=True)
+        queryset = queryset.order_by('-create_at')
+
+        return queryset
+
+
+def observations_check(request, pk):
+    observation = Observations.objects.filter(pk=pk).first()
+    if observation:
+        observation.active = False
+        observation.save()
+    return redirect('app:observations')

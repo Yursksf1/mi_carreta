@@ -41,5 +41,16 @@ urlpatterns = [
         route='sheep/<uuid:pk>/weigh',
         view=views.SheepWeighView.as_view(),
         name='add-weigh'
-    )
+    ),
+
+    path(
+        route='observations',
+        view=views.ObservationsView.as_view(),
+        name='observations'
+    ),
+    path(
+        route='observations/<uuid:pk>/check',
+        view=views.observations_check,
+        name='check-observations'
+    ),
 ]

@@ -1,4 +1,4 @@
-from myapp.models import HistoryWeather, SheepBreed, HistoryWeight
+from myapp.models import Sheep, HistoryWeather, SheepBreed, HistoryWeight, HistoryFamacha, HistoryBodyCondition, Observations
 
 
 class SheepController(object):
@@ -42,3 +42,52 @@ class SheepController(object):
 
 
         return ids_weight
+
+    @staticmethod
+    def update_weight(pk, data):
+        """
+        Update values weight
+        :param pk: UUID, unique sheep identifier Ie, 'ce24c41c-1660-42db-ab47-78e5380ec0ac'
+        :param data: dict, values update Ie:
+            data = {
+                'date': data_request.get('date')[0],
+                'weight': data_request.get('weight')[0],
+                'famacha': data_request.get('famacha')[0],
+                'corporal': data_request.get('corporal')[0],
+                'evaluation-reproductive': data_request.get('evaluation-reproductive')[0],
+                'observacion': data_request.get('observacion')[0],
+            }
+        """
+        sheep = Sheep.objects.filter(id=pk).first()
+        if sheep:
+            date = data.get('date')
+            weight = data.get('weight')
+            famacha = data.get('famacha')
+            corporal = data.get('corporal')
+            evaluation_reproductive = data.get('evaluation_reproductive')
+            observacion = data.get('observacion')
+
+            if weight:
+                hw = HistoryWeight()
+                hw.sheep = sheep
+                hw.weight = data.get('weight')
+                hw.save()
+
+            if famacha:
+                hw = HistoryFamacha()
+                hw.sheep = sheep
+                hw.famacha = famacha
+                hw.save()
+
+            if corporal:
+                hw = HistoryBodyCondition()
+                hw.sheep = sheep
+                hw.body_condition = corporal
+                hw.save()
+
+            if observacion:
+                hw = Observations()
+                hw.sheep = sheep
+                hw.description = observacion
+                hw.active = True
+                hw.save()

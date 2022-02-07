@@ -94,6 +94,32 @@ class Sheep(models.Model):
 
         return '{}'.format(str(weight.weight)[:-1])
 
+
+    def last_body_condition(self):
+        body_condition = HistoryBodyCondition.objects.filter(
+            sheep=self
+        )
+
+        if not body_condition.exists():
+            return 'N/A'
+
+        body_condition = body_condition.order_by('-create_at').first()
+
+        return '{}'.format(str(body_condition.body_condition)[:-1])
+
+
+    def last_famacha(self):
+        famacha = HistoryFamacha.objects.filter(
+            sheep=self
+        )
+
+        if not famacha.exists():
+            return 'N/A'
+
+        famacha = famacha.order_by('-create_at').first()
+
+        return '{}'.format(str(famacha.famacha)[:-1])
+
     def age(self):
         local_tz = get_localzone()
         now = datetime.now(local_tz)
@@ -192,6 +218,7 @@ class SheepBreed(models.Model):
     def __str__(self):
         return '{} - {} - {}'.format(self.sheep, self.percent, self.breed.name)
 
+
 class SheepPhoto(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sheep = models.ForeignKey(
@@ -217,6 +244,40 @@ class SheepPhoto(models.Model):
 
     class Meta:
         ordering = ['-is_principal']
+
+
+class Observations(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+    )
+    description = models.fields.CharField(max_length=100)
+    active = models.fields.BooleanField(default=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+
+class HistoryFamacha(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+    )
+    famacha = models.DecimalField(max_digits=7, decimal_places=2)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+
+class HistoryBodyCondition(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+    )
+    body_condition = models.DecimalField(max_digits=7, decimal_places=2)
+    create_at = models.DateTimeField(auto_now_add=True)
+
 
 class HistoryWeight(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

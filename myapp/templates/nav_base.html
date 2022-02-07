@@ -1,6 +1,6 @@
 {% load static %}
 
-    <nav class="navbar navbar-expand-lg navbar-expand-md navbar-dark bg-dark static-top justify-content-between">
+  <nav class="navbar navbar-expand-lg navbar-expand-md navbar-dark bg-dark fixed-top justify-content-between">
     <div class="container">
 
 
@@ -102,9 +102,16 @@
 
         </form>
 
-
+          <li class="nav-item right">
+            <a class="nav-link" href="{% url 'app:observations' %}">
+              <img src="{% static 'img/observacion.png' %}">
+            </a>
+          </li>
 
         </ul>
+        
+
       </div>
+      
     </div>
   </nav>

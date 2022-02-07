@@ -349,6 +349,11 @@ a {
     border-radius: 3px 0 0 3px;
   }
 
+  .right {
+    position: relative;
+    right: 0px;
+  }
+
   /* On hover, add a black background color with a little bit see-through */
   .slide-prev:hover,
   .slide-next:hover {
@@ -394,4 +399,13 @@ a {
   .active,
   .demo:hover {
     opacity: 1;
+  }
+
+  .text-observation {
+      font-size: 200%;
+  }
+
+  .footer-observation {
+    position: absolute;
+    bottom: 10px;
   }
