@@ -409,3 +409,11 @@ a {
     position: absolute;
     bottom: 10px;
   }
+
+  .hr_with_lines {
+      border-top: 1px dashed gray;
+  }
+
+  .acciones_en_bloque {
+      font-size: 20px;
+  }

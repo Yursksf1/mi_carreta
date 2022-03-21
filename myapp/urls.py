@@ -53,4 +53,7 @@ urlpatterns = [
         view=views.observations_check,
         name='check-observations'
     ),
+    path('acciones_bloque/', TemplateView.as_view(template_name="acciones_bloque.html"), name='acciones_bloque')
+
+
 ]
