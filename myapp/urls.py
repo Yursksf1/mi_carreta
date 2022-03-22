@@ -53,7 +53,19 @@ urlpatterns = [
         view=views.observations_check,
         name='check-observations'
     ),
-    path('acciones_bloque/', TemplateView.as_view(template_name="acciones_bloque.html"), name='acciones_bloque')
+    path('acciones_bloque/', TemplateView.as_view(template_name="acciones_bloque.html"), name='acciones_bloque'),
 
+    ## ACCIONES EN BLOQUE
+
+    path(
+        route='acciones_bloque/pluviometer/download',
+        view=views.pluviometer_download,
+        name='pluviometer_download'
+    ),
+    path(
+        route='acciones_bloque/pluviometer/import',
+        view=views.pluviometer_import,
+        name='pluviometer_import'
+    ),
 
 ]

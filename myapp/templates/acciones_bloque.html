@@ -11,12 +11,14 @@
 <div class="container">
     <div class="acciones_en_bloque row ">
         <div class="col-6">
-            <img src="{% static 'img/temperatura.png' %}">  
-            <img src="{% static 'img/humedad.png' %}">  
+            <img src="{% static 'img/temperatura.png' %}">
+            <img src="{% static 'img/humedad.png' %}">
             Temperatura y Humedad
         </div>
+
+
         <div class="col-3">
-            <a href="">
+              <a href="#ModalTemperaturaHumedad" class="modal-link" data-toggle='modal'>
                 <img src="{% static 'img/carga.png' %}">
                 Cargar
             </a>
@@ -34,16 +36,16 @@
 
         <div class="col-6">
             <img src="{% static 'img/lluvia.png' %}">
-            Pluviometro 
+            Pluviometro
         </div>
         <div class="col-3">
-            <a href="">
+              <a href="#ModalLluvia" class="modal-link" data-toggle='modal'>
                 <img src="{% static 'img/carga.png' %}">
                 Cargar
             </a>
         </div>
         <div class="col-3">
-            <a href="">
+            <a href="{% url 'app:pluviometer_download' %} ">
                 <img src="{% static 'img/descargar.png' %}">
                 Descargar
             </a>
@@ -55,10 +57,10 @@
 
         <div class="col-6">
             <img src="{% static 'img/balanza.png' %}">
-            Peso 
+            Peso
         </div>
         <div class="col-3">
-            <a href="">
+            <a href="#ModalPeso" class="modal-link" data-toggle='modal'>
                 <img src="{% static 'img/carga.png' %}">
                 Cargar
             </a>
@@ -72,6 +74,75 @@
     </div>
     <hr class="hr_with_lines">
 
+
+
+<div class='modal small fade' id='ModalTemperaturaHumedad' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+        <h3 id='myModalLabel'>Detail 1</h3>
+      </div>
+      <div class='modal-body' id="Details">
+        <input id="descr" name="descr" value="" />
+      </div>
+      <div class='modal-footer'>
+        <button class='btn btn-default' data-dismiss='modal' aria-hidden='true'>Fermer</button>
+
+      </div>
+    </div>
+  </div>
 </div>
+
+
+<div class='modal small fade' id='ModalLluvia' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+          <h3 id='myModalLabel'>Subir Documento Pluviometro</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+      </div>
+    <form action="{% url "app:pluviometer_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
+
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+<div class='modal small fade' id='ModalPeso' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+        <h3 id='myModalLabel'>Detail 3</h3>
+      </div>
+      <div class='modal-body' id="Details">
+        <input id="descr" name="descr" value="" />
+      </div>
+      <div class='modal-footer'>
+        <button class='btn btn-default' data-dismiss='modal' aria-hidden='true'>Fermer</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
 {% endblock %}

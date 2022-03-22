@@ -107,6 +107,7 @@
                     <div class="numbertext">{{ forloop.counter }} / {{ sheep.sheepphoto_set.all | length }}</div>
                         <img src="{{ sheep_photo.upload.url }}" style="width:100%">
                     </div>
+                 <p>{{ sheep_photo.upload.url }}</p>
                 {% endfor %}
 
             {% else %}

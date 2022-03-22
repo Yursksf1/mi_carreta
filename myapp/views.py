@@ -7,10 +7,12 @@ from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
 from django.db.models import Q
+import datetime
 
-from myapp.models import HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations
+from myapp.models import HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
+from django.http import FileResponse
 
 IMAGEN_LOCATION = {
     'N': 'img/nevera.png',
@@ -351,3 +353,201 @@ def observations_check(request, pk):
         observation.active = False
         observation.save()
     return redirect('app:observations')
+
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+
+def generate_document(hoja, datas):
+    start = 1
+    years = datas.keys()
+    for year in years:
+        generate_year(hoja, start, year, datas.get(year))
+        start = start + 13
+
+def generate_year(hoja, start, year, year_data):
+    hoja.merge_cells("A{}:AF{}".format(start, start))
+    hoja = add_yead(hoja, start, year)
+    hoja = generate_months(hoja, start, year_data)
+
+    return hoja
+
+def add_yead(hoja, start, year):
+    position = "A{}".format(start)
+    celda = hoja[position]
+    hoja[position] = year
+    skyblue = PatternFill(start_color='87CEEB',
+                          end_color='87CEEB',
+                          fill_type='solid')
+
+    celda.fill = skyblue
+    celda.font = Font(name='Times New Roman', size=18, color='000000', bold=True)
+    celda.alignment = Alignment(horizontal='center')
+
+    return hoja
+
+
+def generate_months(hoja, start, year_data):
+    encabezado = ["MESES", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "TOTAL MES ", "PROMEDIO MES"]
+    hoja.append(encabezado)
+    for index, mes in enumerate(meses):
+        if index+1 in year_data.keys():
+            registro = [mes] + year_data.get(index+1)
+            hoja.append(registro)
+
+    return hoja
+
+def prepare_data_pluviometer(data_pluviometer):
+    data = {
+    }
+    for pluviometer in data_pluviometer:
+        year = pluviometer.create_at.year
+        month = pluviometer.create_at.month
+        day = pluviometer.create_at.day - 1
+        if not data.get(year):
+            data[year] = {}
+        if not data.get(year).get(month):
+            data[year][month] = [0] * 31
+        data[year][month][day] = pluviometer.measure
+
+    return data
+
+columnas = [
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "AA",
+    "AB",
+    "AC",
+    "AD",
+    "AE",
+    "AF",
+]
+
+meses = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+]
+
+def pluviometer_download(request):
+    path = 'media/generate_reports'
+    file_name = 'pluvimetro.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+    for i in columnas:
+        hoja.column_dimensions[i].width = 5
+    datas = [
+        {"year": 2020},
+        {"year": 2021},
+        {"year": 2022},
+    ]
+    pluviometer_data = HistoryPluviometer.objects.all()
+    pluviometer_data = prepare_data_pluviometer(pluviometer_data)
+
+    hoja = generate_document(hoja, pluviometer_data)
+
+    libro.save(file_path)
+
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def pluviometer_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet1"]
+    print(worksheet)
+
+    excel_data = list()
+    # iterating over the rows and
+    # getting value from each cell in row
+    year = 2020
+    month = "ENERO"
+    for row in worksheet.iter_rows():
+        row_data = list()
+        valor_a = row[0].value
+        if type(valor_a) == int:
+            print("es del año: {}".format(valor_a))
+            year = valor_a
+        elif valor_a in meses:
+            month = meses.index(valor_a) + 1
+
+            for index, cell in enumerate(row):
+                if index == 0:
+                    continue
+
+                new_value = cell.value
+                if not new_value:
+                    continue
+                if index in range(1, 31):
+                    day = index
+                    print("{} {} {} value: {}".format(day, month, year, new_value))
+
+                    date = datetime.date(year, month, day)
+                    hp = HistoryPluviometer.objects.filter(create_at=date).first()
+                    if hp:
+                        print('update HistoryPluviometer')
+                        hp.measure = new_value
+                    else:
+                        print('create HistoryPluviometer')
+                        hp = HistoryPluviometer()
+                        hp.create_at = date
+                        hp.measure = new_value
+                    hp.save()
+
+
+    return redirect('app:acciones_bloque')
+
+## EJEMPLO
+def pluviometer_download_2(request):
+    path = 'media/generate_reports'
+    file_name = 'pluvimetro.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+
+    libro = Workbook()
+    hoja = libro.active
+    celda = hoja["B2"]
+    hoja["B2"] = "Muestra"
+    celda.font = Font(name='Arial', size=14, color='00FF0000')
+
+    libro.save(file_path)
+
+    response = FileResponse(open(file_path, 'rb'))
+    return response
