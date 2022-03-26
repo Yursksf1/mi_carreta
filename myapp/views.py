@@ -488,7 +488,7 @@ def pluviometer_import(request):
     wb = openpyxl.load_workbook(excel_file)
 
     # getting a particular sheet by name out of many sheets
-    worksheet = wb["Sheet1"]
+    worksheet = wb["Sheet"]
     print(worksheet)
 
     excel_data = list()
@@ -559,10 +559,8 @@ def generate_document_weather(hoja, weather_data):
         "A": 'Aprisco',
     }
     for wd in weather_data:
-        data = [wd.create_at.isoformat(), LOCATION.get(wd.location), wd.temperature, wd.humidity]
+        data = [date.isoformat(wd.create_at), LOCATION.get(wd.location), wd.temperature, wd.humidity]
         hoja.append(data)
-
-
 
 def weather_download(request):
     path = 'media/generate_reports'
@@ -583,5 +581,66 @@ def weather_download(request):
     return response
 
 def weather_import(request):
-    pass
+    excel_file = request.FILES["excel_file"]
 
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+
+        date = row[0].value
+        location = row[1].value
+        temperature = row[2].value
+        humidity = row[3].value
+
+        date = datetime.date.fromisoformat(date)
+        hw = HistoryWeather.objects.filter(create_at=date, location=location).first()
+        if hw:
+            print('update HistoryPluviometer')
+            hw.temperature = temperature
+            hw.humidity = humidity
+        else:
+            print('create HistoryPluviometer')
+            hw = HistoryWeather()
+            hw.create_at = date
+            hw.location = location
+            hw.temperature = temperature
+            hw.humidity = humidity
+        hw.save()
+    return redirect('app:acciones_bloque')
+
+
+## Weight
+
+def weight_download(request):
+    path = 'media/generate_reports'
+    file_name = 'weight.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+
+    # here is the magic
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def weight_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+
+    # here is the magic
+    return redirect('app:acciones_bloque')

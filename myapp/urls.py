@@ -78,5 +78,15 @@ urlpatterns = [
         view=views.weather_import,
         name='weather_import'
     ),
+    path(
+        route='acciones_bloque/weight/download',
+        view=views.weight_download,
+        name='weight_download'
+    ),
+    path(
+        route='acciones_bloque/weight/import',
+        view=views.weight_import,
+        name='weight_import'
+    ),
 
 ]
