@@ -68,4 +68,15 @@ urlpatterns = [
         name='pluviometer_import'
     ),
 
+    path(
+        route='acciones_bloque/weather/download',
+        view=views.weather_download,
+        name='weather_download'
+    ),
+    path(
+        route='acciones_bloque/weather/import',
+        view=views.weather_import,
+        name='weather_import'
+    ),
+
 ]

@@ -24,7 +24,7 @@
             </a>
         </div>
         <div class="col-3">
-            <a href="">
+            <a href="{% url 'app:weather_download' %} ">
                 <img src="{% static 'img/descargar.png' %}">
                 Descargar
             </a>
@@ -80,16 +80,24 @@
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
-        <h3 id='myModalLabel'>Detail 1</h3>
+          <h3 id='myModalLabel'>Subir Documento Temperatura y Humedad</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
       </div>
-      <div class='modal-body' id="Details">
-        <input id="descr" name="descr" value="" />
-      </div>
-      <div class='modal-footer'>
-        <button class='btn btn-default' data-dismiss='modal' aria-hidden='true'>Fermer</button>
+    <form action="{% url "app:weather_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
 
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
       </div>
+    </form>
     </div>
   </div>
 </div>

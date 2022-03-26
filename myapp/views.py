@@ -392,7 +392,7 @@ def generate_months(hoja, start, year_data):
     hoja.append(encabezado)
     for index, mes in enumerate(meses):
         if index+1 in year_data.keys():
-            registro = [mes] + year_data.get(index+1)
+            registro = [mes] + year_data.get(index+1) + ['=AVERAGE(B{i}:AF{i})'.format(i=hoja.max_row +1), '=SUM(B{i}:AF{i})'.format(i=hoja.max_row+1)]
             hoja.append(registro)
 
     return hoja
@@ -469,11 +469,7 @@ def pluviometer_download(request):
     hoja = libro.active
     for i in columnas:
         hoja.column_dimensions[i].width = 5
-    datas = [
-        {"year": 2020},
-        {"year": 2021},
-        {"year": 2022},
-    ]
+
     pluviometer_data = HistoryPluviometer.objects.all()
     pluviometer_data = prepare_data_pluviometer(pluviometer_data)
 
@@ -551,3 +547,41 @@ def pluviometer_download_2(request):
 
     response = FileResponse(open(file_path, 'rb'))
     return response
+
+## weather
+
+def generate_document_weather(hoja, weather_data):
+    encabezado = ["FECHA", "UBICACION", "TEMPERATURA", "HUMEDAD"]
+    hoja.append(encabezado)
+    LOCATION = {
+        "N": 'Nevera',
+        "L": 'Laboratorio',
+        "A": 'Aprisco',
+    }
+    for wd in weather_data:
+        data = [wd.create_at.isoformat(), LOCATION.get(wd.location), wd.temperature, wd.humidity]
+        hoja.append(data)
+
+
+
+def weather_download(request):
+    path = 'media/generate_reports'
+    file_name = 'weather.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+    for i in columnas:
+        hoja.column_dimensions[i].width = 10
+
+    weather_data = HistoryWeather.objects.order_by('create_at').all()
+
+    hoja = generate_document_weather(hoja, weather_data)
+
+    libro.save(file_path)
+
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def weather_import(request):
+    pass
+
