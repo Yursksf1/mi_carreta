@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.db.models import Q
 import datetime
 
-from myapp.models import HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer
+from myapp.models import HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer, HistoryBodyCondition, HistoryFamacha
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
 from django.http import FileResponse
@@ -619,13 +619,26 @@ def weather_import(request):
 
 ## Weight
 
+
+def generate_document_weight(hoja, sheeps_data):
+    encabezado = ["Nombre", "#OVINO", "GENERO", "Edad", "ultimo peso", "ultima famacha", "ultima condicion corportal"]
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        data = [sheep.name, sheep.identification_number, sheep.gender, sheep.age(), sheep.last_weight(), sheep.last_famacha(), sheep.last_body_condition()]
+        hoja.append(data)
+
+
 def weight_download(request):
     path = 'media/generate_reports'
     file_name = 'weight.xlsx'
     file_path = '{}/{}'.format(path, file_name)
     libro = Workbook()
+    hoja = libro.active
 
+    sheeps = Sheep.objects.filter(active=True).order_by("active", "-gender", "birthday").all()
     # here is the magic
+    generate_document_weight(hoja, sheeps)
 
     libro.save(file_path)
     response = FileResponse(open(file_path, 'rb'))
@@ -641,6 +654,54 @@ def weight_import(request):
     # getting a particular sheet by name out of many sheets
     worksheet = wb["Sheet"]
     print(worksheet)
+    index_ovino = 1
+    index_weight = 4
+    index_famacha = 5
+    index_body_condition = 6
 
-    # here is the magic
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            num_ovino = row[index_ovino].value
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            if not sheep:
+                print("no se encuentra registro de {}".format(num_ovino))
+                continue
+
+            weight = row[index_weight].value
+            famacha = row[index_famacha].value
+            body_condition = row[index_body_condition].value
+            today = datetime.now()
+
+            hw = HistoryWeight.objects.filter(create_at=today, sheep=sheep).first()
+            if hw:
+                print('update HistoryPluviometer')
+                hw.weight = weight
+            else:
+                print('create HistoryPluviometer')
+                hw = HistoryWeight()
+                hw.weight = weight
+            hw.save()
+
+            hbc = HistoryBodyCondition.objects.filter(create_at=today, sheep=sheep).first()
+            if hbc:
+                print('update HistoryPluviometer')
+                hbc.body_condition = body_condition
+            else:
+                print('create HistoryPluviometer')
+                hbc = HistoryBodyCondition()
+                hbc.body_condition = body_condition
+            hbc.save()
+
+            hf = HistoryFamacha.objects.filter(create_at=today, sheep=sheep).first()
+            if hf:
+                print('update HistoryPluviometer')
+                hf.famacha = famacha
+            else:
+                print('create HistoryPluviometer')
+                hf = HistoryFamacha()
+                hf.famacha = famacha
+            hf.save()
+
     return redirect('app:acciones_bloque')
