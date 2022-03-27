@@ -3,6 +3,8 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.generic.edit import FormView
 from datetime import date, timedelta
+from tzlocal import get_localzone
+
 from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
@@ -628,7 +630,6 @@ def generate_document_weight(hoja, sheeps_data):
         data = [sheep.name, sheep.identification_number, sheep.gender, sheep.age(), sheep.last_weight(), sheep.last_famacha(), sheep.last_body_condition()]
         hoja.append(data)
 
-
 def weight_download(request):
     path = 'media/generate_reports'
     file_name = 'weight.xlsx'
@@ -672,9 +673,11 @@ def weight_import(request):
             weight = row[index_weight].value
             famacha = row[index_famacha].value
             body_condition = row[index_body_condition].value
-            today = datetime.now()
 
-            hw = HistoryWeight.objects.filter(create_at=today, sheep=sheep).first()
+            local_tz = get_localzone()
+            today = datetime.datetime.now(local_tz).date()
+
+            hw = HistoryWeight.objects.filter(create_at__date=today, sheep=sheep).first()
             if hw:
                 print('update HistoryPluviometer')
                 hw.weight = weight
@@ -682,9 +685,10 @@ def weight_import(request):
                 print('create HistoryPluviometer')
                 hw = HistoryWeight()
                 hw.weight = weight
+                hw.sheep = sheep
             hw.save()
 
-            hbc = HistoryBodyCondition.objects.filter(create_at=today, sheep=sheep).first()
+            hbc = HistoryBodyCondition.objects.filter(create_at__date=today, sheep=sheep).first()
             if hbc:
                 print('update HistoryPluviometer')
                 hbc.body_condition = body_condition
@@ -692,9 +696,10 @@ def weight_import(request):
                 print('create HistoryPluviometer')
                 hbc = HistoryBodyCondition()
                 hbc.body_condition = body_condition
+                hbc.sheep = sheep
             hbc.save()
 
-            hf = HistoryFamacha.objects.filter(create_at=today, sheep=sheep).first()
+            hf = HistoryFamacha.objects.filter(create_at__date=today, sheep=sheep).first()
             if hf:
                 print('update HistoryPluviometer')
                 hf.famacha = famacha
@@ -702,6 +707,7 @@ def weight_import(request):
                 print('create HistoryPluviometer')
                 hf = HistoryFamacha()
                 hf.famacha = famacha
+                hf.sheep = sheep
             hf.save()
 
     return redirect('app:acciones_bloque')
