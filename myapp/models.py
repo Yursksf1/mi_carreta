@@ -20,10 +20,10 @@ class Sheep(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    identification_number = models.fields.CharField(max_length=100)
-    identification_number_2 = models.fields.CharField(max_length=100)
-    name = models.fields.CharField(max_length=100, null=True)
-    description = models.fields.CharField(max_length=300)
+    identification_number = models.fields.CharField(max_length=100, null=True, blank=True)
+    identification_number_2 = models.fields.CharField(max_length=100, null=True, blank=True)
+    name = models.fields.CharField(max_length=100, null=True, blank=True)
+    description = models.fields.CharField(max_length=300, null=True, blank=True)
 
     gender = models.CharField(
         max_length=1,
@@ -31,8 +31,8 @@ class Sheep(models.Model):
     )
     birthday = models.DateTimeField(default=now, editable=True)
 
-    parentDadId = models.ForeignKey('Sheep', null=True, related_name='dad', on_delete=models.SET_NULL)
-    parentMomId = models.ForeignKey('Sheep', null=True, related_name='mom', on_delete=models.SET_NULL)
+    parentDadId = models.ForeignKey('Sheep', null=True, blank=True, related_name='dad', on_delete=models.SET_NULL)
+    parentMomId = models.ForeignKey('Sheep', null=True, blank=True,  related_name='mom', on_delete=models.SET_NULL)
 
     active = models.fields.BooleanField(default=True)
 
@@ -188,6 +188,9 @@ class Sheep(models.Model):
         sheeps = sheep.order_by('birthday').all()
 
         return sheeps
+
+    def get_absolute_url(self):
+        return reverse('app:detail', kwargs={'pk': str(self.id)} )
 
 
 class Breed(models.Model):

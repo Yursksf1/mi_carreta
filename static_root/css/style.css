@@ -1,0 +1,440 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.jumbotron-custom {
+     background-color: gray;
+ }
+ .container-progress{
+    margin-top: -10px;
+    margin-bottom: -10px;
+ }
+
+ .dropdown-menu {
+     min-width: 320px;
+     color: #6c757d;
+ }
+
+ .dropdown-menu .row{
+     margin-left: 0;
+     margin-right: 0;
+ }
+
+ .container-date-filter .col-sm-2 {
+     padding-right: 10px;
+     padding-left: 10px;
+ }
+ .container-date-filter .col-sm-6  {
+     padding-right: 5px;
+     padding-left: 5px;
+ }
+ .container-date-filter .col-sm-4  {
+     padding-right: 5px;
+     padding-left: 5px;
+ }
+ .container-date-filter .col-sm-8  {
+     padding-right: 5px;
+     padding-left: 5px;
+ }
+
+ .container-date-filter .col .col {
+     margin-left: 0;
+     margin-right: 0;
+ }
+
+ .container-item-filter p{
+     margin-top: 10px;
+     margin-bottom: 0px;
+ }
+ .container-item-filter {
+     border: 1px solid rgba(0,0,0,.125);
+     font-size: 12px;
+ }
+ .container-item-filter {
+     border: 1px solid rgba(0,0,0,.125);
+ }
+
+ .paginate_button {
+    color: white;
+    background-color: #343a40;
+    border-radius: 2px;
+    margin-left: 1px;
+    border-color: black;
+    padding: 8px;
+    right: auto;
+
+}
+
+.paginate_button:hover {
+  background-color: white;
+  color: #343a40
+  }
+
+.dataTables_info {
+    padding: 8px;
+    right: auto;
+}
+
+ .weather-container {
+    border-width: 1px;
+    border-color: black;
+    padding: 1px;
+
+ }
+.weather-container p {
+    font-size: 40px;
+    text-align:center;
+}
+form .weather-container  {
+    font-size: 25px;
+    text-align:center;
+    padding: 1px;
+}
+
+form .weather-container input  {
+    color: #1b1b1b;
+    font-size: 40px;
+    text-align:center;
+}
+
+
+ .measure-temperature {
+    color: #eeeeee;
+    background-color: #e35f5f;
+    padding-bottom: 15px;
+ }
+
+ .measure-date {
+    color: #000;
+    background-color: #D0ECE7;
+    padding-bottom: 15px;
+ }
+
+ .measure-weight {
+    color: #000;
+    background-color: #2E86C1;
+    padding-bottom: 15px;
+ }
+
+ .measure-famacha {
+    color: #000;
+    background-color: #F1948A;
+    padding-bottom: 15px;
+ }
+
+ .measure-condicion-corporal {
+    color: #000;
+    background-color: #F7DC6F;
+    padding-bottom: 15px;
+ }
+
+ .measure-evaluation-reproductive {
+    color: #000;
+    background-color: #D2B4DE;
+    padding-bottom: 15px;
+ }
+
+ .measure-observaciones {
+    color: #000;
+    background-color: #85929E;
+    padding-bottom: 15px;
+ }
+
+
+
+ .measure-humidity {
+    color: #eeeeee;
+    background-color: #264b5d;
+    padding-bottom: 15px;
+ }
+
+ .measure-button-add {
+    margin-top: 10px;
+    width: 100%;
+ }
+ .measure-button-cancel {
+    margin-top: 10px;
+    background-color: #e0e0e0;
+    width: 100%;
+ }
+
+.dashboard-container {
+    border-width: 1px;
+    border-color: black;
+    padding-right: 1%;
+    padding-left: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-radius: .25rem;
+    text-align: center;
+}
+.dashboard-container a {
+    color: #ffffff;
+}
+
+.bg-gradient-total {
+    background: #62d469!important;
+    background: linear-gradient(45deg,#49ec8f 0%,#62d469 100%)!important;
+    border-color: #92D050!important;
+}
+
+
+.bg-gradient-machos {
+    background: #1f1498!important;
+    background: linear-gradient(45deg,#321fdb 0%,#1f1498 100%)!important;
+    border-color: #1f1498!important;
+}
+
+.bg-gradient-corderos {
+    background: #2982cc!important;
+    background: linear-gradient(45deg,#39f 0%,#2982cc 100%)!important;
+    border-color: #2982cc!important;
+}
+.bg-gradient-hembras {
+    background: #d93737!important;
+    background: linear-gradient(45deg,#e55353 0%,#d93737 100%)!important;
+    border-color: #d93737!important;
+}
+
+
+.dashboard-container .total {
+    /* background-color: darkslateblue; */
+}
+.dashboard-container .machos {
+    /* background-color: #6f94c6; */
+}
+.dashboard-container .hembras {
+    /* background-color: lightpink; */
+}
+.dashboard-container .cordero {
+    /* background-color: #ddffdd; */
+}
+
+.dashboard-container p {
+    font-size: 40px;
+    text-align:center;
+}
+
+.edades {
+    background-color: red;
+}
+
+.nav-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+a {
+    color: black;
+}
+
+.sheep-weight {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.fa-mars{
+    font-weight: bold;
+    font-size: 25px;
+    color:  #3399FF;
+}
+
+.fa-venus{
+    font-weight: bold;
+    font-size: 25px;
+    color:  #fc75f0;
+}
+
+.card-img-top {
+    border-radius: 12px;
+
+}
+
+.card-buttons {
+}
+
+.blue-dark{
+    background-color: #002060;
+}
+
+.brown {
+    background-color: #833C0C;
+}
+
+.fucsia {
+    background-color: #FF0066;
+}
+
+.green {
+    background-color: #00B050;
+}
+
+.light-green {
+    background-color: #92D050;
+}
+
+.light-yellow {
+    background-color: #F8CBAD;
+}
+
+.lila {
+    background-color: #9933FF;
+}
+
+.orange {
+    background-color: #FF3300;
+}
+
+.sky-blue {
+    background-color: #3399FF;
+}
+
+.violet {
+    background-color: #4C004C;
+}
+
+.yellow{
+    background-color: #FFC000;
+}
+
+.detail-img-principal {
+    width: 100%;
+    height: 100%;
+}
+
+.images-detail {
+    width: 50%;
+    height: 50%;
+}
+
+* {
+    box-sizing: border-box;
+  }
+
+  /* Position the image container (needed to position the left and right arrows) */
+  .container {
+    position: relative;
+  }
+
+  /* Hide the images by default */
+  .mySlides {
+    display: none;
+  }
+
+  /* Add a pointer when hovering over the thumbnail images */
+  .cursor {
+    cursor: pointer;
+  }
+
+  /* Next & previous buttons */
+  .slide-prev,
+  .slide-next {
+    cursor: pointer;
+    position: absolute;
+    top: 40%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Position the "next button" to the right */
+  .slide-next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .right {
+    position: relative;
+    right: 0px;
+  }
+
+  /* On hover, add a black background color with a little bit see-through */
+  .slide-prev:hover,
+  .slide-next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  /* Number text (1/3 etc) */
+  .numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+  }
+
+  /* Container for image text */
+  .caption-container {
+    text-align: center;
+    background-color: #222;
+    padding: 2px 16px;
+    color: white;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  /* Six columns side by side */
+  .column {
+    float: left;
+    width: 40%;
+    padding: 2px ;
+
+  }
+
+  /* Add a transparency effect for thumnbail images */
+  .demo {
+    opacity: 0.6;
+  }
+
+  .active,
+  .demo:hover {
+    opacity: 1;
+  }
+
+  .text-observation {
+      font-size: 200%;
+  }
+
+  .footer-observation {
+    position: absolute;
+    bottom: 10px;
+  }
+
+  .hr_with_lines {
+      border-top: 1px dashed gray;
+  }
+
+  .acciones_en_bloque {
+      font-size: 20px;
+  }
+
+  .icon_gender {
+      height: 30px;
+      width: 30px;
+  }
+
+  .icon_buscador {
+      height: 20px;
+      width: 20px;
+  }
+
+  .icon_card {
+      height: 20px;
+      width: 20px;
+  }
+
+.col-lg-4, .col-md-6 {
+    padding-right: 2px;
+    padding-left: 2px;
+}

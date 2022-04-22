@@ -6,7 +6,8 @@ body {
      background-color: gray;
  }
  .container-progress{
-    margin-top: -15px;
+    margin-top: -10px;
+    margin-bottom: -10px;
  }
 
  .dropdown-menu {
@@ -196,18 +197,6 @@ form .weather-container input  {
 }
 
 
-.dashboard-container .total {
-    /* background-color: darkslateblue; */
-}
-.dashboard-container .machos {
-    /* background-color: #6f94c6; */
-}
-.dashboard-container .hembras {
-    /* background-color: lightpink; */
-}
-.dashboard-container .cordero {
-    /* background-color: #ddffdd; */
-}
 
 .dashboard-container p {
     font-size: 40px;
@@ -417,3 +406,23 @@ a {
   .acciones_en_bloque {
       font-size: 20px;
   }
+
+  .icon_gender {
+      height: 30px;
+      width: 30px;
+  }
+
+  .icon_buscador {
+      height: 20px;
+      width: 20px;
+  }
+
+  .icon_card {
+      height: 20px;
+      width: 20px;
+  }
+
+.col-lg-4, .col-md-6 {
+    padding-right: 2px;
+    padding-left: 2px;
+}

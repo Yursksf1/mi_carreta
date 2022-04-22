@@ -88,5 +88,15 @@ urlpatterns = [
         view=views.weight_import,
         name='weight_import'
     ),
+    path(
+        route='acciones_bloque/weights/download',
+        view=views.weights_download,
+        name='weights_download'
+    ),
+    path(
+        route='acciones_bloque/weights/import',
+        view=views.weights_import,
+        name='weights_import'
+    ),
 
 ]

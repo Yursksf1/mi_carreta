@@ -1,78 +1,78 @@
 
   {% load static %}
+<!-- card-deck -->
+<div class="col-lg-4 col-md-6 my-1">
+  <div class="card ">
 
-  <div class="card col-sm-12 col-md-6 col-lg-4 offset-0 offset-md-0 offset-lg-0 mb-3 ">
-    <div class="row ">
+    <div class="col-12 text-center card-header">
+      <h5 class="card-title">
+        <a href="{% url 'app:detail' sheep.id %}" >
+          {{ sheep.full_name }}
+        </a>
 
-      <div class="col-12 text-center card-header">
-        <h5 class="card-title">
+        <span class="card-buttons float-right">
           <a href="{% url 'app:detail' sheep.id %}" >
-            {{ sheep.full_name }}
+            <img class="icon_card" src="{% static 'img/ojo.png' %}">  
           </a>
 
-          <span class="card-buttons float-right">
-            <a href="{% url 'app:detail' sheep.id %}" >
-                <i class="fa fa-eye"></i>
-            </a>
+          <a href="{% url 'admin:myapp_sheep_change' sheep.id %}" >
+            <img class="icon_card" src="{% static 'img/escritura.png' %}">  
+          </a>
+      </span>
 
-            <a href="{% url 'app:detail' sheep.id %}" >
-                <i class="fa fa-pencil-square-o"></i>
-            </a>
-        </span>
+      </h5>
+    </div>
 
-        </h5>
-      </div>
-
-      <div class="col-10 offset-1 container-progress">
-        <br>
-        {% if sheep.breed %}
-          <div class="progress">
-
+    <div class="col-12  container-progress">
+      <br>
+      {% if sheep.breed and not sheep.breeds == 'None' %}
+        <div class="progress">
           {% for breed in sheep.breeds  %}
               <div class="progress-bar  {{ breed.breed.color }}" style="width:{{breed.percent}}%">
-                  {{breed.breed.acronym}}
+                {{breed.breed.acronym}}
               </div>
           {% endfor %}
+      </div>
+      {% else %}
+          <div class="progress">
+              <div class="progress-bar brown" style="width:100%">
+                  MZ
+              </div>
         </div>
-        {% else %}
-            <div class="progress">
-                <div class="progress-bar brown" style="width:100%">
-                    MZ
-                </div>
-          </div>
-        {% endif %}
-      </div>
-
-      <div class=" col-6 col-sm-4 col-md-7 col-lg-6">
-        <a href="{% url 'app:detail' sheep.id %}" title="">
-          {% if sheep.prncipal_photo %}
-            <img class="card-img-top" class="img-thumbnail" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
-          {% else %}
-          <img class="card-img-top" class="img-thumbnail" src="{% static 'img/sheep_default.jpeg' %}"  alt="{{ sheep.full_name }}">
-          {% endif %}
-        </a>
-      </div>
-      <div class="col-6 col-sm-8 col-md-5 col-lg-6">
-        <div class="card-body">
-          <p class="card-text">
-
-            <div class='sheep-weight'>
-              {{ sheep.weight  }}
-            </div>
-            {% if sheep.breed_name %}
-              {{ sheep.breed_name  }}
-            {% else %}
-              MEZTIZO
-            {% endif %}
-          </p>
-          <p class="card-text"><small class="text-muted">
-            {% if sheep.gender == 'M'%}
-              <i class="fa fa-mars"></i>
-            {% else %}
-              <i class="fa fa-venus"></i>
-            {% endif %}
-            {{ sheep.age }}</small></p>
-        </div>
-      </div>
+      {% endif %}
     </div>
+
+    <div class="row card-body">
+    <div class=" col-6 col-sm-4 col-md-7 col-lg-6">
+      <a href="{% url 'app:detail' sheep.id %}" title="">
+        {% if sheep.prncipal_photo %}
+          <img class="card-img-top" class="img-thumbnail" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
+        {% else %}
+        <img class="card-img-top" class="img-thumbnail" src="{% static 'img/sheep_default.jpg' %}"  alt="{{ sheep.full_name }}">
+        {% endif %}
+      </a>
+    </div>
+    <div class="col-6 col-sm-8 col-md-5 col-lg-6">
+        <p class="card-text">
+
+          <div class='sheep-weight'>
+            {{ sheep.weight  }}
+          </div>
+          {% if sheep.breed_name %}
+            {{ sheep.breed_name  }}
+          {% else %}
+            MEZTIZO
+          {% endif %}
+        </p>
+        <p class="card-text"><small class="text-muted">
+          {% if sheep.gender == 'M'%}
+          <img class= "icon_gender" src="{% static 'img/genero_masculino.png' %}">
+          {% else %}
+          <img class= "icon_gender" src="{% static 'img/genero_femenino.png' %}">
+          {% endif %}
+          {{ sheep.age }}</small></p>
+    </div>
+    </div>
+
   </div>
+</div>

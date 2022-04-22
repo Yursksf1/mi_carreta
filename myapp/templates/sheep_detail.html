@@ -78,9 +78,14 @@
 
 {% block content %}
     <a class="btn btn-primary" href="{% url 'app:add-weigh'  sheep.id %}">
-    add peso
+        <img src="{% static 'img/balanza.png' %}">
+        Agregar Peso
     </a>
 
+    <a class="btn btn-primary" href="{% url 'admin:myapp_sheep_change' sheep.id %}" >
+        <img src="{% static 'img/escritura.png' %}">  
+        Editar
+    </a>
 <div class="col-sm-12 col-md-12">
     <p class="ml-2 mt-0 mb-2">
         <b>Nombre:  {{ sheep.full_name }}</b> - <small> Fecha de nacimiento: {{ sheep.birthday |date:"Y-m-d" }}</small>
@@ -113,7 +118,7 @@
             {% else %}
                 <div class="mySlides">
                 <div class="numbertext">1 / 1</div>
-                    <img src="{% static 'img/sheep_default.jpeg' %}" style="width:100%">
+                    <img src="{% static 'img/sheep_default.jpg' %}" style="width:100%">
                 </div>
             {% endif %}
             <!-- Next and previous buttons -->
@@ -133,7 +138,7 @@
         {% else %}
             <div class="row">
                 <div class="column offset-md-0">
-                    <img class="demo cursor" src="{% static 'img/sheep_default.jpeg' %}"style="width:100%" onclick="currentSlide(1)" alt="default sheep">
+                    <img class="demo cursor" src="{% static 'img/sheep_default.jpg' %}"style="width:100%" onclick="currentSlide(1)" alt="default sheep">
                 </div>
             </div>
         {% endif %}
