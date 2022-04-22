@@ -15,7 +15,7 @@
               <img class="icon_card" src="{% static 'img/ojo.png' %}">    
             </a>
 
-            <a href="{% url 'app:detail' sheep.id %}" >
+            <a href="{% url 'admin:myapp_sheep_change' sheep.id %}" >
               <img class="icon_card" src="{% static 'img/escritura.png' %}">  
             </a>
         </span>
@@ -25,11 +25,10 @@
 
       <div class="col-10 offset-1">
         <br>
-        {% if sheep.breed %}
+        {% if sheep.breed and not sheep.breeds == 'None' %}
           <div class="progress">
 
           {% for breed in sheep.breeds  %}
-          {{breed}}
               <div class="progress-bar  {{ breed.breed.color }}" style="width:{{breed.percent}}%">
                   {{breed.breed.acronym}}
               </div>

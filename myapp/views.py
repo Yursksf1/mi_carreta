@@ -115,19 +115,35 @@ def weather_history(request):
 
 def dashboard(request):
     sheeps = Sheep.objects
-    total = len(sheeps.filter(active=True).all())
     ids_pure = SheepController.get_id_pure()
-
-    num_machos = len(sheeps.filter(gender='M', active=True).exclude(id__in=ids_pure))
-    num_hembras = len(sheeps.filter(gender='H', active=True).exclude(id__in=ids_pure))
     today = date.today()
-    month_3 = today - timedelta(days=90)
+    month_6 = today - timedelta(days=180)
+    month_12 = today - timedelta(days=360)
 
-    num_cordero = len(sheeps.filter(birthday__gt=month_3, active=True).exclude(id__in=ids_pure))
+    total = len(sheeps.filter(active=True).all())
 
     num_machos_p = len(sheeps.filter(gender='M', id__in=ids_pure, active=True))
     num_hembras_p = len(sheeps.filter(gender='H', id__in=ids_pure, active=True))
-    num_cordero_p = len(sheeps.filter(birthday__gt=month_3, id__in=ids_pure, active=True))
+    num_machos_c = len(sheeps.filter(gender='M', active=True).exclude(id__in=ids_pure))
+    num_hembras_c = len(sheeps.filter(gender='H', active=True).exclude(id__in=ids_pure))
+
+    num_ovejas = len(sheeps.filter(birthday__lt=month_12, active=True))
+    num_borregos = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12,  active=True))
+    num_corderos = len(sheeps.filter(birthday__gt=month_6, active=True))
+
+    num_ovejas_m_p = len(sheeps.filter(birthday__lt=month_12, gender='M', id__in=ids_pure, active=True))
+    num_ovejas_h_p = len(sheeps.filter(birthday__lt=month_12, gender='H', id__in=ids_pure, active=True))
+    num_borregos_m_p = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12, gender='M', id__in=ids_pure, active=True))
+    num_borregos_h_p = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12, gender='H', id__in=ids_pure, active=True))
+    num_corderos_m_p = len(sheeps.filter(birthday__gt=month_6, gender='M', id__in=ids_pure, active=True))
+    num_corderos_h_p = len(sheeps.filter(birthday__gt=month_6, gender='H', id__in=ids_pure, active=True))
+
+    num_ovejas_m_c = len(sheeps.filter(birthday__lt=month_12, gender='M', active=True).exclude(id__in=ids_pure))
+    num_ovejas_h_c = len(sheeps.filter(birthday__lt=month_12, gender='H', active=True).exclude(id__in=ids_pure))
+    num_borregos_m_c = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12, gender='M', active=True).exclude(id__in=ids_pure))
+    num_borregos_h_c = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12, gender='H', active=True).exclude(id__in=ids_pure))
+    num_corderos_m_c = len(sheeps.filter(birthday__gt=month_6, gender='M', active=True).exclude(id__in=ids_pure))
+    num_corderos_h_c = len(sheeps.filter(birthday__gt=month_6, gender='H', active=True).exclude(id__in=ids_pure))
 
     num_gestantes = 11
     num_natal = 8
@@ -141,16 +157,31 @@ def dashboard(request):
         'dashboard.html',
         {
             'total': total,
+
             'num_machos_p': num_machos_p,
             'num_hembras_p': num_hembras_p,
-            'num_corderos_p': num_cordero_p,
-            'num_borrego_p': 0,
+            'num_machos_c': num_machos_c,
+            'num_hembras_c': num_hembras_c,
 
-            'num_machos': num_machos,
-            'num_hembras': num_hembras,
-            'num_corderos': num_cordero,
-            'num_borrego_p': 0,
+            'num_ovejas': num_ovejas,
+            'num_borregos': num_borregos,
+            'num_corderos': num_corderos,
 
+            'num_ovejas_m_p': num_ovejas_m_p,
+            'num_ovejas_h_p': num_ovejas_h_p,
+            'num_borregos_m_p': num_borregos_m_p,
+            'num_borregos_h_p': num_borregos_h_p,
+            'num_corderos_m_p': num_corderos_m_p,
+            'num_corderos_h_p': num_corderos_h_p,
+
+            'num_ovejas_m_c': num_ovejas_m_c,
+            'num_ovejas_h_c': num_ovejas_h_c,
+            'num_borregos_m_c': num_borregos_m_c,
+            'num_borregos_h_c': num_borregos_h_c,
+            'num_corderos_m_c': num_corderos_m_c,
+            'num_corderos_h_c': num_corderos_h_c,
+
+            # aun falta buscar esto:
             'num_gestantes': num_gestantes,
             'num_natal': num_natal,
             'num_destetes': num_destetes,
@@ -220,17 +251,27 @@ class SheepsFeedView(ListView):
         if 'type' in self.request.GET:
             if self.request.GET['type'] == 'cordero':
                 today = date.today()
-                one_year = today - timedelta(days=365)
-                queryset = queryset.filter(birthday__gt=one_year)
+                month_6 = today - timedelta(days=180)
+                queryset = queryset.filter(
+                    birthday__gt=month_6
+                )
 
             if self.request.GET['type'] == 'borrego':
                 today = date.today()
-                one_year = today - timedelta(days=365)
-                two_year = today - timedelta(days=750)
+                month_6 = today - timedelta(days=180)
+                month_12 = today - timedelta(days=360)
                 queryset = queryset.filter(
-                    birthday__lt=one_year,
-                    birthday__gt=two_year
+                    birthday__lt=month_6,
+                    birthday__gt=month_12
                 )
+
+            if self.request.GET['type'] == 'oveja':
+                today = date.today()
+                month_12 = today - timedelta(days=360)
+                queryset = queryset.filter(
+                    birthday__lt=month_12
+                )
+
 
         if 'age_range_max' in self.request.GET:
             age_range_max = self.request.GET['age_range_max']

@@ -14,7 +14,7 @@
     <div class="col-xs-12 dashboard-container ">
 
         <a href="{% url 'app:feed' %}?active=true">
-            <div class="col-sm-12 col-xs-12 dashboard-container total">
+            <div class="col-xs-12 dashboard-container total">
                 <div class="card text-white bg-gradient-total">
                 <h4>
                         Total Animales:
@@ -26,7 +26,7 @@
                     {% if  total  %}
                         {{ total }}
                     {% else %}
-                        N/A
+                        0
                     {% endif %}
                 </p>
                 </div>
@@ -45,7 +45,7 @@
                         {% if  num_machos_p  %}
                             {{ num_machos_p }}
                         {% else %}
-                            N/A
+                            0
                         {% endif %}
                     </p>
                 </div>
@@ -62,7 +62,7 @@
                         {% if  num_hembras_p  %}
                             {{ num_hembras_p }}
                         {% else %}
-                            N/A
+                            0
                         {% endif %}
                     </p>
 
@@ -78,10 +78,10 @@
                     Machos (C): <br>
                 </h4>
                 <p>
-                    {% if  num_machos  %}
-                        {{ num_machos }}
+                    {% if  num_machos_c  %}
+                        {{ num_machos_c }}
                     {% else %}
-                        N/A
+                        0
                     {% endif %}
                 </p>
 
@@ -96,10 +96,10 @@
                     Hembras (C): <br>
                 </h4>
                 <p>
-                    {% if  num_hembras  %}
-                        {{ num_hembras }}
+                    {% if  num_hembras_c  %}
+                        {{ num_hembras_c }}
                     {% else %}
-                        N/A
+                        0
                     {% endif %}
                 </p>
 
@@ -108,136 +108,410 @@
     </a>
 
         <div class="edades">
+
+            <a href="{% url 'app:feed' %}?type=oveja&active=true">
+                <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+                    <div class="card text-white bg-gradient-corderos">
+
+                        <h4>
+                            Ovejas:
+                            {% if num_ovejas  %}
+                                {{ num_ovejas }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </h4>
+                    </div>
+                </div>
+            </a>
+            <a href="{% url 'app:feed' %}?type=borrego&active=true">
+                <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+                    <div class="card text-white bg-gradient-corderos">
+                        <h4>
+                            Borregos:
+                            {% if num_borregos %}
+                                {{ num_borregos }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </h4>
+                    </div>
+                </div>
+            </a>
+            <a href="{% url 'app:feed' %}?type=cordero&active=true">
+                <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+                    <div class="card text-white bg-gradient-corderos">
+
+                        <h4>
+                            Corderos:
+                            {% if num_corderos %}
+                                {{ num_corderos }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </h4>
+                    </div>
+                </div>
+            </a>
             <div class="col-sm-4 col-xs-4 dashboard-container cordero">
-
-                <a href="{% url 'app:feed' %}?type=oveja&breeds=puro&active=true">
-                    <div class="col-sm-6 col-xs-6 cordero">
+                <a href="{% url 'app:feed' %}?type=oveja&breeds=puro&gender=M&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
                         <div class="card text-white bg-gradient-corderos">
 
                             <h4>
-                                Oveja (M)(P): <br>
+                                <img class= "icon_card" src="{% static 'img/genero_masculino.png' %}">
+                                Ovejas (M)(P): <br>
                             </h4>
                             <p>
-                                {% if  num_corderos_p  %}
-                                    {{ num_corderos_p }}
+                                {% if  num_ovejas_m_p  %}
+                                    {{ num_ovejas_m_p }}
                                 {% else %}
-                                    N/A
+                                    0
                                 {% endif %}
                             </p>
                         </div>
                     </div>
                 </a>
-                <a href="{% url 'app:feed' %}?type=oveja&breeds=puro&active=true">
-                    <div class="col-sm-6 col-xs-6 cordero">
+                <a href="{% url 'app:feed' %}?type=oveja&breeds=puro&gender=H&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
                         <div class="card text-white bg-gradient-corderos">
 
                             <h4>
-                                Oveja (H)(P): <br>
+                                <img class= "icon_card" src="{% static 'img/genero_femenino.png' %}">
+                                Ovejas (H)(P): <br>
                             </h4>
                             <p>
-                                {% if  num_corderos_p  %}
-                                    {{ num_corderos_p }}
+                                {% if  num_ovejas_h_p  %}
+                                    {{ num_ovejas_h_p }}
                                 {% else %}
-                                    N/A
+                                    0
                                 {% endif %}
                             </p>
                         </div>
                     </div>
                 </a>
-
-
             </div>
 
-            <a href="{% url 'app:feed' %}?type=borrego&breeds=puro&active=true">
-                <div class="col-sm-4 col-xs-4 dashboard-container cordero">
-                    <div class="card text-white bg-gradient-corderos">
+            <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+                <a href="{% url 'app:feed' %}?type=borrego&breeds=puro&gender=M&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
 
-                        <h4>
-                            Borrego (P): <br>
-                        </h4>
-                        <p>
-                            {% if  num_borrego_p  %}
-                                {{ num_borrego_p }}
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </p>
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_masculino.png' %}">
+                                Borregos (M)(P): <br>
+                            </h4>
+                            <p>
+                                {% if  num_borregos_m_p  %}
+                                    {{ num_borregos_m_p }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </a>
-            <a href="{% url 'app:feed' %}?type=cordero&breeds=puro&active=true">
-                <div class="col-sm-4 col-xs-4 dashboard-container cordero">
-                    <div class="card text-white bg-gradient-corderos">
+                </a>
+                <a href="{% url 'app:feed' %}?type=borrego&breeds=puro&gender=H&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
 
-                        <h4>
-                            Corderos (P): <br>
-                        </h4>
-                        <p>
-                            {% if  num_corderos_p  %}
-                                {{ num_corderos_p }}
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </p>
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_femenino.png' %}">
+
+                                Borregos (H)(P): <br>
+                            </h4>
+                            <p>
+                                {% if  num_borregos_h_p  %}
+                                    {{ num_borregos_h_p }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
+
+            <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+                <a href="{% url 'app:feed' %}?type=cordero&breeds=puro&gender=M&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
+
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_masculino.png' %}">
+                                Corderos (M)(P): <br>
+                            </h4>
+                            <p>
+                                {% if  num_corderos_m_p  %}
+                                    {{ num_corderos_m_p }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                <a href="{% url 'app:feed' %}?type=cordero&breeds=puro&gender=H&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
+
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_femenino.png' %}">
+
+                                Corderos (H)(P): <br>
+                            </h4>
+                            <p>
+                                {% if  num_corderos_h_p  %}
+                                    {{ num_corderos_h_p }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+                <a href="{% url 'app:feed' %}?type=oveja&breeds=comercial&gender=M&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
+
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_masculino.png' %}">
+                                Ovejas (M)(C): <br>
+                            </h4>
+                            <p>
+                                {% if  num_ovejas_m_c  %}
+                                    {{ num_ovejas_m_c }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                <a href="{% url 'app:feed' %}?type=oveja&breeds=comercial&gender=H&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
+
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_femenino.png' %}">
+
+                                Ovejas (H)(C): <br>
+                            </h4>
+                            <p>
+                                {% if  num_ovejas_h_c  %}
+                                    {{ num_ovejas_h_c }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+                <a href="{% url 'app:feed' %}?type=borrego&breeds=comercial&gender=M&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
+
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_masculino.png' %}">
+                                Borregos (M)(C): <br>
+                            </h4>
+                            <p>
+                                {% if  num_borregos_m_c  %}
+                                    {{ num_borregos_m_c }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                <a href="{% url 'app:feed' %}?type=borrego&breeds=comercial&gender=H&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
+
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_femenino.png' %}">
+
+                                Borregos (H)(C): <br>
+                            </h4>
+                            <p>
+                                {% if  num_borregos_h_c  %}
+                                    {{ num_borregos_h_c }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-sm-4 col-xs-4 dashboard-container cordero">
+                <a href="{% url 'app:feed' %}?type=cordero&breeds=comercial&gender=M&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
+
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_masculino.png' %}">
+                                Corderos (M)(C): <br>
+                            </h4>
+                            <p>
+                                {% if  num_corderos_m_c  %}
+                                    {{ num_corderos_m_c }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                <a href="{% url 'app:feed' %}?type=cordero&breeds=comercial&gender=H&active=true">
+                    <div class="col-sm-6 col-xs-6 dashboard-container cordero">
+                        <div class="card text-white bg-gradient-corderos">
+
+                            <h4>
+                                <img class= "icon_card" src="{% static 'img/genero_femenino.png' %}">
+
+                                Corderos (H)(C): <br>
+                            </h4>
+                            <p>
+                                {% if  num_corderos_h_c  %}
+                                    {{ num_corderos_h_c }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
         </div>
+
+        <a href="{% url 'app:feed' %}?active=true">
+            <div class="col-xs-12 dashboard-container total">
+                <div class="card text-white bg-gradient-total">
+                    <h4>
+                        Grupos
+                    </h4>
+                </div>
+            </div>
+        </a>
+
         <div>
-            <a href="{% url 'app:feed' %}?type=oveja&breeds=comercial&active=true">
-                <div class="col-sm-4 col-xs-4 dashboard-container cordero">
-                    <div class="card text-white bg-gradient-corderos">
+            <a href="{% url 'app:feed' %}?active=true">
+                <div class="col-sm-4 col-xs-4 dashboard-container grupos">
+                    <div class="card text-white bg-gradient-grupos">
 
                         <h4>
-                            Oveja (C): <br>
+                            Comerciales: <br>
                         </h4>
                         <p>
                             {% if  num_corderos  %}
                                 {{ num_corderos }}
                             {% else %}
-                                N/A
+                                0
                             {% endif %}
                         </p>
 
                     </div>
                 </div>
             </a>
-            <a href="{% url 'app:feed' %}?type=borrego&breeds=comercial&active=true">
-            <div class="col-sm-4 col-xs-4 dashboard-container cordero">
-                <div class="card text-white bg-gradient-corderos">
+            <a href="{% url 'app:feed' %}?active=true">
+            <div class="col-sm-4 col-xs-4 dashboard-container grupos">
+                <div class="card text-white bg-gradient-grupos">
 
                     <h4>
-                        Borrego (C): <br>
+                        Madres: <br>
                     </h4>
                     <p>
-                        {% if  num_borrego  %}
-                            {{ num_borrego }}
+                        {% if  num_borregos  %}
+                            {{ num_borregos }}
                         {% else %}
-                            N/A
+                            0
                         {% endif %}
                     </p>
 
                 </div>
             </div>
-        </a>
-            <a href="{% url 'app:feed' %}?type=cordero&breeds=comercial&active=true">
-            <div class="col-sm-4 col-xs-4 dashboard-container cordero">
-                <div class="card text-white bg-gradient-corderos">
+            </a>
+            <a href="{% url 'app:feed' %}?active=true">
+            <div class="col-sm-4 col-xs-4 dashboard-container grupos">
+                <div class="card text-white bg-gradient-grupos">
 
                     <h4>
-                        Corderos (C): <br>
+                        Machos en Servicio: <br>
                     </h4>
                     <p>
                         {% if  num_corderos  %}
                             {{ num_corderos }}
                         {% else %}
-                            N/A
+                            0
                         {% endif %}
                     </p>
 
                 </div>
             </div>
-        </a>
+            </a>
+            <a href="{% url 'app:feed' %}?active=true">
+                <div class="col-sm-4 col-xs-4 dashboard-container grupos">
+                    <div class="card text-white bg-gradient-grupos">
+
+                        <h4>
+                            Comerciales: <br>
+                        </h4>
+                        <p>
+                            {% if  num_corderos  %}
+                                {{ num_corderos }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </p>
+
+                    </div>
+                </div>
+            </a>
+            <a href="{% url 'app:feed' %}?active=true">
+            <div class="col-sm-4 col-xs-4 dashboard-container grupos">
+                <div class="card text-white bg-gradient-grupos">
+
+                    <h4>
+                        Madres: <br>
+                    </h4>
+                    <p>
+                        {% if  num_borregos  %}
+                            {{ num_borregos }}
+                        {% else %}
+                            0
+                        {% endif %}
+                    </p>
+
+                </div>
+            </div>
+            </a>
+            <a href="{% url 'app:feed' %}?active=true">
+            <div class="col-sm-4 col-xs-4 dashboard-container grupos">
+                <div class="card text-white bg-gradient-grupos">
+
+                    <h4>
+                        Machos en Servicio: <br>
+                    </h4>
+                    <p>
+                        {% if  num_corderos  %}
+                            {{ num_corderos }}
+                        {% else %}
+                            0
+                        {% endif %}
+                    </p>
+
+                </div>
+            </div>
+            </a>
         </div>
 
     </div>

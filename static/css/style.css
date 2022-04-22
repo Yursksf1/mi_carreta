@@ -161,10 +161,10 @@ form .weather-container input  {
 .dashboard-container {
     border-width: 1px;
     border-color: black;
-    padding-right: 1%;
-    padding-left: 1%;
-    padding-top: 1%;
-    padding-bottom: 1%;
+    padding-right: 0.1%;
+    padding-left: 0.1%;
+    padding-top: 0.1%;
+    padding-bottom: 0.1%;
     border-radius: .25rem;
     text-align: center;
 }
@@ -195,7 +195,11 @@ form .weather-container input  {
     background: linear-gradient(45deg,#e55353 0%,#d93737 100%)!important;
     border-color: #d93737!important;
 }
-
+.bg-gradient-grupos {
+    background: #f09b3a!important;
+    background: linear-gradient(45deg,#f9d283 0%,#f3a854 100%)!important;
+    border-color: #f09b3a!important;
+}
 
 
 .dashboard-container p {
