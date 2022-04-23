@@ -78,12 +78,31 @@ class RangeDayListFilter(admin.SimpleListFilter):
                 birthday__lte=date_delta,
             )
 
+from django.utils.safestring import mark_safe
+
+class PhotoInline(admin.TabularInline):
+    model = SheepPhoto
+    fields = ('render_image', 'upload', 'is_principal' )
+    readonly_fields = ("render_image",)
+    extra = 0
+
+
+    def render_image(self, obj):
+        return mark_safe("""<img style="width: 60px; height: 50px;" src="{}" />""".format(obj.upload.url))
+
+class MembershipInline(admin.TabularInline):
+    model = SheepBreed
+    extra = 0
+
 
 class SheepAdmin(admin.ModelAdmin):
     list_display = ('idd',  'imagen', 'identification_number', 'name', 'gender', 'age', 'nacimiento', 'breeds', 'parentDadId', 'parentMomId', 'active')
     list_filter = (RangeDayListFilter, 'active', 'gender' )
     search_fields = ('name', 'identification_number')
-
+    inlines = [
+        PhotoInline,
+        MembershipInline
+    ]
     def imagen(self, obj):
         url = obj.get_absolute_url()
         url_img = '/static/img/sheep_default.jpg'

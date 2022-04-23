@@ -98,5 +98,15 @@ urlpatterns = [
         view=views.weights_import,
         name='weights_import'
     ),
+    path(
+        route='acciones_bloque/sheep/download',
+        view=views.sheep_download,
+        name='sheep_download'
+    ),
+    path(
+        route='acciones_bloque/sheep/import',
+        view=views.sheep_import,
+        name='sheep_import'
+    ),
 
 ]

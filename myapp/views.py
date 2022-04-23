@@ -852,3 +852,98 @@ def weights_import(request):
                 hf.save()
 
     return redirect('app:acciones_bloque')
+
+
+# multiple sheep
+
+def generate_document_sheep(hoja, sheeps_data):
+    encabezado = ["Activo",  "Nombre", "#OVINO", "GENERO", "nacimiento", "padre", "madre"]
+
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        active = "N"
+        if sheep.active:
+            active = "S"
+        data = [active, sheep.name, sheep.identification_number, sheep.gender, sheep.birthday.strftime("%d/%m/%Y")]
+        parents = ["", ""]
+        if sheep.parentDadId:
+            parents[0] = sheep.parentDadId.identification_number
+        if sheep.parentMomId:
+            parents[1] = sheep.parentMomId.identification_number
+        data = data + parents
+        hoja.append(data)
+
+def sheep_download(request):
+    path = 'media/generate_reports'
+    file_name = 'sheep_import.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+
+    sheeps = Sheep.objects.order_by("active", "-gender", "identification_number").all()
+    # here is the magic
+    generate_document_sheep(hoja, sheeps)
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def sheep_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+    index_is_active = 0
+    index_name = 1
+    index_num = 2
+    index_gender = 3
+    index_birthday = 4
+    index_dad = 5
+    index_mom = 6
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            is_active = row[index_is_active].value
+            num_ovino = row[index_num].value
+            name = row[index_name].value
+            gender = row[index_gender].value
+            date_birthday = row[index_birthday].value
+            local_tz = get_localzone()
+            birthday = datetime.datetime.now(local_tz).date()
+            if date_birthday:
+                birthday = datetime.datetime.strptime(date_birthday,  '%d/%m/%Y')
+            dad = row[index_dad].value
+            mom = row[index_mom].value
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            if not sheep:
+                sheep = Sheep()
+                sheep.name = name
+                sheep.identification_number = name
+                sheep.gender = gender
+                sheep.birthday = birthday
+                sheep.active = not (is_active.upper() == 'N')
+                sheep.save()
+
+                if dad:
+                    sheep_dad = Sheep.objects.filter(identification_number=dad).first()
+                    if sheep_dad:
+                        sheep.parentDadId = sheep_dad.id
+
+                if mom:
+                    sheep_mom = Sheep.objects.filter(identification_number=mom).first()
+                    if sheep_mom:
+                        sheep.parentMomId = sheep_mom.id
+                sheep.save()
+
+
+
+
+    return redirect('app:acciones_bloque')
