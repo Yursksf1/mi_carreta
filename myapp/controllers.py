@@ -1,4 +1,4 @@
-from myapp.models import Sheep, HistoryWeather, SheepBreed, HistoryWeight, HistoryFamacha, HistoryBodyCondition, Observations
+from myapp.models import Sheep, Group, SheepGroup, HistoryWeather, SheepBreed, HistoryWeight, HistoryFamacha, HistoryBodyCondition, Observations
 
 
 class SheepController(object):
@@ -17,6 +17,19 @@ class SheepController(object):
         sheep_breeds = SheepBreed.objects.filter(percent__gte=pure).all()
         ids_pure = [sheep_breed.sheep.id for sheep_breed in sheep_breeds]
         return ids_pure
+
+    @staticmethod
+    def get_id_in_group(group_name):
+        """
+        Return id sheep in group
+        :param: group_name, name gropu Ie, "service"
+        return list ids. Ie, [12,13,14,25]
+        """
+        group = Group.objects.filter(slug=group_name).first()
+
+        sheep_groups = SheepGroup.objects.filter(group=group).all()
+        ids_sheep = [sheep_group.sheep.id for sheep_group in sheep_groups]
+        return ids_sheep
 
     @staticmethod
     def get_id_range_weight(weight_range_min, weight_range_max):

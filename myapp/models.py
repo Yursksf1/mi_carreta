@@ -204,6 +204,22 @@ class Breed(models.Model):
         return self.name
 
 
+class Group(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.fields.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, default="")
+    active = models.fields.BooleanField(default=True)
+    description = models.fields.CharField(max_length=300)
+
+    def count(self):
+        sh = SheepGroup.objects.filter(group_id=self.id).all()
+        return len(sh)
+
+
+    def __str__(self):
+        return self.name
+
+
 class SheepBreed(models.Model):
     breed = models.ForeignKey(
         Breed,
@@ -217,6 +233,45 @@ class SheepBreed(models.Model):
 
     )
     percent = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.sheep, self.percent, self.breed.name)
+
+
+class SheepGroup(models.Model):
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.CASCADE,
+        related_name='sheep'
+    )
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+        related_name='group'
+
+    )
+    date_start = models.DateTimeField(auto_now_add=True)
+    date_end = models.DateTimeField()
+
+    def __str__(self):
+        return '{} - {}'.format(self.sheep, self.group)
+
+
+class Service(models.Model):
+    sheep_hembra = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+        related_name='service_hembra'
+
+    )
+    sheep_macho = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+        related_name='service_macho'
+
+    )
+    date_start = models.DateTimeField(auto_now_add=True)
+    date_end = models.DateTimeField()
 
     def __str__(self):
         return '{} - {} - {}'.format(self.sheep, self.percent, self.breed.name)
@@ -257,6 +312,16 @@ class Observations(models.Model):
     )
     description = models.fields.CharField(max_length=100)
     active = models.fields.BooleanField(default=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+
+class HistorySheep(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+    )
+    description = models.fields.CharField(max_length=500)
     create_at = models.DateTimeField(auto_now_add=True)
 
 

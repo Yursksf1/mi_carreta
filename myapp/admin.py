@@ -1,5 +1,6 @@
 from django.contrib import admin
 from myapp.models import Sheep, Breed, HistoryWeight, SheepPhoto, SheepBreed
+from myapp.models import Group, SheepGroup, Service, HistorySheep
 # Register your models here.
 from django.utils import timezone
 from datetime import datetime
@@ -95,13 +96,19 @@ class MembershipInline(admin.TabularInline):
     extra = 0
 
 
+class SheepGroupInline(admin.TabularInline):
+    model = SheepGroup
+    extra = 0
+
+
 class SheepAdmin(admin.ModelAdmin):
     list_display = ('idd',  'imagen', 'identification_number', 'name', 'gender', 'age', 'nacimiento', 'breeds', 'parentDadId', 'parentMomId', 'active')
     list_filter = (RangeDayListFilter, 'active', 'gender' )
     search_fields = ('name', 'identification_number')
     inlines = [
         PhotoInline,
-        MembershipInline
+        MembershipInline,
+        SheepGroupInline
     ]
     def imagen(self, obj):
         url = obj.get_absolute_url()
@@ -143,5 +150,12 @@ class BreedAdmin(admin.ModelAdmin):
 
 admin.site.register(Breed, BreedAdmin)
 
-admin.site.register(SheepPhoto)
-admin.site.register(SheepBreed)
+# admin.site.register(SheepPhoto)
+# admin.site.register(SheepBreed)
+
+
+admin.site.register(Group)
+# admin.site.register(SheepGroup)
+admin.site.register(Service)
+admin.site.register(HistorySheep)
+

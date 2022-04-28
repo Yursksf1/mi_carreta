@@ -404,114 +404,27 @@
         </a>
 
         <div>
-            <a href="{% url 'app:feed' %}?active=true">
-                <div class="col-sm-4 col-xs-4 dashboard-container grupos">
-                    <div class="card text-white bg-gradient-grupos">
+            {% for group in groups %}
+                <a href="{% url 'app:feed' %}?group={{ group.slug }}">
+                    <div class="col-sm-4 col-xs-4 dashboard-container grupos">
+                        <div class="card text-white bg-gradient-grupos">
 
-                        <h4>
-                            Vientres Vacios: <br>
-                        </h4>
-                        <p>
-                            {% if  num_corderos  %}
-                                {{ num_corderos }}
-                            {% else %}
-                                0
-                            {% endif %}
-                        </p>
+                            <h4>
+                                {{ group.name }}: <br>
+                            </h4>
+                            <p>
+                                {% if  group.count  %}
+                                    {{ group.count }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </p>
 
+                        </div>
                     </div>
-                </div>
-            </a>
-            <a href="{% url 'app:feed' %}?active=true">
-            <div class="col-sm-4 col-xs-4 dashboard-container grupos">
-                <div class="card text-white bg-gradient-grupos">
+                </a>
 
-                    <h4>
-                        En Servicio: <br>
-                    </h4>
-                    <p>
-                        {% if  num_borregos  %}
-                            {{ num_borregos }}
-                        {% else %}
-                            0
-                        {% endif %}
-                    </p>
-
-                </div>
-            </div>
-            </a>
-            <a href="{% url 'app:feed' %}?active=true">
-            <div class="col-sm-4 col-xs-4 dashboard-container grupos">
-                <div class="card text-white bg-gradient-grupos">
-
-                    <h4>
-                        Gestantes: <br>
-                    </h4>
-                    <p>
-                        {% if  num_corderos  %}
-                            {{ num_corderos }}
-                        {% else %}
-                            0
-                        {% endif %}
-                    </p>
-
-                </div>
-            </div>
-            </a>
-            <a href="{% url 'app:feed' %}?active=true">
-                <div class="col-sm-4 col-xs-4 dashboard-container grupos">
-                    <div class="card text-white bg-gradient-grupos">
-
-                        <h4>
-                            Madres: <br>
-                        </h4>
-                        <p>
-                            {% if  num_corderos  %}
-                                {{ num_corderos }}
-                            {% else %}
-                                0
-                            {% endif %}
-                        </p>
-
-                    </div>
-                </div>
-            </a>
-            <a href="{% url 'app:feed' %}?active=true">
-            <div class="col-sm-4 col-xs-4 dashboard-container grupos">
-                <div class="card text-white bg-gradient-grupos">
-
-                    <h4>
-                        Destetos: <br>
-                    </h4>
-                    <p>
-                        {% if  num_borregos  %}
-                            {{ num_borregos }}
-                        {% else %}
-                            0
-                        {% endif %}
-                    </p>
-
-                </div>
-            </div>
-            </a>
-            <a href="{% url 'app:feed' %}?active=true">
-            <div class="col-sm-4 col-xs-4 dashboard-container grupos">
-                <div class="card text-white bg-gradient-grupos">
-
-                    <h4>
-                        Levante: <br>
-                    </h4>
-                    <p>
-                        {% if  num_corderos  %}
-                            {{ num_corderos }}
-                        {% else %}
-                            0
-                        {% endif %}
-                    </p>
-
-                </div>
-            </div>
-            </a>
+            {% endfor %}
         </div>
 
     </div>

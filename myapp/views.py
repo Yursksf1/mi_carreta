@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.db.models import Q
 import datetime
 
-from myapp.models import HistoryWeight, HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer, HistoryBodyCondition, HistoryFamacha
+from myapp.models import HistoryWeight, HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer, HistoryBodyCondition, HistoryFamacha, Group
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
 from django.http import FileResponse
@@ -151,11 +151,9 @@ def dashboard(request):
 
     num_vendidas = 25
     num_muertes = 6
+    groups = Group.objects.all()
 
-    return render(
-        request,
-        'dashboard.html',
-        {
+    context = {
             'total': total,
 
             'num_machos_p': num_machos_p,
@@ -186,8 +184,16 @@ def dashboard(request):
             'num_natal': num_natal,
             'num_destetes': num_destetes,
             'num_vendidas': num_vendidas,
-            'num_muertes': num_muertes
+            'num_muertes': num_muertes,
+
+            'groups': groups
+
         }
+
+    return render(
+        request,
+        'dashboard.html',
+        context
     )
 
 class WeatherCreateView(CreateView):
@@ -247,6 +253,13 @@ class SheepsFeedView(ListView):
 
             if self.request.GET['breeds'] == 'comercial':
                 queryset = queryset.exclude(id__in=ids_pure)
+
+        if 'group' in self.request.GET:
+            group_name = self.request.GET['group']
+            ids_in_group = SheepController.get_id_in_group(group_name)
+            queryset = queryset.filter(
+                id__in=ids_in_group
+            )
 
         if 'type' in self.request.GET:
             if self.request.GET['type'] == 'cordero':
