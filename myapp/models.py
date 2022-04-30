@@ -294,11 +294,23 @@ class Service(models.Model):
         related_name='service_macho'
 
     )
-    date_start = models.DateTimeField(auto_now_add=True)
-    date_end = models.DateTimeField()
+    date_start = models.DateTimeField(default=now)
+    date_end = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return '{} - {} - {}'.format(self.sheep, self.percent, self.breed.name)
+        return '{} - {} - {}'.format(self.sheep_macho.name, self.sheep_hembra.name, self.date_start)
+
+
+class Mancha(models.Model):
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+        related_name='service_hembra'
+
+    )
+    date_start = models.DateTimeField(default=now)
+    def __str__(self):
+        return '{} - {}'.format(self.date_start, self.service)
 
 
 class SheepPhoto(models.Model):

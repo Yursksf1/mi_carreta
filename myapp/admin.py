@@ -1,6 +1,6 @@
 from django.contrib import admin
 from myapp.models import Sheep, Breed, HistoryWeight, SheepPhoto, SheepBreed
-from myapp.models import Group, SheepGroup, Service, HistorySheep
+from myapp.models import Group, SheepGroup, Service, HistorySheep, Mancha
 # Register your models here.
 from django.utils import timezone
 from datetime import datetime
@@ -99,11 +99,13 @@ class MembershipInline(admin.TabularInline):
     model = SheepBreed
     extra = 0
 
-
 class SheepGroupInline(admin.TabularInline):
     model = SheepGroup
     extra = 0
 
+class ManchaGroupInline(admin.TabularInline):
+    model = Mancha
+    extra = 0
 
 class SheepAdmin(admin.ModelAdmin):
     list_display = ('idd',  'imagen', 'identification_number', 'name', 'gender', 'age', 'nacimiento', 'breeds', 'parentDadId', 'parentMomId', 'active')
@@ -147,6 +149,24 @@ class SheepAdmin(admin.ModelAdmin):
 
 admin.site.register(Sheep, SheepAdmin)
 
+from django import forms
+class ServiceForm(forms.ModelForm):
+    sheep_macho = forms.ModelChoiceField(queryset=Sheep.objects.filter(gender="M", active=True).order_by("identification_number"))
+    sheep_hembra = forms.ModelChoiceField(queryset=Sheep.objects.filter(gender="H", active=True).order_by("identification_number"))
+
+    class Meta:
+        model = Service
+        fields = '__all__'
+
+class ServiceAdmin(admin.ModelAdmin):
+
+    form = ServiceForm
+
+    inlines = [
+        ManchaGroupInline
+    ]
+
+
 
 class BreedAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
@@ -161,6 +181,6 @@ admin.site.register(Breed, BreedAdmin)
 
 admin.site.register(Group)
 # admin.site.register(SheepGroup)
-admin.site.register(Service)
+admin.site.register(Service, ServiceAdmin)
 admin.site.register(HistorySheep)
 
