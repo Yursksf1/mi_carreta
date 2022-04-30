@@ -94,6 +94,30 @@ class Sheep(models.Model):
 
         return '{}'.format(str(weight.weight)[:-1])
 
+    def last_weight_comparative(self):
+        result = "no cambia"
+        weight = HistoryWeight.objects.filter(
+            sheep=self
+        )
+
+        if not weight.exists():
+            return result
+
+        weight_list = weight.order_by('-create_at').all()
+        if len(weight_list) == 1:
+            return "sube"
+
+        weight_new = weight_list[0]
+        weight_anterior = weight_list[1]
+        if weight_new.weight == weight_anterior.weight:
+            result = "no cambia"
+        elif weight_new.weight > weight_anterior.weight:
+            result = "sube"
+        elif weight_new.weight < weight_anterior.weight:
+            result = "baja"
+
+        return result
+
 
     def last_body_condition(self):
         body_condition = HistoryBodyCondition.objects.filter(
@@ -325,6 +349,9 @@ class HistorySheep(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
 
 
+    class Meta:
+        ordering = ['-create_at']
+
 class HistoryFamacha(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -357,6 +384,28 @@ class HistoryWeight(models.Model):
     weight = models.DecimalField(max_digits=7, decimal_places=2)
     create_at = models.DateTimeField(auto_now_add=True)
 
+    def get_conversion(self):
+        number = 0
+        all_w = HistoryWeight.objects.filter(sheep=self.sheep).all().order_by("create_at").all()
+        index = list(all_w).index(self)
+        indice_anterior = index - 1
+        if indice_anterior < 0:
+            return 0
+
+        w2 = all_w[indice_anterior]
+
+        diff_w = self.weight-w2.weight
+        diff_d = (self.create_at-w2.create_at).days
+
+        if diff_w == 0 or diff_d==0:
+            return 0
+
+        number = (diff_w/diff_d) * 1000
+        return round(number, 0)
+
+
+    class Meta:
+        ordering = ['create_at']
 
 class HistoryWeather(models.Model):
     LOCATION = [

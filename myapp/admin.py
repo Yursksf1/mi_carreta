@@ -91,6 +91,10 @@ class PhotoInline(admin.TabularInline):
     def render_image(self, obj):
         return mark_safe("""<img style="width: 60px; height: 50px;" src="{}" />""".format(obj.upload.url))
 
+class HistoryInline(admin.TabularInline):
+    model = HistorySheep
+    extra = 0
+
 class MembershipInline(admin.TabularInline):
     model = SheepBreed
     extra = 0
@@ -108,7 +112,8 @@ class SheepAdmin(admin.ModelAdmin):
     inlines = [
         PhotoInline,
         MembershipInline,
-        SheepGroupInline
+        SheepGroupInline,
+        HistoryInline
     ]
     def imagen(self, obj):
         url = obj.get_absolute_url()

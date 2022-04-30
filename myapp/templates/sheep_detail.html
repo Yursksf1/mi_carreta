@@ -73,6 +73,71 @@
             captionText.innerHTML = dots[slideIndex-1].alt;
         }
     </script>
+
+    <script src='https://cdn.plot.ly/plotly-2.1.0.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'> </script>
+	<script src='https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css'> </script>
+	<script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'> </script>
+
+    <script>
+        // Basic example
+        $(document).ready(function () {
+        $('.dtBasicExample').DataTable({
+            order: [[0, "desc"]],
+            lengthMenu: [[5, 10, 100, -1], [5, 10, 100, "todos"]],
+            bFilter: false,
+            language: {
+                "lengthMenu": "Ver _MENU_ por pag",
+                "zeroRecords": "No hay información para mostrar",
+                "info": " _PAGE_ / _PAGES_",
+                "infoEmpty": "No hay elementos disponibles",
+                "infoFiltered": "(Filtrado de _MAX_ elementos totales)",
+                "paginate": {
+                    "previous": "←",
+                    "next": "→"
+                    }
+            },
+
+        });
+        });
+
+        {% for sheep in sheeps %}
+
+            var aprisco_dates = [
+                {% for weight in sheep.historyweight_set.all %}
+                "{{ weight.create_at|date:'Y-m-d' }}",
+                {% endfor %}
+            ]
+
+            var aprisco_data = [
+                {% for weight in sheep.historyweight_set.all %}
+                '{{ weight.weight }}',
+                {% endfor %}
+            ]
+
+            var trace1 = {
+            type: "scatter",
+            mode: "lines",
+            name: 'Peso',
+            x: aprisco_dates,
+            y: aprisco_data,
+            line: {color: '#17BECF'}
+            }
+
+
+            var hdata = [trace1];
+
+            var hlayout = {
+            title: 'Historico Pesos',
+            };
+
+            var name = "HistoricoPesos-" +  "{{ sheep.id }}"
+            console.log(name)
+            Plotly.newPlot(name, data=hdata, layout=hlayout);
+        {% endfor %}
+
+
+    </script>
 {% endblock %}
 
 
@@ -83,16 +148,31 @@
     </a>
 
     <a class="btn btn-primary" href="{% url 'admin:myapp_sheep_change' sheep.id %}" >
-        <img src="{% static 'img/escritura.png' %}">  
+        <img src="{% static 'img/escritura.png' %}">
         Editar
     </a>
+          {% if sheep.gender == 'M'%}
+          <img class= "icon_gender" src="{% static 'img/genero_masculino.png' %}">
+      {% else %}
+          <img class= "icon_gender" src="{% static 'img/genero_femenino.png' %}">
+      {% endif %}
 <div class="col-sm-12 col-md-12">
+
+
     <p class="ml-2 mt-0 mb-2">
         <b>Nombre:  {{ sheep.full_name }}</b> - <small> Fecha de nacimiento: {{ sheep.birthday |date:"Y-m-d" }}</small>
     </p>
     <p class="ml-2 mt-0 mb-2">
         <b> Edad: {{ sheep.age }}</b> - {% if  sheep.breed %} <small> Raza: {{ sheep.breed_name }}</small> - {% endif %}
         <b> Ultimo peso: {{ sheep.last_weight }} [kg]</b>
+        {% if sheep.last_weight_comparative == "sube" %}
+                <img src="{% static 'img/flecha-arriba.png' %}" style="width:20px">
+        {% elif  sheep.last_weight_comparative == "baja" %}
+                <img src="{% static 'img/flecha-abajo.png' %}" style="width:20px">
+        {% elif  sheep.last_weight_comparative == "no cambia" %}
+                <img src="{% static 'img/flecha-sin_cambio.png' %}" style="width:20px">
+        {% endif %}
+
     </p>
 
 <!-- Container for the image gallery -->
@@ -155,26 +235,71 @@
 
 <div class="col-sm-12">
 
-<table class="table">
+<table class="table dtBasicExample">
+
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Fecha</th>
       <th scope="col">Peso [kg]</th>
+      <th scope="col">Ganancia por dia [g]</th>
     </tr>
   </thead>
   <tbody>
       {% for weight in sheep.historyweight_set.all %}
         <tr>
           <th scope="row">    {{ forloop.counter }} </th>
-          <td>{{ weight.create_at }}</td>
+          <td> {{ weight.create_at |date:'d/m/Y  (M)' }} </td>
           <td>{{ weight.weight }}</td>
+          <td>
+               {% if weight.get_conversion > 0 %}
+                        <img src="{% static 'img/flecha-arriba.png' %}" style="width:20px">
+                {% elif weight.get_conversion < 0 %}
+                        <img src="{% static 'img/flecha-abajo.png' %}" style="width:20px">
+                {% elif  weight.get_conversion ==  0 %}
+                        <img src="{% static 'img/flecha-sin_cambio.png' %}" style="width:20px">
+                {% endif %}
+
+          {{ weight.get_conversion }}
+          </td>
         </tr>
       {% endfor %}
   </tbody>
 </table>
 
     <p>Tomado hace: {{ sheep }}</p>
+<div>
+
+
+    <div class="page-header">
+        <h1 id="timeline">Historico</h1>
+    </div>
+<div class="container">
+
+    <div style="overflow-y: auto; height:300px;" >
+
+        <ul class="timeline" >
+            {% for history in sheep.historysheep_set.all %}
+                <li class="timeline-inverted">
+                  <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i></div>
+                  <div class="timeline-panel">
+                    <div class="timeline-heading">
+                      <h4 class="timeline-title"> {{ history.create_at |date:"d-m-Y" }} </h4>
+                    </div>
+                    <div class="timeline-body">
+                        <p>  {{ history.description }} </p>
+                    </div>
+                  </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+
+</div>
+
 
 </div>
 
@@ -250,6 +375,11 @@
         </div>
 
     </div>
+
+
+
 </div>
+
     {% endblock %}
+
 

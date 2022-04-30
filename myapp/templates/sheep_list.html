@@ -11,7 +11,13 @@
 {% block content %}
 <div class="container">
     <div class="row">
+        {% if not sheeps %}
+            <h2>
+                <img src="{% static 'img/oveja_mee.gif' %}">
+                No se encuentran Animales que cumplan los filtros definidos
+            </h2>
 
+        {% endif %}
         {% for sheep in sheeps %}
             {% include "sheep_card.html" %}
         {% endfor %}
