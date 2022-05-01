@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.db.models import Q
 import datetime
 
-from myapp.models import HistoryWeight, HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer, HistoryBodyCondition, HistoryFamacha, Group
+from myapp.models import HistoryWeight, HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer, HistoryBodyCondition, HistoryFamacha, Group, Breed
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
 from django.http import FileResponse
@@ -965,5 +965,71 @@ def sheep_import(request):
 
 
 
+
+    return redirect('app:acciones_bloque')
+
+
+# multiple sheep breeds
+
+def generate_document_sheep_breeds(hoja, sheeps_data):
+    encabezado = ["oveja_id",  "rasa_acronim", "percentage"]
+
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        breeds = sheep.breed.all()
+        for breed in breeds:
+            if breed != "N":
+                data = [sheep.identification_number, breed.breed.acronym, int(breed.percent)]
+                hoja.append(data)
+
+def sheep_breeds_download(request):
+    path = 'media/generate_reports'
+    file_name = 'sheep_breeds_import.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+
+    sheeps = Sheep.objects.order_by("active", "-gender", "identification_number").all()
+    # here is the magic
+    generate_document_sheep_breeds(hoja, sheeps)
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def sheep_breeds_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+
+    index_ov_num = 0
+    index_acr = 1
+    index_percentaje = 2
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            num_ovino = row[index_ov_num].value
+            acronym = row[index_acr].value
+            percetaje = row[index_percentaje].value
+
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            breed = Breed.objects.filter(acronym=acronym).first()
+            if sheep and breed:
+                sheep_breed = SheepBreed.objects.filter(sheep=sheep, breed=breed, percetaje=percetaje)
+                if not sheep_breed:
+                    sheep_breed = SheepBreed()
+                    sheep_breed.sheep = sheep
+                    sheep_breed.breed = breed
+                    sheep_breed.percetaje = percetaje
+                    sheep_breed.save()
 
     return redirect('app:acciones_bloque')

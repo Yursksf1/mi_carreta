@@ -113,5 +113,15 @@ urlpatterns = [
         view=views.sheep_import,
         name='sheep_import'
     ),
+    path(
+        route='acciones_bloque/sheep_breeds/download',
+        view=views.sheep_breeds_download,
+        name='sheep_breeds_download'
+    ),
+    path(
+        route='acciones_bloque/sheep_breeds/import',
+        view=views.sheep_breeds_import,
+        name='sheep_breeds_import'
+    ),
 
 ]
