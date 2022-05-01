@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.db.models import Q
 import datetime
 
-from myapp.models import HistoryWeight, HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer, HistoryBodyCondition, HistoryFamacha, Group, Breed
+from myapp.models import HistoryWeight, HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer, HistoryBodyCondition, HistoryFamacha, Group, Breed, SheepGroup
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
 from django.http import FileResponse
@@ -1024,12 +1024,74 @@ def sheep_breeds_import(request):
             sheep = Sheep.objects.filter(identification_number=num_ovino).first()
             breed = Breed.objects.filter(acronym=acronym).first()
             if sheep and breed:
-                sheep_breed = SheepBreed.objects.filter(sheep=sheep, breed=breed, percetaje=percetaje)
+                sheep_breed = SheepBreed.objects.filter(sheep=sheep, breed=breed, percent=percetaje)
                 if not sheep_breed:
                     sheep_breed = SheepBreed()
                     sheep_breed.sheep = sheep
                     sheep_breed.breed = breed
-                    sheep_breed.percetaje = percetaje
+                    sheep_breed.percent = percetaje
                     sheep_breed.save()
+
+    return redirect('app:acciones_bloque')
+
+
+# multiple sheep group
+
+def generate_document_sheep_group(hoja, sheeps_data):
+    encabezado = ["oveja_id",  "slug"]
+
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        groups = sheep.group.all()
+        for sheep_group in groups:
+            data = [sheep.identification_number, sheep_group.group.slug]
+            hoja.append(data)
+
+def sheep_group_download(request):
+    path = 'media/generate_reports'
+    file_name = 'sheep_group_import.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+
+    sheeps = Sheep.objects.order_by("active", "-gender", "identification_number").all()
+    # here is the magic
+    generate_document_sheep_group(hoja, sheeps)
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def sheep_group_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+
+    index_ov_num = 0
+    index_slug = 1
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            num_ovino = row[index_ov_num].value
+            slug = row[index_slug].value
+
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            group = Group.objects.filter(slug=slug).first()
+            if sheep and group:
+                sheep_group = SheepGroup.objects.filter(sheep=sheep, group=group)
+                if not sheep_group:
+                    sheep_group = SheepGroup()
+                    sheep_group.sheep = sheep
+                    sheep_group.group = group
+                    sheep_group.save()
 
     return redirect('app:acciones_bloque')
