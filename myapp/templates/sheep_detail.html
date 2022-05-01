@@ -7,8 +7,9 @@
 {% endblock %}
 
 {% block script %}
-	<script src='https://cdn.plot.ly/plotly-2.1.0.min.js'></script>
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'> </script>
+
+    <script src="{% static 'js/plotly-2.1.0.min.js' %}"></script>
+    <script src="{% static 'js/d3.min.js' %}"></script>
 
     <script>
 
@@ -74,10 +75,10 @@
         }
     </script>
 
-    <script src='https://cdn.plot.ly/plotly-2.1.0.min.js'></script>
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'> </script>
-	<script src='https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css'> </script>
-	<script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'> </script>
+    <script src="{% static 'js/plotly-2.1.0.min.js' %}"></script>
+    <script src="{% static 'js/d3.min.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.css' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
 
     <script>
         // Basic example
@@ -267,8 +268,8 @@
   </tbody>
 </table>
 
-    <p>Tomado hace: {{ sheep }}</p>
-<div>
+
+    <div>
 
 
     <div class="page-header">

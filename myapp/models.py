@@ -275,7 +275,7 @@ class SheepGroup(models.Model):
 
     )
     date_start = models.DateTimeField(auto_now_add=True)
-    date_end = models.DateTimeField()
+    date_end = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return '{} - {}'.format(self.sheep, self.group)
@@ -393,7 +393,7 @@ class HistoryWeight(models.Model):
         Sheep,
         on_delete=models.CASCADE,
     )
-    weight = models.DecimalField(max_digits=7, decimal_places=2)
+    weight = models.DecimalField(max_digits=7, decimal_places=1)
     create_at = models.DateTimeField(auto_now_add=True)
 
     def get_conversion(self):

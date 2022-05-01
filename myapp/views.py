@@ -340,6 +340,13 @@ class SheepDetailView(DetailView):
     queryset = Sheep.objects.all()
     context_object_name = 'sheep'
 
+class SheepDetailHistoryView(DetailView):
+    """Return sheep detail."""
+
+    template_name = 'sheep_detail_history.html'
+    queryset = Sheep.objects.all()
+    context_object_name = 'sheep'
+
 
 class CreateSheepView(CreateView):
     """Create a new sheep."""
@@ -939,7 +946,7 @@ def sheep_import(request):
             if not sheep:
                 sheep = Sheep()
                 sheep.name = name
-                sheep.identification_number = name
+                sheep.identification_number = num_ovino
                 sheep.gender = gender
                 sheep.birthday = birthday
                 sheep.active = not (is_active.upper() == 'N')
@@ -948,12 +955,12 @@ def sheep_import(request):
                 if dad:
                     sheep_dad = Sheep.objects.filter(identification_number=dad).first()
                     if sheep_dad:
-                        sheep.parentDadId = sheep_dad.id
+                        sheep.parentDadId = sheep_dad
 
                 if mom:
                     sheep_mom = Sheep.objects.filter(identification_number=mom).first()
                     if sheep_mom:
-                        sheep.parentMomId = sheep_mom.id
+                        sheep.parentMomId = sheep_mom
                 sheep.save()
 
 

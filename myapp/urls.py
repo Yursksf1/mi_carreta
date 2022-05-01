@@ -38,6 +38,11 @@ urlpatterns = [
         name='detail'
     ),
     path(
+        route='sheep/<uuid:pk>/history',
+        view=views.SheepDetailHistoryView.as_view(),
+        name='detail_history'
+    ),
+    path(
         route='sheep/<uuid:pk>/weigh',
         view=views.SheepWeighView.as_view(),
         name='add-weigh'
