@@ -294,7 +294,7 @@ class Service(models.Model):
         related_name='service_macho'
 
     )
-    date_start = models.DateTimeField(default=now)
+    date_start = models.DateTimeField(default=now, editable=True)
     date_end = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
@@ -308,7 +308,7 @@ class Mancha(models.Model):
         related_name='service_hembra'
 
     )
-    date_start = models.DateTimeField(default=now)
+    date_start = models.DateTimeField(default=now, editable=True)
     def __str__(self):
         return '{} - {}'.format(self.date_start, self.service)
 
@@ -372,7 +372,7 @@ class HistoryFamacha(models.Model):
         on_delete=models.CASCADE,
     )
     famacha = models.DecimalField(max_digits=7, decimal_places=2)
-    create_at = models.DateTimeField(auto_now_add=True)
+    create_at = models.DateTimeField(default=now, editable=True)
 
 
 class HistoryBodyCondition(models.Model):
@@ -383,7 +383,7 @@ class HistoryBodyCondition(models.Model):
         on_delete=models.CASCADE,
     )
     body_condition = models.DecimalField(max_digits=7, decimal_places=2)
-    create_at = models.DateTimeField(auto_now_add=True)
+    create_at = models.DateTimeField(default=now, editable=True)
 
 
 class HistoryWeight(models.Model):
@@ -394,7 +394,7 @@ class HistoryWeight(models.Model):
         on_delete=models.CASCADE,
     )
     weight = models.DecimalField(max_digits=7, decimal_places=1)
-    create_at = models.DateTimeField(auto_now_add=True)
+    create_at = models.DateTimeField(default=now, editable=True)
 
     def get_conversion(self):
         number = 0

@@ -722,6 +722,9 @@ def weight_import(request):
     index_famacha = 5
     index_body_condition = 6
 
+    date = "2021-12-21"
+    create_date = datetime.datetime.strptime(date,  '%Y-%m-%d')
+
     for index, row in enumerate(worksheet.iter_rows()):
         if index == 0:
             continue
@@ -741,37 +744,42 @@ def weight_import(request):
             if weight:
                 hw = HistoryWeight.objects.filter(create_at__date=today, sheep=sheep).first()
                 if hw:
-                    print('update HistoryPluviometer')
+                    print('update HistoryWeight')
                     hw.weight = weight
                 else:
-                    print('create HistoryPluviometer')
+                    print('create HistoryWeight')
                     hw = HistoryWeight()
                     hw.weight = weight
                     hw.sheep = sheep
+                    hw.create_at = create_date
                 hw.save()
             if body_condition:
 
                 hbc = HistoryBodyCondition.objects.filter(create_at__date=today, sheep=sheep).first()
                 if hbc:
-                    print('update HistoryPluviometer')
+                    print('update HistoryBodyCondition')
                     hbc.body_condition = body_condition
                 else:
-                    print('create HistoryPluviometer')
+                    print('create HistoryBodyCondition')
                     hbc = HistoryBodyCondition()
                     hbc.body_condition = body_condition
                     hbc.sheep = sheep
+                    hbc.create_at = create_date
+
                 hbc.save()
 
             if famacha:
                 hf = HistoryFamacha.objects.filter(create_at__date=today, sheep=sheep).first()
                 if hf:
-                    print('update HistoryPluviometer')
+                    print('update HistoryFamacha')
                     hf.famacha = famacha
                 else:
-                    print('create HistoryPluviometer')
+                    print('create HistoryFamacha')
                     hf = HistoryFamacha()
                     hf.famacha = famacha
                     hf.sheep = sheep
+                    hf.create_at = create_date
+
                 hf.save()
 
     return redirect('app:acciones_bloque')
@@ -819,11 +827,16 @@ def weights_import(request):
     index_famacha = 5
     index_body_condition = 6
 
+    date = "2022-03-15"
+    create_date = datetime.datetime.strptime(date,  '%Y-%m-%d')
     for index, row in enumerate(worksheet.iter_rows()):
         if index == 0:
             continue
         else:
             num_ovino = row[index_ovino].value
+            if not num_ovino:
+                print("no se encuentra registro de {}".format(num_ovino))
+                continue
             sheep = Sheep.objects.filter(identification_number=num_ovino).first()
             if not sheep:
                 print("no se encuentra registro de {}".format(num_ovino))
@@ -838,37 +851,49 @@ def weights_import(request):
             if weight:
                 hw = HistoryWeight.objects.filter(create_at__date=today, sheep=sheep).first()
                 if hw:
-                    print('update HistoryPluviometer')
+                    print('update HistoryWeight')
                     hw.weight = weight
                 else:
-                    print('create HistoryPluviometer')
+                    print('create HistoryWeight')
                     hw = HistoryWeight()
                     hw.weight = weight
                     hw.sheep = sheep
+                    hw.create_at = create_date
                 hw.save()
+                hw.create_at = create_date
+                hw.save()
+
             if body_condition:
 
                 hbc = HistoryBodyCondition.objects.filter(create_at__date=today, sheep=sheep).first()
                 if hbc:
-                    print('update HistoryPluviometer')
+                    print('update HistoryBodyCondition')
                     hbc.body_condition = body_condition
                 else:
-                    print('create HistoryPluviometer')
+                    print('create HistoryBodyCondition')
                     hbc = HistoryBodyCondition()
                     hbc.body_condition = body_condition
                     hbc.sheep = sheep
+                    hbc.create_at = create_date
+
+                hbc.save()
+                hbc.create_at = create_date
                 hbc.save()
 
             if famacha:
                 hf = HistoryFamacha.objects.filter(create_at__date=today, sheep=sheep).first()
                 if hf:
-                    print('update HistoryPluviometer')
+                    print('update HistoryFamacha')
                     hf.famacha = famacha
                 else:
-                    print('create HistoryPluviometer')
+                    print('create HistoryFamacha')
                     hf = HistoryFamacha()
                     hf.famacha = famacha
                     hf.sheep = sheep
+                    hf.create_at = create_date
+
+                hf.save()
+                hf.create_at = create_date
                 hf.save()
 
     return redirect('app:acciones_bloque')
