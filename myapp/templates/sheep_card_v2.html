@@ -1,7 +1,7 @@
 
   {% load static %}
 
-  <div class="card col-sm-12 col-md-6 col-lg-4 offset-0 offset-md-0 offset-lg-0 mb-3 ">
+  <div class="card col-sm-12 col-md-6 col-lg-4 ml-md-auto mb-3 ">
     <div class="row ">
 
       <div class="col-12 text-center card-header">
@@ -12,11 +12,11 @@
 
           <span class="card-buttons float-right">
             <a href="{% url 'app:detail' sheep.id %}" >
-                <i class="fa fa-eye"></i>
+              <img class="icon_card" src="{% static 'img/ojo.png' %}">    
             </a>
 
-            <a href="{% url 'app:detail' sheep.id %}" >
-                <i class="fa fa-pencil-square-o"></i>
+            <a href="{% url 'admin:myapp_sheep_change' sheep.id %}" >
+              <img class="icon_card" src="{% static 'img/escritura.png' %}">  
             </a>
         </span>
 
@@ -25,7 +25,7 @@
 
       <div class="col-10 offset-1">
         <br>
-        {% if sheep.breed %}
+        {% if sheep.breed and not sheep.breeds == 'None' %}
           <div class="progress">
 
           {% for breed in sheep.breeds  %}
@@ -33,13 +33,13 @@
                   {{breed.breed.acronym}}
               </div>
           {% endfor %}
-        </div>
+          </div>
         {% else %}
             <div class="progress">
                 <div class="progress-bar brown" style="width:100%">
                     MZ
                 </div>
-          </div>
+            </div>
         {% endif %}
       </div>
 
@@ -48,7 +48,7 @@
           {% if sheep.prncipal_photo %}
             <img class="card-img-top" class="img-thumbnail" src="{{ sheep.prncipal_photo.upload.url }}" alt="{{ sheep.full_name }}">
           {% else %}
-          <img class="card-img-top" class="img-thumbnail" src="{% static 'img/sheep_default.jpeg' %}"  alt="{{ sheep.full_name }}">
+          <img class="card-img-top" class="img-thumbnail" src="{% static 'img/sheep_default.jpg' %}"  alt="{{ sheep.full_name }}">
           {% endif %}
         </a>
       </div>
@@ -67,9 +67,9 @@
           </p>
           <p class="card-text"><small class="text-muted">
             {% if sheep.gender == 'M'%}
-              <i class="fa fa-mars"></i>
+            <img class= "icon_gender" src="{% static 'img/genero_masculino.png' %}">
             {% else %}
-              <i class="fa fa-venus"></i>
+            <img class= "icon_gender" src="{% static 'img/genero_femenino.png' %}">
             {% endif %}
             {{ sheep.age }}</small></p>
         </div>

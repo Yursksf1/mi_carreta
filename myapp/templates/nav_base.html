@@ -1,6 +1,6 @@
 {% load static %}
 
-    <nav class="navbar navbar-expand-lg navbar-expand-md navbar-dark bg-dark static-top justify-content-between">
+  <nav class="navbar navbar-expand-lg navbar-expand-md navbar-dark bg-dark fixed-top justify-content-between">
     <div class="container">
 
 
@@ -20,15 +20,22 @@
         <ul class="navbar-nav ml-auto">
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:weather-today' %}">TyH</a>
+            <a class="nav-link" href="{% url 'app:weather-today' %}">
+              <img src="{% static 'img/temperatura.png' %}">
+              <img src="{% static 'img/humedad.png' %}">
+            </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:feed_with_weight' %}?active=true"> SW</a>
+            <a class="nav-link" href="{% url 'app:feed_with_weight' %}?active=true"> 
+              <img src="{% static 'img/crecimiento.png' %}">
+            </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:feed' %}?active=true">sheeps</a>
+            <a class="nav-link" href="{% url 'app:feed' %}?active=true">
+              <img src="{% static 'img/aprisco.png' %}">
+            </a>
           </li>
 
 
@@ -39,13 +46,13 @@
         <form class="form-inline pull-right">
 
 
-          <input id="search" class="form-control" type="text" placeholder="Search">
+          <input id="search" class="form-control" type="text" placeholder="Buscar">
           &nbsp;
 
           <li class="nav-item dropdown" id="dropdownMenuClickableInside">
 
             <a id='btnFilter' class=" nav-link dropdown-toggle btn btn-success" href="#" id="navbardrop" data-toggle="dropdown">
-              <i class="fa fa-filter"></i>
+              <img class="icon_buscador" src="{% static 'img/selectivo.png' %}">  
             </a>
             <div class="dropdown-menu">
                 <div class="row">
@@ -97,14 +104,31 @@
           &nbsp;
 
           <div id='btnSearch' class="btn btn-success" type="submit">
-            <i class="fa fa-search"></i>
+            <img class="icon_buscador" src="{% static 'img/lupa.png' %}">  
           </div>
 
         </form>
 
-
+          <li class="nav-item right">
+            <a class="nav-link" href="{% url 'app:observations' %}">
+              <img src="{% static 'img/observacion.png' %}">
+            </a>
+          </li>
+          <li>
+              <a class="nav-link" href="{% url 'app:acciones_bloque' %}">
+                  <img src="{% static 'img/xls.png' %}">
+              </a>
+          </li>
+          <li>
+              <a class="nav-link" href="{% url 'admin:index' %}">
+                  <img src="{% static 'img/veterinario.png' %}">
+              </a>
+          </li>
 
         </ul>
+
+
       </div>
+
     </div>
   </nav>

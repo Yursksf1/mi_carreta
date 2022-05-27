@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Acciones en bloque
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="acciones_en_bloque row ">
+        <div class="col-6">
+            <img src="{% static 'img/temperatura.png' %}">
+            <img src="{% static 'img/humedad.png' %}">
+            Temperatura y Humedad
+        </div>
+
+
+        <div class="col-3">
+              <a href="#ModalTemperaturaHumedad" class="modal-link" data-toggle='modal'>
+                <img src="{% static 'img/carga.png' %}">
+                Cargar
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'app:weather_download' %} ">
+                <img src="{% static 'img/descargar.png' %}">
+                Descargar
+            </a>
+        </div>
+    </div>
+
+    <hr class="hr_with_lines">
+    <div class="acciones_en_bloque row ">
+
+        <div class="col-6">
+            <img src="{% static 'img/lluvia.png' %}">
+            Pluviometro
+        </div>
+        <div class="col-3">
+              <a href="#ModalLluvia" class="modal-link" data-toggle='modal'>
+                <img src="{% static 'img/carga.png' %}">
+                Cargar
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'app:pluviometer_download' %} ">
+                <img src="{% static 'img/descargar.png' %}">
+                Descargar
+            </a>
+        </div>
+    </div>
+
+    <hr class="hr_with_lines">
+    <div class="acciones_en_bloque row ">
+
+        <div class="col-6">
+            <img src="{% static 'img/aprisco.png' %}">
+            Ovejas
+        </div>
+        <div class="col-3">
+              <a href="#ModalSheep" class="modal-link" data-toggle='modal'>
+                <img src="{% static 'img/carga.png' %}">
+                Cargar
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'app:sheep_download' %} ">
+                <img src="{% static 'img/descargar.png' %}">
+                Descargar
+            </a>
+        </div>
+    </div>
+
+    <hr class="hr_with_lines">
+    <div class="acciones_en_bloque row ">
+
+        <div class="col-6">
+            <img src="{% static 'img/Porcentaje.png' %}">
+            Ovejas - Porcentaje Pureza
+        </div>
+        <div class="col-3">
+              <a href="#ModalSheepBreeds" class="modal-link" data-toggle='modal'>
+                <img src="{% static 'img/carga.png' %}">
+                Cargar
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'app:sheep_breeds_download' %} ">
+                <img src="{% static 'img/descargar.png' %}">
+                Descargar
+            </a>
+        </div>
+    </div>
+
+    <hr class="hr_with_lines">
+    <div class="acciones_en_bloque row ">
+
+        <div class="col-6">
+            <img src="{% static 'img/ovejas_grupo.png' %}">
+            Ovejas - Grupos
+        </div>
+        <div class="col-3">
+              <a href="#ModalSheepGroups" class="modal-link" data-toggle='modal'>
+                <img src="{% static 'img/carga.png' %}">
+                Cargar
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'app:sheep_group_download' %} ">
+                <img src="{% static 'img/descargar.png' %}">
+                Descargar
+            </a>
+        </div>
+    </div>
+
+    <hr class="hr_with_lines">
+    <div class="acciones_en_bloque row ">
+
+        <div class="col-6">
+            <img src="{% static 'img/balanza.png' %}">
+            Peso
+        </div>
+        <div class="col-3">
+            <a href="#ModalPeso" class="modal-link" data-toggle='modal'>
+                <img src="{% static 'img/carga.png' %}">
+                Cargar
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'app:weight_download' %} ">
+                <img src="{% static 'img/descargar.png' %}">
+                Descargar
+            </a>
+        </div>
+    </div>
+    <hr class="hr_with_lines">
+
+    <div class="acciones_en_bloque row ">
+
+        <div class="col-6">
+            <img src="{% static 'img/balanza.png' %}">
+            Pesos
+        </div>
+        <div class="col-3">
+            <a href="#ModalPesos" class="modal-link" data-toggle='modal'>
+                <img src="{% static 'img/carga.png' %}">
+                Cargar
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'app:weights_download' %} ">
+                <img src="{% static 'img/descargar.png' %}">
+                Descargar
+            </a>
+        </div>
+    </div>
+    <hr class="hr_with_lines">
+
+
+
+<div class='modal small fade' id='ModalTemperaturaHumedad' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+          <h3 id='myModalLabel'>Subir Documento Temperatura y Humedad</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+      </div>
+    <form action="{% url "app:weather_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
+
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+<div class='modal small fade' id='ModalLluvia' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+          <h3 id='myModalLabel'>Subir Documento Pluviometro</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+      </div>
+    <form action="{% url "app:pluviometer_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
+
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+<div class='modal small fade' id='ModalSheep' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+          <h3 id='myModalLabel'>Subir Ovejas</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+      </div>
+    <form action="{% url "app:sheep_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
+
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<div class='modal small fade' id='ModalSheepBreeds' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+          <h3 id='myModalLabel'>Subir Ovejas Raza</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+      </div>
+    <form action="{% url "app:sheep_breeds_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
+
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<div class='modal small fade' id='ModalSheepGroups' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+          <h3 id='myModalLabel'>Subir Grupo Ovejas</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+      </div>
+    <form action="{% url "app:sheep_group_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
+
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+<div class='modal small fade' id='ModalPeso' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+          <h3 id='myModalLabel'>Subir Documento Pesos</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+      </div>
+    <form action="{% url "app:weight_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
+
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+<div class='modal small fade' id='ModalPesos' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+          <h3 id='myModalLabel'>Subir Documento Multiple Pesos</h3>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+      </div>
+    <form action="{% url "app:weights_import" %}" method="post" enctype="multipart/form-data">
+        <div class='modal-body'>
+                {% csrf_token %}
+                <input type="file"
+                       title="Upload excel file"
+                       name="excel_file"
+                       required="required">
+
+        </div>
+
+      <div class='modal-footer'>
+          <input type="submit" class="btn btn-success">
+          <button class='btn btn-danger' data-dismiss='modal' aria-hidden='true'>Cancel</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

@@ -38,8 +38,100 @@ urlpatterns = [
         name='detail'
     ),
     path(
+        route='sheep/<uuid:pk>/history',
+        view=views.SheepDetailHistoryView.as_view(),
+        name='detail_history'
+    ),
+    path(
         route='sheep/<uuid:pk>/weigh',
         view=views.SheepWeighView.as_view(),
         name='add-weigh'
-    )
+    ),
+
+    path(
+        route='observations',
+        view=views.ObservationsView.as_view(),
+        name='observations'
+    ),
+    path(
+        route='observations/<uuid:pk>/check',
+        view=views.observations_check,
+        name='check-observations'
+    ),
+    path('acciones_bloque/', TemplateView.as_view(template_name="acciones_bloque.html"), name='acciones_bloque'),
+
+    ## ACCIONES EN BLOQUE
+
+    path(
+        route='acciones_bloque/pluviometer/download',
+        view=views.pluviometer_download,
+        name='pluviometer_download'
+    ),
+    path(
+        route='acciones_bloque/pluviometer/import',
+        view=views.pluviometer_import,
+        name='pluviometer_import'
+    ),
+
+    path(
+        route='acciones_bloque/weather/download',
+        view=views.weather_download,
+        name='weather_download'
+    ),
+    path(
+        route='acciones_bloque/weather/import',
+        view=views.weather_import,
+        name='weather_import'
+    ),
+    path(
+        route='acciones_bloque/weight/download',
+        view=views.weight_download,
+        name='weight_download'
+    ),
+    path(
+        route='acciones_bloque/weight/import',
+        view=views.weight_import,
+        name='weight_import'
+    ),
+    path(
+        route='acciones_bloque/weights/download',
+        view=views.weights_download,
+        name='weights_download'
+    ),
+    path(
+        route='acciones_bloque/weights/import',
+        view=views.weights_import,
+        name='weights_import'
+    ),
+    path(
+        route='acciones_bloque/sheep/download',
+        view=views.sheep_download,
+        name='sheep_download'
+    ),
+    path(
+        route='acciones_bloque/sheep/import',
+        view=views.sheep_import,
+        name='sheep_import'
+    ),
+    path(
+        route='acciones_bloque/sheep_breeds/download',
+        view=views.sheep_breeds_download,
+        name='sheep_breeds_download'
+    ),
+    path(
+        route='acciones_bloque/sheep_breeds/import',
+        view=views.sheep_breeds_import,
+        name='sheep_breeds_import'
+    ),
+    path(
+        route='acciones_bloque/sheep_group/download',
+        view=views.sheep_group_download,
+        name='sheep_group_download'
+    ),
+    path(
+        route='acciones_bloque/sheep_group/import',
+        view=views.sheep_group_import,
+        name='sheep_group_import'
+    ),
+
 ]

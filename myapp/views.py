@@ -3,14 +3,19 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.generic.edit import FormView
 from datetime import date, timedelta
+from tzlocal import get_localzone
+
 from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse
 from django.db.models import Q
+import datetime
 
-from myapp.models import HistoryWeather, SheepBreed, Sheep, HistoryWeight
+from myapp.models import HistoryWeight, HistoryWeather, SheepBreed, Sheep, HistoryWeight, Observations, HistoryPluviometer, HistoryBodyCondition, HistoryFamacha, Group, Breed, SheepGroup
 from myapp.serializers import HistoryWeatherSerialize
 from myapp.controllers import SheepController
+from django.http import FileResponse
+from django.db.models.functions import TruncMonth
 
 IMAGEN_LOCATION = {
     'N': 'img/nevera.png',
@@ -110,19 +115,35 @@ def weather_history(request):
 
 def dashboard(request):
     sheeps = Sheep.objects
-    total = len(sheeps.filter(active=True).all())
     ids_pure = SheepController.get_id_pure()
-
-    num_machos = len(sheeps.filter(gender='M', active=True).exclude(id__in=ids_pure))
-    num_hembras = len(sheeps.filter(gender='H', active=True).exclude(id__in=ids_pure))
     today = date.today()
-    month_3 = today - timedelta(days=90)
+    month_6 = today - timedelta(days=180)
+    month_12 = today - timedelta(days=360)
 
-    num_cordero = len(sheeps.filter(birthday__gt=month_3, active=True).exclude(id__in=ids_pure))
+    total = len(sheeps.filter(active=True).all())
 
     num_machos_p = len(sheeps.filter(gender='M', id__in=ids_pure, active=True))
     num_hembras_p = len(sheeps.filter(gender='H', id__in=ids_pure, active=True))
-    num_cordero_p = len(sheeps.filter(birthday__gt=month_3, id__in=ids_pure, active=True))
+    num_machos_c = len(sheeps.filter(gender='M', active=True).exclude(id__in=ids_pure))
+    num_hembras_c = len(sheeps.filter(gender='H', active=True).exclude(id__in=ids_pure))
+
+    num_ovejas = len(sheeps.filter(birthday__lt=month_12, active=True))
+    num_borregos = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12,  active=True))
+    num_corderos = len(sheeps.filter(birthday__gt=month_6, active=True))
+
+    num_ovejas_m_p = len(sheeps.filter(birthday__lt=month_12, gender='M', id__in=ids_pure, active=True))
+    num_ovejas_h_p = len(sheeps.filter(birthday__lt=month_12, gender='H', id__in=ids_pure, active=True))
+    num_borregos_m_p = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12, gender='M', id__in=ids_pure, active=True))
+    num_borregos_h_p = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12, gender='H', id__in=ids_pure, active=True))
+    num_corderos_m_p = len(sheeps.filter(birthday__gt=month_6, gender='M', id__in=ids_pure, active=True))
+    num_corderos_h_p = len(sheeps.filter(birthday__gt=month_6, gender='H', id__in=ids_pure, active=True))
+
+    num_ovejas_m_c = len(sheeps.filter(birthday__lt=month_12, gender='M', active=True).exclude(id__in=ids_pure))
+    num_ovejas_h_c = len(sheeps.filter(birthday__lt=month_12, gender='H', active=True).exclude(id__in=ids_pure))
+    num_borregos_m_c = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12, gender='M', active=True).exclude(id__in=ids_pure))
+    num_borregos_h_c = len(sheeps.filter(birthday__lt=month_6, birthday__gt=month_12, gender='H', active=True).exclude(id__in=ids_pure))
+    num_corderos_m_c = len(sheeps.filter(birthday__gt=month_6, gender='M', active=True).exclude(id__in=ids_pure))
+    num_corderos_h_c = len(sheeps.filter(birthday__gt=month_6, gender='H', active=True).exclude(id__in=ids_pure))
 
     num_gestantes = 11
     num_natal = 8
@@ -130,26 +151,49 @@ def dashboard(request):
 
     num_vendidas = 25
     num_muertes = 6
+    groups = Group.objects.all()
 
-    return render(
-        request,
-        'dashboard.html',
-        {
+    context = {
             'total': total,
+
             'num_machos_p': num_machos_p,
             'num_hembras_p': num_hembras_p,
-            'num_corderos_p': num_cordero_p,
+            'num_machos_c': num_machos_c,
+            'num_hembras_c': num_hembras_c,
 
-            'num_machos': num_machos,
-            'num_hembras': num_hembras,
-            'num_corderos': num_cordero,
+            'num_ovejas': num_ovejas,
+            'num_borregos': num_borregos,
+            'num_corderos': num_corderos,
 
+            'num_ovejas_m_p': num_ovejas_m_p,
+            'num_ovejas_h_p': num_ovejas_h_p,
+            'num_borregos_m_p': num_borregos_m_p,
+            'num_borregos_h_p': num_borregos_h_p,
+            'num_corderos_m_p': num_corderos_m_p,
+            'num_corderos_h_p': num_corderos_h_p,
+
+            'num_ovejas_m_c': num_ovejas_m_c,
+            'num_ovejas_h_c': num_ovejas_h_c,
+            'num_borregos_m_c': num_borregos_m_c,
+            'num_borregos_h_c': num_borregos_h_c,
+            'num_corderos_m_c': num_corderos_m_c,
+            'num_corderos_h_c': num_corderos_h_c,
+
+            # aun falta buscar esto:
             'num_gestantes': num_gestantes,
             'num_natal': num_natal,
             'num_destetes': num_destetes,
             'num_vendidas': num_vendidas,
-            'num_muertes': num_muertes
+            'num_muertes': num_muertes,
+
+            'groups': groups
+
         }
+
+    return render(
+        request,
+        'dashboard.html',
+        context
     )
 
 class WeatherCreateView(CreateView):
@@ -210,11 +254,37 @@ class SheepsFeedView(ListView):
             if self.request.GET['breeds'] == 'comercial':
                 queryset = queryset.exclude(id__in=ids_pure)
 
+        if 'group' in self.request.GET:
+            group_name = self.request.GET['group']
+            ids_in_group = SheepController.get_id_in_group(group_name)
+            queryset = queryset.filter(
+                id__in=ids_in_group
+            )
+
         if 'type' in self.request.GET:
             if self.request.GET['type'] == 'cordero':
                 today = date.today()
-                month_3 = today - timedelta(days=90)
-                queryset = queryset.filter(birthday__gt=month_3)
+                month_6 = today - timedelta(days=180)
+                queryset = queryset.filter(
+                    birthday__gt=month_6
+                )
+
+            if self.request.GET['type'] == 'borrego':
+                today = date.today()
+                month_6 = today - timedelta(days=180)
+                month_12 = today - timedelta(days=360)
+                queryset = queryset.filter(
+                    birthday__lt=month_6,
+                    birthday__gt=month_12
+                )
+
+            if self.request.GET['type'] == 'oveja':
+                today = date.today()
+                month_12 = today - timedelta(days=360)
+                queryset = queryset.filter(
+                    birthday__lt=month_12
+                )
+
 
         if 'age_range_max' in self.request.GET:
             age_range_max = self.request.GET['age_range_max']
@@ -270,6 +340,13 @@ class SheepDetailView(DetailView):
     queryset = Sheep.objects.all()
     context_object_name = 'sheep'
 
+class SheepDetailHistoryView(DetailView):
+    """Return sheep detail."""
+
+    template_name = 'sheep_detail_history.html'
+    queryset = Sheep.objects.all()
+    context_object_name = 'sheep'
+
 
 class CreateSheepView(CreateView):
     """Create a new sheep."""
@@ -302,6 +379,744 @@ class SheepWeighView(View):
         )
 
     def post(self, request, pk, *args, **kwargs):
-        print('post', pk, request)
-
+        data_request = request.POST
+        if data_request:
+            data = {
+                'date': data_request.get('date'),
+                'weight': data_request.get('weight'),
+                'famacha': data_request.get('famacha'),
+                'corporal': data_request.get('corporal'),
+                'evaluation-reproductive': data_request.get('evaluation-reproductive'),
+                'observacion': data_request.get('observacion'),
+            }
+            SheepController().update_weight(pk, data)
         return redirect('app:detail', pk)
+
+
+class ObservationsView(ListView):
+    """Return all published sheeps."""
+
+    template_name = 'observations.html'
+    model = Observations
+    paginate_by = 20
+    context_object_name = 'observation'
+
+    def get_queryset(self):
+        """Filter by price if it is provided in GET parameters"""
+        queryset = super().get_queryset()
+
+        queryset = queryset.filter(active=True)
+        queryset = queryset.order_by('-create_at')
+
+        return queryset
+
+
+def observations_check(request, pk):
+    observation = Observations.objects.filter(pk=pk).first()
+    if observation:
+        observation.active = False
+        observation.save()
+    return redirect('app:observations')
+
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+
+def generate_document(hoja, datas):
+    start = 1
+    years = datas.keys()
+    for year in years:
+        generate_year(hoja, start, year, datas.get(year))
+        start = start + 13
+
+def generate_year(hoja, start, year, year_data):
+    hoja.merge_cells("A{}:AF{}".format(start, start))
+    hoja = add_yead(hoja, start, year)
+    hoja = generate_months(hoja, start, year_data)
+
+    return hoja
+
+def add_yead(hoja, start, year):
+    position = "A{}".format(start)
+    celda = hoja[position]
+    hoja[position] = year
+    skyblue = PatternFill(start_color='87CEEB',
+                          end_color='87CEEB',
+                          fill_type='solid')
+
+    celda.fill = skyblue
+    celda.font = Font(name='Times New Roman', size=18, color='000000', bold=True)
+    celda.alignment = Alignment(horizontal='center')
+
+    return hoja
+
+
+def generate_months(hoja, start, year_data):
+    encabezado = ["MESES", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "TOTAL MES ", "PROMEDIO MES"]
+    hoja.append(encabezado)
+    for index, mes in enumerate(meses):
+        if index+1 in year_data.keys():
+            registro = [mes] + year_data.get(index+1) + ['=AVERAGE(B{i}:AF{i})'.format(i=hoja.max_row +1), '=SUM(B{i}:AF{i})'.format(i=hoja.max_row+1)]
+            hoja.append(registro)
+
+    return hoja
+
+def prepare_data_pluviometer(data_pluviometer):
+    data = {
+    }
+    for pluviometer in data_pluviometer:
+        year = pluviometer.create_at.year
+        month = pluviometer.create_at.month
+        day = pluviometer.create_at.day - 1
+        if not data.get(year):
+            data[year] = {}
+        if not data.get(year).get(month):
+            data[year][month] = [0] * 31
+        data[year][month][day] = pluviometer.measure
+
+    return data
+
+columnas = [
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "AA",
+    "AB",
+    "AC",
+    "AD",
+    "AE",
+    "AF",
+]
+
+meses = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+]
+
+def pluviometer_download(request):
+    path = 'media/generate_reports'
+    file_name = 'pluvimetro.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+    for i in columnas:
+        hoja.column_dimensions[i].width = 5
+
+    pluviometer_data = HistoryPluviometer.objects.all()
+    pluviometer_data = prepare_data_pluviometer(pluviometer_data)
+
+    hoja = generate_document(hoja, pluviometer_data)
+
+    libro.save(file_path)
+
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def pluviometer_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+
+    excel_data = list()
+    # iterating over the rows and
+    # getting value from each cell in row
+    year = 2020
+    month = "ENERO"
+    for row in worksheet.iter_rows():
+        row_data = list()
+        valor_a = row[0].value
+        if type(valor_a) == int:
+            print("es del año: {}".format(valor_a))
+            year = valor_a
+        elif valor_a in meses:
+            month = meses.index(valor_a) + 1
+
+            for index, cell in enumerate(row):
+                if index == 0:
+                    continue
+
+                new_value = cell.value
+                if not new_value:
+                    continue
+                if index in range(1, 31):
+                    day = index
+                    print("{} {} {} value: {}".format(day, month, year, new_value))
+
+                    date = datetime.date(year, month, day)
+                    hp = HistoryPluviometer.objects.filter(create_at=date).first()
+                    if hp:
+                        print('update HistoryPluviometer')
+                        hp.measure = new_value
+                    else:
+                        print('create HistoryPluviometer')
+                        hp = HistoryPluviometer()
+                        hp.create_at = date
+                        hp.measure = new_value
+                    hp.save()
+
+
+    return redirect('app:acciones_bloque')
+
+## EJEMPLO
+def pluviometer_download_2(request):
+    path = 'media/generate_reports'
+    file_name = 'pluvimetro.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+
+    libro = Workbook()
+    hoja = libro.active
+    celda = hoja["B2"]
+    hoja["B2"] = "Muestra"
+    celda.font = Font(name='Arial', size=14, color='00FF0000')
+
+    libro.save(file_path)
+
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+## weather
+
+def generate_document_weather(hoja, weather_data):
+    encabezado = ["FECHA", "UBICACION", "TEMPERATURA", "HUMEDAD"]
+    hoja.append(encabezado)
+    LOCATION = {
+        "N": 'Nevera',
+        "L": 'Laboratorio',
+        "A": 'Aprisco',
+    }
+    for wd in weather_data:
+        data = [date.isoformat(wd.create_at), LOCATION.get(wd.location), wd.temperature, wd.humidity]
+        hoja.append(data)
+
+def weather_download(request):
+    path = 'media/generate_reports'
+    file_name = 'weather.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+    for i in columnas:
+        hoja.column_dimensions[i].width = 10
+
+    weather_data = HistoryWeather.objects.order_by('create_at').all()
+
+    hoja = generate_document_weather(hoja, weather_data)
+
+    libro.save(file_path)
+
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def weather_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+
+        date = row[0].value
+        location = row[1].value
+        temperature = row[2].value
+        humidity = row[3].value
+
+        date = datetime.date.fromisoformat(date)
+        hw = HistoryWeather.objects.filter(create_at=date, location=location).first()
+        if hw:
+            print('update HistoryPluviometer')
+            hw.temperature = temperature
+            hw.humidity = humidity
+        else:
+            print('create HistoryPluviometer')
+            hw = HistoryWeather()
+            hw.create_at = date
+            hw.location = location
+            hw.temperature = temperature
+            hw.humidity = humidity
+        hw.save()
+    return redirect('app:acciones_bloque')
+
+
+## Weight
+
+
+def generate_document_weight(hoja, sheeps_data):
+    encabezado = ["Nombre", "#OVINO", "GENERO", "Edad", "ultimo peso", "ultima famacha", "ultima condicion corportal"]
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        data = [sheep.name, sheep.identification_number, sheep.gender, sheep.age(), sheep.last_weight(), sheep.last_famacha(), sheep.last_body_condition()]
+        hoja.append(data)
+
+def weight_download(request):
+    path = 'media/generate_reports'
+    file_name = 'weight.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+
+    sheeps = Sheep.objects.filter(active=True).order_by("active", "-gender", "identification_number").all()
+    # here is the magic
+    generate_document_weight(hoja, sheeps)
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def weight_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+    index_ovino = 1
+    index_weight = 4
+    index_famacha = 5
+    index_body_condition = 6
+
+    date = "2021-12-21"
+    create_date = datetime.datetime.strptime(date,  '%Y-%m-%d')
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            num_ovino = row[index_ovino].value
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            if not sheep:
+                print("no se encuentra registro de {}".format(num_ovino))
+                continue
+
+            weight = row[index_weight].value
+            famacha = row[index_famacha].value
+            body_condition = row[index_body_condition].value
+
+            local_tz = get_localzone()
+            today = datetime.datetime.now(local_tz).date()
+            if weight:
+                hw = HistoryWeight.objects.filter(create_at__date=today, sheep=sheep).first()
+                if hw:
+                    print('update HistoryWeight')
+                    hw.weight = weight
+                else:
+                    print('create HistoryWeight')
+                    hw = HistoryWeight()
+                    hw.weight = weight
+                    hw.sheep = sheep
+                    hw.create_at = create_date
+                hw.save()
+            if body_condition:
+
+                hbc = HistoryBodyCondition.objects.filter(create_at__date=today, sheep=sheep).first()
+                if hbc:
+                    print('update HistoryBodyCondition')
+                    hbc.body_condition = body_condition
+                else:
+                    print('create HistoryBodyCondition')
+                    hbc = HistoryBodyCondition()
+                    hbc.body_condition = body_condition
+                    hbc.sheep = sheep
+                    hbc.create_at = create_date
+
+                hbc.save()
+
+            if famacha:
+                hf = HistoryFamacha.objects.filter(create_at__date=today, sheep=sheep).first()
+                if hf:
+                    print('update HistoryFamacha')
+                    hf.famacha = famacha
+                else:
+                    print('create HistoryFamacha')
+                    hf = HistoryFamacha()
+                    hf.famacha = famacha
+                    hf.sheep = sheep
+                    hf.create_at = create_date
+
+                hf.save()
+
+    return redirect('app:acciones_bloque')
+
+
+# multiple weight
+
+def generate_document_weights(hoja, sheeps_data):
+    encabezado = ["Nombre", "#OVINO", "GENERO", "Edad"]
+
+    hw = HistoryWeight.objects.values('create_at').group_by('create_at')
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        data = [sheep.name, sheep.identification_number, sheep.gender, sheep.age(), sheep.last_weight(), sheep.last_famacha(), sheep.last_body_condition()]
+        hoja.append(data)
+
+def weights_download(request):
+    path = 'media/generate_reports'
+    file_name = 'multiple_weight.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+
+    sheeps = Sheep.objects.filter(active=True).order_by("active", "-gender", "identification_number").all()
+    # here is the magic
+    generate_document_weights(hoja, sheeps)
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def weights_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+    index_ovino = 1
+    index_weight = 4
+    index_famacha = 5
+    index_body_condition = 6
+
+    date = "2022-03-15"
+    create_date = datetime.datetime.strptime(date,  '%Y-%m-%d')
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            num_ovino = row[index_ovino].value
+            if not num_ovino:
+                print("no se encuentra registro de {}".format(num_ovino))
+                continue
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            if not sheep:
+                print("no se encuentra registro de {}".format(num_ovino))
+                continue
+
+            weight = row[index_weight].value
+            famacha = row[index_famacha].value
+            body_condition = row[index_body_condition].value
+
+            local_tz = get_localzone()
+            today = datetime.datetime.now(local_tz).date()
+            if weight:
+                hw = HistoryWeight.objects.filter(create_at__date=today, sheep=sheep).first()
+                if hw:
+                    print('update HistoryWeight')
+                    hw.weight = weight
+                else:
+                    print('create HistoryWeight')
+                    hw = HistoryWeight()
+                    hw.weight = weight
+                    hw.sheep = sheep
+                    hw.create_at = create_date
+                hw.save()
+                hw.create_at = create_date
+                hw.save()
+
+            if body_condition:
+
+                hbc = HistoryBodyCondition.objects.filter(create_at__date=today, sheep=sheep).first()
+                if hbc:
+                    print('update HistoryBodyCondition')
+                    hbc.body_condition = body_condition
+                else:
+                    print('create HistoryBodyCondition')
+                    hbc = HistoryBodyCondition()
+                    hbc.body_condition = body_condition
+                    hbc.sheep = sheep
+                    hbc.create_at = create_date
+
+                hbc.save()
+                hbc.create_at = create_date
+                hbc.save()
+
+            if famacha:
+                hf = HistoryFamacha.objects.filter(create_at__date=today, sheep=sheep).first()
+                if hf:
+                    print('update HistoryFamacha')
+                    hf.famacha = famacha
+                else:
+                    print('create HistoryFamacha')
+                    hf = HistoryFamacha()
+                    hf.famacha = famacha
+                    hf.sheep = sheep
+                    hf.create_at = create_date
+
+                hf.save()
+                hf.create_at = create_date
+                hf.save()
+
+    return redirect('app:acciones_bloque')
+
+
+# multiple sheep
+
+def generate_document_sheep(hoja, sheeps_data):
+    encabezado = ["Activo",  "Nombre", "#OVINO", "GENERO", "nacimiento", "padre", "madre"]
+
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        active = "N"
+        if sheep.active:
+            active = "S"
+        data = [active, sheep.name, sheep.identification_number, sheep.gender, sheep.birthday.strftime("%d/%m/%Y")]
+        parents = ["", ""]
+        if sheep.parentDadId:
+            parents[0] = sheep.parentDadId.identification_number
+        if sheep.parentMomId:
+            parents[1] = sheep.parentMomId.identification_number
+        data = data + parents
+        hoja.append(data)
+
+def sheep_download(request):
+    path = 'media/generate_reports'
+    file_name = 'sheep_import.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+
+    sheeps = Sheep.objects.order_by("active", "-gender", "identification_number").all()
+    # here is the magic
+    generate_document_sheep(hoja, sheeps)
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def sheep_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+    index_is_active = 0
+    index_name = 1
+    index_num = 2
+    index_gender = 3
+    index_birthday = 4
+    index_dad = 5
+    index_mom = 6
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            is_active = row[index_is_active].value
+            num_ovino = row[index_num].value
+            name = row[index_name].value
+            gender = row[index_gender].value
+            date_birthday = row[index_birthday].value
+            local_tz = get_localzone()
+            birthday = datetime.datetime.now(local_tz).date()
+            if date_birthday:
+                birthday = datetime.datetime.strptime(date_birthday,  '%d/%m/%Y')
+            dad = row[index_dad].value
+            mom = row[index_mom].value
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            if not sheep:
+                sheep = Sheep()
+                sheep.name = name
+                sheep.identification_number = num_ovino
+                sheep.gender = gender
+                sheep.birthday = birthday
+                sheep.active = not (is_active.upper() == 'N')
+                sheep.save()
+
+                if dad:
+                    sheep_dad = Sheep.objects.filter(identification_number=dad).first()
+                    if sheep_dad:
+                        sheep.parentDadId = sheep_dad
+
+                if mom:
+                    sheep_mom = Sheep.objects.filter(identification_number=mom).first()
+                    if sheep_mom:
+                        sheep.parentMomId = sheep_mom
+                sheep.save()
+
+
+
+
+    return redirect('app:acciones_bloque')
+
+
+# multiple sheep breeds
+
+def generate_document_sheep_breeds(hoja, sheeps_data):
+    encabezado = ["oveja_id",  "rasa_acronim", "percentage"]
+
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        breeds = sheep.breed.all()
+        for breed in breeds:
+            if breed != "N":
+                data = [sheep.identification_number, breed.breed.acronym, int(breed.percent)]
+                hoja.append(data)
+
+def sheep_breeds_download(request):
+    path = 'media/generate_reports'
+    file_name = 'sheep_breeds_import.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+
+    sheeps = Sheep.objects.order_by("active", "-gender", "identification_number").all()
+    # here is the magic
+    generate_document_sheep_breeds(hoja, sheeps)
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def sheep_breeds_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+
+    index_ov_num = 0
+    index_acr = 1
+    index_percentaje = 2
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            num_ovino = row[index_ov_num].value
+            acronym = row[index_acr].value
+            percetaje = row[index_percentaje].value
+
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            breed = Breed.objects.filter(acronym=acronym).first()
+            if sheep and breed:
+                sheep_breed = SheepBreed.objects.filter(sheep=sheep, breed=breed, percent=percetaje)
+                if not sheep_breed:
+                    sheep_breed = SheepBreed()
+                    sheep_breed.sheep = sheep
+                    sheep_breed.breed = breed
+                    sheep_breed.percent = percetaje
+                    sheep_breed.save()
+
+    return redirect('app:acciones_bloque')
+
+
+# multiple sheep group
+
+def generate_document_sheep_group(hoja, sheeps_data):
+    encabezado = ["oveja_id",  "slug"]
+
+    hoja.append(encabezado)
+
+    for sheep in sheeps_data:
+        groups = sheep.group.all()
+        for sheep_group in groups:
+            data = [sheep.identification_number, sheep_group.group.slug]
+            hoja.append(data)
+
+def sheep_group_download(request):
+    path = 'media/generate_reports'
+    file_name = 'sheep_group_import.xlsx'
+    file_path = '{}/{}'.format(path, file_name)
+    libro = Workbook()
+    hoja = libro.active
+
+    sheeps = Sheep.objects.order_by("active", "-gender", "identification_number").all()
+    # here is the magic
+    generate_document_sheep_group(hoja, sheeps)
+
+    libro.save(file_path)
+    response = FileResponse(open(file_path, 'rb'))
+    return response
+
+def sheep_group_import(request):
+    excel_file = request.FILES["excel_file"]
+
+    # you may put validations here to check extension or file size
+
+    wb = openpyxl.load_workbook(excel_file)
+
+    # getting a particular sheet by name out of many sheets
+    worksheet = wb["Sheet"]
+    print(worksheet)
+
+    index_ov_num = 0
+    index_slug = 1
+
+    for index, row in enumerate(worksheet.iter_rows()):
+        if index == 0:
+            continue
+        else:
+            num_ovino = row[index_ov_num].value
+            slug = row[index_slug].value
+
+            sheep = Sheep.objects.filter(identification_number=num_ovino).first()
+            group = Group.objects.filter(slug=slug).first()
+            if sheep and group:
+                sheep_group = SheepGroup.objects.filter(sheep=sheep, group=group)
+                if not sheep_group:
+                    sheep_group = SheepGroup()
+                    sheep_group.sheep = sheep
+                    sheep_group.group = group
+                    sheep_group.save()
+
+    return redirect('app:acciones_bloque')

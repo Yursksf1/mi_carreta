@@ -17,7 +17,8 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Fecha</th>
-                <th scope="col">Peso [Kg]</th>
+                <th scope="col">Peso [kg]</th>
+                <th scope="col">Ganancia por dia [g]</th>
               </tr>
             </thead>
             <tbody>
@@ -26,17 +27,27 @@
                     <th scope="row">    {{ forloop.counter }} </th>
                     <td>{{ weight.create_at |date:'d/m/Y'}}</td>
                     <td>{{ weight.weight }}</td>
+                    <td>
+                           {% if weight.get_conversion > 0 %}
+                                    <img src="{% static 'img/flecha-arriba.png' %}" style="width:20px">
+                            {% elif weight.get_conversion < 0 %}
+                                    <img src="{% static 'img/flecha-abajo.png' %}" style="width:20px">
+                            {% elif  weight.get_conversion ==  0 %}
+                                    <img src="{% static 'img/flecha-sin_cambio.png' %}" style="width:20px">
+                            {% endif %}
+                      {{ weight.get_conversion }}
+                    </td>
                   </tr>
                 {% endfor %}
             </tbody>
           </table>
-          
+
       </div>
       <div class="col-6 col-sm-9 col-lg-9">
         <div class="col-sm-12">
             <div id="HistoricoPesos-{{ sheep.id }}"> </div>
         </div>
-        
+
       </div>
     </div>
   </div>

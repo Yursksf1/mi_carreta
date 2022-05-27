@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block script %}
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+<script>dayjs().format()</script>
+    <script>
+
+const events =[];
+const calendarElement = document.getElementById('calendar');
+const calendarInstance = Calendar.getInstance(calendarElement);
+calendarInstance.addEvents(events);
+
+    </script>
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<div class="calendar" id="calendar"></div>
+
+
+<div class="container">
+    <div class="page-header">
+        <h1 id="timeline">Historico</h1>
+    </div>
+    <div>
+
+        <ul class="timeline" >
+            {% for history in sheep.historysheep_set.all %}
+                <li class="timeline-inverted">
+                  <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i></div>
+                  <div class="timeline-panel">
+                    <div class="timeline-heading">
+                      <h4 class="timeline-title"> {{ history.create_at |date:"d-m-Y" }} </h4>
+                    </div>
+                    <div class="timeline-body">
+                        <p>  {{ history.description }} </p>
+                    </div>
+                  </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+    {% endblock %}
+
+

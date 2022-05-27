@@ -20,10 +20,10 @@ class Sheep(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    identification_number = models.fields.CharField(max_length=100)
-    identification_number_2 = models.fields.CharField(max_length=100)
-    name = models.fields.CharField(max_length=100, null=True)
-    description = models.fields.CharField(max_length=300)
+    identification_number = models.fields.CharField(max_length=100, null=True, blank=True)
+    identification_number_2 = models.fields.CharField(max_length=100, null=True, blank=True)
+    name = models.fields.CharField(max_length=100, null=True, blank=True)
+    description = models.fields.CharField(max_length=300, null=True, blank=True)
 
     gender = models.CharField(
         max_length=1,
@@ -31,8 +31,8 @@ class Sheep(models.Model):
     )
     birthday = models.DateTimeField(default=now, editable=True)
 
-    parentDadId = models.ForeignKey('Sheep', null=True, related_name='dad', on_delete=models.SET_NULL)
-    parentMomId = models.ForeignKey('Sheep', null=True, related_name='mom', on_delete=models.SET_NULL)
+    parentDadId = models.ForeignKey('Sheep', null=True, blank=True, related_name='dad', on_delete=models.SET_NULL)
+    parentMomId = models.ForeignKey('Sheep', null=True, blank=True,  related_name='mom', on_delete=models.SET_NULL)
 
     active = models.fields.BooleanField(default=True)
 
@@ -79,7 +79,70 @@ class Sheep(models.Model):
 
         weight = weight.order_by('-create_at').first()
 
-        return '{} Kg'.format( str(weight.weight)[:-1])
+        return '{} kg'.format(str(weight.weight)[:-1])
+
+
+    def last_weight(self):
+        weight = HistoryWeight.objects.filter(
+            sheep=self
+        )
+
+        if not weight.exists():
+            return 'N/A'
+
+        weight = weight.order_by('-create_at').first()
+
+        return '{}'.format(str(weight.weight)[:-1])
+
+    def last_weight_comparative(self):
+        result = "no cambia"
+        weight = HistoryWeight.objects.filter(
+            sheep=self
+        )
+
+        if not weight.exists():
+            return result
+
+        weight_list = weight.order_by('-create_at').all()
+        if len(weight_list) == 1:
+            return "sube"
+
+        weight_new = weight_list[0]
+        weight_anterior = weight_list[1]
+        if weight_new.weight == weight_anterior.weight:
+            result = "no cambia"
+        elif weight_new.weight > weight_anterior.weight:
+            result = "sube"
+        elif weight_new.weight < weight_anterior.weight:
+            result = "baja"
+
+        return result
+
+
+    def last_body_condition(self):
+        body_condition = HistoryBodyCondition.objects.filter(
+            sheep=self
+        )
+
+        if not body_condition.exists():
+            return 'N/A'
+
+        body_condition = body_condition.order_by('-create_at').first()
+
+        return '{}'.format(str(body_condition.body_condition)[:-1])
+
+
+    def last_famacha(self):
+        famacha = HistoryFamacha.objects.filter(
+            sheep=self
+        )
+
+        if not famacha.exists():
+            return 'N/A'
+
+        famacha = famacha.order_by('-create_at').first()
+
+        return '{}'.format(str(famacha.famacha)[:-1])
 
     def age(self):
         local_tz = get_localzone()
@@ -150,6 +213,9 @@ class Sheep(models.Model):
 
         return sheeps
 
+    def get_absolute_url(self):
+        return reverse('app:detail', kwargs={'pk': str(self.id)} )
+
 
 class Breed(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -157,6 +223,22 @@ class Breed(models.Model):
     acronym = models.fields.CharField(max_length=100)
     color = models.fields.CharField(max_length=100)
     description = models.fields.CharField(max_length=300)
+
+    def __str__(self):
+        return self.name
+
+
+class Group(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.fields.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, default="")
+    active = models.fields.BooleanField(default=True)
+    description = models.fields.CharField(max_length=300)
+
+    def count(self):
+        sh = SheepGroup.objects.filter(group_id=self.id).all()
+        return len(sh)
+
 
     def __str__(self):
         return self.name
@@ -178,6 +260,58 @@ class SheepBreed(models.Model):
 
     def __str__(self):
         return '{} - {} - {}'.format(self.sheep, self.percent, self.breed.name)
+
+
+class SheepGroup(models.Model):
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.CASCADE,
+        related_name='sheep'
+    )
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+        related_name='group'
+
+    )
+    date_start = models.DateTimeField(auto_now_add=True)
+    date_end = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return '{} - {}'.format(self.sheep, self.group)
+
+
+class Service(models.Model):
+    sheep_hembra = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+        related_name='service_hembra'
+
+    )
+    sheep_macho = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+        related_name='service_macho'
+
+    )
+    date_start = models.DateTimeField(default=now, editable=True)
+    date_end = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.sheep_macho.name, self.sheep_hembra.name, self.date_start)
+
+
+class Mancha(models.Model):
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+        related_name='service_hembra'
+
+    )
+    date_start = models.DateTimeField(default=now, editable=True)
+    def __str__(self):
+        return '{} - {}'.format(self.date_start, self.service)
+
 
 class SheepPhoto(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -205,6 +339,53 @@ class SheepPhoto(models.Model):
     class Meta:
         ordering = ['-is_principal']
 
+
+class Observations(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+    )
+    description = models.fields.CharField(max_length=100)
+    active = models.fields.BooleanField(default=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+
+class HistorySheep(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+    )
+    description = models.fields.CharField(max_length=500)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        ordering = ['-create_at']
+
+class HistoryFamacha(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+    )
+    famacha = models.DecimalField(max_digits=7, decimal_places=2)
+    create_at = models.DateTimeField(default=now, editable=True)
+
+
+class HistoryBodyCondition(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    sheep = models.ForeignKey(
+        Sheep,
+        on_delete=models.CASCADE,
+    )
+    body_condition = models.DecimalField(max_digits=7, decimal_places=2)
+    create_at = models.DateTimeField(default=now, editable=True)
+
+
 class HistoryWeight(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -212,9 +393,31 @@ class HistoryWeight(models.Model):
         Sheep,
         on_delete=models.CASCADE,
     )
-    weight = models.DecimalField(max_digits=7, decimal_places=2)
-    create_at = models.DateTimeField(auto_now_add=True)
+    weight = models.DecimalField(max_digits=7, decimal_places=1)
+    create_at = models.DateTimeField(default=now, editable=True)
 
+    def get_conversion(self):
+        number = 0
+        all_w = HistoryWeight.objects.filter(sheep=self.sheep).all().order_by("create_at").all()
+        index = list(all_w).index(self)
+        indice_anterior = index - 1
+        if indice_anterior < 0:
+            return 0
+
+        w2 = all_w[indice_anterior]
+
+        diff_w = self.weight-w2.weight
+        diff_d = (self.create_at-w2.create_at).days
+
+        if diff_w == 0 or diff_d==0:
+            return 0
+
+        number = (diff_w/diff_d) * 1000
+        return round(number, 0)
+
+
+    class Meta:
+        ordering = ['create_at']
 
 class HistoryWeather(models.Model):
     LOCATION = [
@@ -234,3 +437,9 @@ class HistoryWeather(models.Model):
         max_length=1,
         choices=LOCATION,
     )
+
+
+class HistoryPluviometer(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    measure = models.PositiveIntegerField()
+    create_at = models.DateField()
