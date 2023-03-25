@@ -525,10 +525,21 @@ meses = [
     'DICIEMBRE',
 ]
 
-def pluviometer_download(request):
-    path = 'media/generate_reports'
+def define_file(file_name):
+    from django.conf import settings
+    media_root = settings.MEDIA_ROOT
+    folder_name = 'generate_reports'
     file_name = 'pluvimetro.xlsx'
-    file_path = '{}/{}'.format(path, file_name)
+    file_path = '{}/{}/{}'.format(media_root, folder_name, file_name)
+    f = open("{}".format(file_path), "a")
+    f.close()
+
+    return file_path
+
+def pluviometer_download(request):
+    file_name = 'pluvimetro.xlsx'
+    file_path = define_file(file_name)
+    
     libro = Workbook()
     hoja = libro.active
     for i in columnas:
@@ -597,9 +608,8 @@ def pluviometer_import(request):
 
 ## EJEMPLO
 def pluviometer_download_2(request):
-    path = 'media/generate_reports'
     file_name = 'pluvimetro.xlsx'
-    file_path = '{}/{}'.format(path, file_name)
+    file_path = define_file(file_name)
 
     libro = Workbook()
     hoja = libro.active
@@ -627,9 +637,9 @@ def generate_document_weather(hoja, weather_data):
         hoja.append(data)
 
 def weather_download(request):
-    path = 'media/generate_reports'
     file_name = 'weather.xlsx'
-    file_path = '{}/{}'.format(path, file_name)
+    file_path = define_file(file_name)
+
     libro = Workbook()
     hoja = libro.active
     for i in columnas:
@@ -693,9 +703,8 @@ def generate_document_weight(hoja, sheeps_data):
         hoja.append(data)
 
 def weight_download(request):
-    path = 'media/generate_reports'
     file_name = 'weight.xlsx'
-    file_path = '{}/{}'.format(path, file_name)
+    file_path = define_file(file_name)
     libro = Workbook()
     hoja = libro.active
 
@@ -798,9 +807,9 @@ def generate_document_weights(hoja, sheeps_data):
         hoja.append(data)
 
 def weights_download(request):
-    path = 'media/generate_reports'
     file_name = 'multiple_weight.xlsx'
-    file_path = '{}/{}'.format(path, file_name)
+    file_path = define_file(file_name)
+
     libro = Workbook()
     hoja = libro.active
 
@@ -920,9 +929,8 @@ def generate_document_sheep(hoja, sheeps_data):
         hoja.append(data)
 
 def sheep_download(request):
-    path = 'media/generate_reports'
     file_name = 'sheep_import.xlsx'
-    file_path = '{}/{}'.format(path, file_name)
+    file_path = define_file(file_name)
     libro = Workbook()
     hoja = libro.active
 
@@ -1009,9 +1017,8 @@ def generate_document_sheep_breeds(hoja, sheeps_data):
                 hoja.append(data)
 
 def sheep_breeds_download(request):
-    path = 'media/generate_reports'
     file_name = 'sheep_breeds_import.xlsx'
-    file_path = '{}/{}'.format(path, file_name)
+    file_path = define_file(file_name)
     libro = Workbook()
     hoja = libro.active
 
@@ -1074,9 +1081,8 @@ def generate_document_sheep_group(hoja, sheeps_data):
             hoja.append(data)
 
 def sheep_group_download(request):
-    path = 'media/generate_reports'
     file_name = 'sheep_group_import.xlsx'
-    file_path = '{}/{}'.format(path, file_name)
+    file_path = define_file(file_name)
     libro = Workbook()
     hoja = libro.active
 
