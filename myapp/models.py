@@ -20,19 +20,20 @@ class Sheep(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    identification_number = models.fields.CharField(max_length=100, null=True, blank=True)
-    identification_number_2 = models.fields.CharField(max_length=100, null=True, blank=True)
-    name = models.fields.CharField(max_length=100, null=True, blank=True)
-    description = models.fields.CharField(max_length=300, null=True, blank=True)
+    identification_number = models.fields.CharField(max_length=100, null=True, blank=True,  verbose_name="Id 1")
+    identification_number_2 = models.fields.CharField(max_length=100, null=True, blank=True,  verbose_name="Id 2")
+    name = models.fields.CharField(max_length=100, null=True, blank=True, verbose_name="Nombre")
+    description = models.fields.CharField(max_length=300, null=True, blank=True, verbose_name="Descripción")
 
     gender = models.CharField(
         max_length=1,
         choices=GENDER,
+         verbose_name="Genero",
     )
-    birthday = models.DateTimeField(default=now, editable=True)
+    birthday = models.DateTimeField(default=now, editable=True,  verbose_name="Nacimiento")
 
-    parentDadId = models.ForeignKey('Sheep', null=True, blank=True, related_name='dad', on_delete=models.SET_NULL)
-    parentMomId = models.ForeignKey('Sheep', null=True, blank=True,  related_name='mom', on_delete=models.SET_NULL)
+    parentDadId = models.ForeignKey('Sheep', null=True, blank=True, related_name='dad', on_delete=models.SET_NULL, verbose_name="Padre Id")
+    parentMomId = models.ForeignKey('Sheep', null=True, blank=True,  related_name='mom', on_delete=models.SET_NULL, verbose_name="Madre Id")
 
     active = models.fields.BooleanField(default=True)
 
@@ -215,25 +216,30 @@ class Sheep(models.Model):
 
     def get_absolute_url(self):
         return reverse('app:detail', kwargs={'pk': str(self.id)} )
-
+    
+    class Meta:
+        verbose_name = "Oveja"
+        verbose_name_plural = "Ovejas"
 
 class Breed(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.fields.CharField(max_length=100)
-    acronym = models.fields.CharField(max_length=100)
+    name = models.fields.CharField(max_length=100, verbose_name="Nombre")
+    acronym = models.fields.CharField(max_length=100, verbose_name="Acronimo")
     color = models.fields.CharField(max_length=100)
-    description = models.fields.CharField(max_length=300)
+    description = models.fields.CharField(max_length=300, verbose_name="Descripción")
 
     def __str__(self):
         return self.name
-
+    class Meta:
+        verbose_name = "Raza"
+        verbose_name_plural = "Razas"
 
 class Group(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.fields.CharField(max_length=100)
+    name = models.fields.CharField(max_length=100, verbose_name="Nombre")
     slug = models.SlugField(max_length=100, default="")
-    active = models.fields.BooleanField(default=True)
-    description = models.fields.CharField(max_length=300)
+    active = models.fields.BooleanField(default=True, verbose_name="Activo")
+    description = models.fields.CharField(max_length=300, verbose_name="Descripción")
 
     def count(self):
         sh = SheepGroup.objects.filter(group_id=self.id).all()
@@ -242,44 +248,52 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
-
+    class Meta:
+        verbose_name = "Grupo"
+        verbose_name_plural = "Grupos"
 
 class SheepBreed(models.Model):
     breed = models.ForeignKey(
         Breed,
         on_delete=models.CASCADE,
-        related_name='sheep'
+        related_name='sheep',
+         verbose_name="Raza"
     )
     sheep = models.ForeignKey(
         Sheep,
         on_delete=models.CASCADE,
-        related_name='breed'
-
+        related_name='breed',
+        verbose_name="Oveja"
     )
-    percent = models.DecimalField(max_digits=5, decimal_places=2)
+    percent = models.DecimalField(max_digits=5, decimal_places=2,  verbose_name="Porcentaje")
 
     def __str__(self):
         return '{} - {} - {}'.format(self.sheep, self.percent, self.breed.name)
-
+    class Meta:
+        verbose_name = "Oveja Raza"
+        verbose_name_plural = "Ovejas Razas"
 
 class SheepGroup(models.Model):
     group = models.ForeignKey(
         Group,
         on_delete=models.CASCADE,
-        related_name='sheep'
+        related_name='sheep',
+        verbose_name="Grupo"
     )
     sheep = models.ForeignKey(
         Sheep,
         on_delete=models.CASCADE,
-        related_name='group'
-
+        related_name='group',
+        verbose_name="Oveja"
     )
     date_start = models.DateTimeField(auto_now_add=True)
     date_end = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return '{} - {}'.format(self.sheep, self.group)
-
+    class Meta:
+        verbose_name = "Oveja Grupo"
+        verbose_name_plural = "Ovejas Grupos"
 
 class Service(models.Model):
     sheep_hembra = models.ForeignKey(
@@ -318,10 +332,11 @@ class SheepPhoto(models.Model):
     sheep = models.ForeignKey(
         Sheep,
         on_delete=models.CASCADE,
+        verbose_name="Oveja"
     )
     upload = models.FileField(upload_to='media/')
     create_at = models.DateTimeField(auto_now_add=True)
-    is_principal = models.fields.BooleanField(default=True)
+    is_principal = models.fields.BooleanField(default=True, verbose_name="es principal?")
 
     def __str__(self):
         return '{} - {}'.format(self.sheep, self.is_principal)
@@ -338,31 +353,39 @@ class SheepPhoto(models.Model):
 
     class Meta:
         ordering = ['-is_principal']
-
+        verbose_name = "Foto Oveja"
+        verbose_name_plural = "Fotos Oveja"
 
 class Observations(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sheep = models.ForeignKey(
         Sheep,
         on_delete=models.CASCADE,
+        verbose_name="Oveja"
     )
-    description = models.fields.CharField(max_length=100)
-    active = models.fields.BooleanField(default=True)
+    description = models.fields.CharField(max_length=100, verbose_name="Descripción")
+    active = models.fields.BooleanField(default=True, verbose_name="Activo")
     create_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Observacion"
+        verbose_name_plural = "Observaciones"
 
 class HistorySheep(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sheep = models.ForeignKey(
         Sheep,
         on_delete=models.CASCADE,
+        verbose_name="Oveja"
     )
-    description = models.fields.CharField(max_length=500)
+    description = models.fields.CharField(max_length=500, verbose_name="Descripción")
     create_at = models.DateTimeField(auto_now_add=True)
 
 
     class Meta:
         ordering = ['-create_at']
+        verbose_name = "Historico Oveja"
+        verbose_name_plural = "Historicos Oveja"
 
 class HistoryFamacha(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
