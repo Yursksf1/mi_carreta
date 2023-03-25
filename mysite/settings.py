@@ -130,8 +130,8 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DECIMAL_SEPARATOR = '.'
-from django.conf.locale.es import formats as es_formats
-es_formats['DECIMAL_SEPARATOR'] = '.'
+# from django.conf.locale.es import formats as es_formats
+# es_formats['DECIMAL_SEPARATOR'] = '.'
 
 STATIC_URL = '/static/'
 
