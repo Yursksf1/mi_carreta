@@ -334,7 +334,7 @@ class SheepPhoto(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Oveja"
     )
-    upload = models.FileField(upload_to='media/')
+    upload = models.FileField(upload_to='media/', verbose_name="Grupo")
     create_at = models.DateTimeField(auto_now_add=True)
     is_principal = models.fields.BooleanField(default=True, verbose_name="es principal?")
 
