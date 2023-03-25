@@ -529,7 +529,6 @@ def define_file(file_name):
     from django.conf import settings
     media_root = settings.MEDIA_ROOT
     folder_name = 'generate_reports'
-    file_name = 'pluvimetro.xlsx'
     file_path = '{}/{}/{}'.format(media_root, folder_name, file_name)
     f = open("{}".format(file_path), "a")
     f.close()
