@@ -28,7 +28,7 @@
       {% if sheep.breed and not sheep.breeds == 'None' %}
         <div class="progress">
           {% for breed in sheep.breeds  %}
-              <div class="progress-bar  {{ breed.breed.color }}" style="width:{{breed.percent}}%">
+              <div class="progress-bar  {{ breed.breed.color }}" style="width:{{breed.get_percent}}%">
                 {{breed.breed.acronym}}
               </div>
           {% endfor %}

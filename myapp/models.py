@@ -269,6 +269,11 @@ class SheepBreed(models.Model):
 
     def __str__(self):
         return '{} - {} - {}'.format(self.sheep, self.percent, self.breed.name)
+    
+    def get_percent(self):
+        percent = str(self.percent)
+        new_percent = percent.replace(',', '.')
+        return new_percent
     class Meta:
         verbose_name = "Oveja Raza"
         verbose_name_plural = "Ovejas Razas"
