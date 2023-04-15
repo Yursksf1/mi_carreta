@@ -19,29 +19,32 @@
 
 
         <ul class="navbar-nav ml-auto">
-
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:weather-today' %}">
+            
+            <a class="nav-link" href="{% url 'app:weather-today' %}"  data-toggle="tooltip" data-placement="bottom"  title="Temperatura y Humedad">
               <img src="{% static 'img/temperatura.png' %}">
               <img src="{% static 'img/humedad.png' %}">
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:feed_with_weight' %}?active=true"> 
+            <a class="nav-link" href="{% url 'app:feed_with_weight' %}?active=true"  data-toggle="tooltip" data-placement="bottom"  title="Grafica de pesos"> 
               <img src="{% static 'img/crecimiento.png' %}">
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:feed' %}?active=true">
+            <a class="nav-link" href="{% url 'app:feed' %}?active=true" data-toggle="tooltip" data-placement="bottom"  title="Identificación">
               <img src="{% static 'img/aprisco.png' %}">
             </a>
           </li>
 
 
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:create' %}">+</a>
+            <a class="nav-link" href="{% url 'app:create' %}" style="font-size: 35px" data-toggle="tooltip" data-placement="bottom"  title="Agregar">
+              +
+
+            </a>
           </li>
 
         <form class="form-inline pull-right">
@@ -111,17 +114,17 @@
         </form>
 
           <li class="nav-item right">
-            <a class="nav-link" href="{% url 'app:observations' %}">
+            <a class="nav-link" href="{% url 'app:observations' %}" data-toggle="tooltip" data-placement="bottom"  title="Observación">
               <img src="{% static 'img/observacion.png' %}">
             </a>
           </li>
           <li>
-              <a class="nav-link" href="{% url 'app:acciones_bloque' %}">
+              <a class="nav-link" href="{% url 'app:acciones_bloque' %}" data-toggle="tooltip" data-placement="bottom"  title="Carga y Descarga">
                   <img src="{% static 'img/xls.png' %}">
               </a>
           </li>
           <li>
-              <a class="nav-link" href="{% url 'admin:index' %}">
+              <a class="nav-link" href="{% url 'admin:index' %}" data-toggle="tooltip" data-placement="bottom"  title="Administración">
                   <img src="{% static 'img/veterinario.png' %}">
               </a>
           </li>
